@@ -1,0 +1,32 @@
+{
+  "editor.tabSize": 2,
+  "[html]": {
+      "editor.formatOnSave": false
+  },
+  "[javascript]": {
+      "editor.formatOnSave": false,
+      "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": true
+      }
+  },
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    }
+  },
+  "[scss]": {
+    "editor.formatOnSave": true, // Format css files on save
+    "editor.defaultFormatter": "esbenp.prettier-vscode" // Format with prettier
+  },
+  "[json]": {
+      "editor.formatOnSave": false
+  },
+  "[vue]": {
+      "editor.formatOnSave": false,
+      "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": true,
+          "source.fixAll.stylelint": true
+      }
+  },
+}
