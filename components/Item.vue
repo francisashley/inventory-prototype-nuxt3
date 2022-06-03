@@ -1,5 +1,5 @@
 <template>
-  <div class="p-1 h-20 w-20">
+  <div class="p-1 h-20 w-20 bg-gray-900">
     <div
       v-if="placeholder"
       class="flex justify-center items-center text-white text-xs border border-thin border-gray-800 overflow-hidden p-2 relative h-full w-full"

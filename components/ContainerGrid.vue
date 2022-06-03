@@ -1,15 +1,27 @@
 <template>
   <div class="flex flex-wrap mx-auto" :style="{ width: containerWidth }">
-    <item
-      v-for="(item, i) in getItems"
-      :key="i"
-      :item="item"
-      :placeholder="!item"
-    />
+    <item v-for="(_, i) in placeholderItems" :key="i" placeholder />
   </div>
+  <draggable
+    v-model="items"
+    group="people"
+    item-key="id"
+    class="absolute top-2 bottom-2 flex flex-wrap mx-auto"
+    :style="{ width: containerWidth }"
+    @start="drag = true"
+    @end="drag = false"
+  >
+    <template #item="{ element }">
+      <item :item="element" :placeholder="!element" />
+    </template>
+  </draggable>
 </template>
 
 <script setup>
+import Draggable from 'vuedraggable'
+
+const emit = defineEmits(['change'])
+
 // Props
 const props = defineProps({
   items: {
@@ -22,16 +34,18 @@ const props = defineProps({
   },
 })
 
-const items = computed(() => props.items)
+const items = computed({
+  get: () => props.items,
+  set: (value) => emit('change', value),
+})
 const cols = computed(() => props.cols)
-const rows = computed(() => Math.ceil(items.value.length / cols.value) || 1)
+const rows = computed(() => {
+  const rows = Math.ceil(items.value.length / cols.value) || 2
+  return rows > 2 ? rows : 2
+})
 const containerWidth = computed(() => cols.value * 5 + 'rem')
-const cells = computed(() => rows.value * cols.value)
-const getItems = computed(() => {
-  const cellItems = []
-  for (let i = 0; i < cells.value; i++) {
-    cellItems.push(items.value[i])
-  }
-  return cellItems
+const placeholderItems = computed(() => {
+  const cells = rows.value * cols.value || 0
+  return Array(cells).fill(null)
 })
 </script>

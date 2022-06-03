@@ -6,14 +6,24 @@
     <ContainerCorner corner="bl" :theme="theme" />
     <ContainerCorner corner="br" :theme="theme" />
     <!--GRID-->
-    <ContainerGrid :cols="cols" :items="items" />
+    <ContainerGrid
+      :cols="cols"
+      :items="items"
+      @change="emit('change', { items: $event, id })"
+    />
   </div>
 </template>
 
 <script setup>
 import { useSizeObserver } from '@/utils/sizeObserver'
 
+const emit = defineEmits(['change'])
+
 const props = defineProps({
+  id: {
+    type: Number,
+    required: true,
+  },
   items: {
     type: Array,
     default: () => [],
