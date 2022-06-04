@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-wrap mx-auto" :style="containerStyle">
-    <item v-for="(_, i) in placeholderItems" :key="i" placeholder />
+    <ContainerGridItem v-for="(_, i) in placeholderItems" :key="i" placeholder />
   </div>
   <draggable
     v-model="items"
@@ -10,7 +10,7 @@
     :style="containerStyle"
   >
     <template #item="{ element }">
-      <item :item="element" :placeholder="!element" />
+      <ContainerGridItem :item="element" :placeholder="!element" />
     </template>
   </draggable>
 </template>

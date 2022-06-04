@@ -4,7 +4,7 @@
     class="relative p-2 border border-thin"
     :class="{ 'border-blue-400': theme === 'blue', 'border-red-400': theme === 'red', 'border-white': theme === null }"
   >
-    <Grid :cols="cols" :rows="rows" :items="items" @change="emit('change', { items: $event, id })" />
+    <ContainerGrid :cols="cols" :rows="rows" :items="items" @change="emit('change', { items: $event, id })" />
   </div>
 </template>
 
