@@ -7,7 +7,7 @@
     <a
       v-else
       href="#"
-      class="flex justify-center items-center text-white text-xs border border-thin border-gray-800 overflow-hidden p-2 relative h-full w-full hover:border-gray-500"
+      class="flex justify-center items-center text-white text-xs border border-thin border-gray-800 overflow-hidden p-2 relative h-full w-full hover:border-gray-500 bg-gray-800"
       :title="item.name"
       @click.prevent="onClick"
     >
