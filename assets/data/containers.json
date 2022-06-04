@@ -1,0 +1,4 @@
+[
+  { "name": "Blue Box", "theme": "blue", "rows": 2, "cols": 8 },
+  { "name": "Red Box", "theme": "red", "rows": 2, "cols": 8 }
+]
