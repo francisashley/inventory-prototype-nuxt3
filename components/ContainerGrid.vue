@@ -26,6 +26,10 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  rows: {
+    type: Number,
+    default: 4,
+  },
   cols: {
     type: Number,
     default: 4,
@@ -37,10 +41,7 @@ const items = computed({
   set: (value) => emit('change', value),
 })
 const cols = computed(() => props.cols)
-const rows = computed(() => {
-  const rows = Math.ceil(items.value.length / cols.value) || 2
-  return rows > 2 ? rows : 2
-})
+const rows = computed(() => props.rows)
 const containerWidth = computed(() => cols.value * 5 + 'rem')
 const placeholderItems = computed(() => {
   const cells = rows.value * cols.value || 0
