@@ -1,11 +1,9 @@
 <template>
-  <div ref="containerRef" class="relative p-2">
-    <!--CORNERS-->
-    <ContainerCorner corner="tl" :theme="theme" />
-    <ContainerCorner corner="tr" :theme="theme" />
-    <ContainerCorner corner="bl" :theme="theme" />
-    <ContainerCorner corner="br" :theme="theme" />
-    <!--GRID-->
+  <div
+    ref="containerRef"
+    class="relative p-2 border border-thin"
+    :class="{ 'border-blue-400': theme === 'blue', 'border-red-400': theme === 'red', 'border-white': theme === null }"
+  >
     <ContainerGrid :cols="cols" :items="items" @change="emit('change', { items: $event, id })" />
   </div>
 </template>
