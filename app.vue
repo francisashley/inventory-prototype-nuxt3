@@ -1,14 +1,8 @@
 <template>
   <div class="min-h-screen flex flex-col flex-1 bg-gray-900">
-    <Container
-      v-for="(container, i) in containers"
-      :id="container.id"
-      :key="i"
-      class="container mx-auto mt-8"
-      :items="container.items"
-      :theme="container.theme"
-      @change="onChange"
-    />
+    <div v-for="({ id, items, theme }, i) in containers" :key="i" class="container mx-auto mt-8">
+      <Container :id="id" :items="items" :theme="theme" @change="onChange" />
+    </div>
   </div>
 </template>
 
