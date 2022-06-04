@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-wrap mx-auto" :style="{ width: containerWidth }">
+  <div class="flex flex-wrap mx-auto" :style="containerStyle">
     <item v-for="(_, i) in placeholderItems" :key="i" placeholder />
   </div>
   <draggable
@@ -7,7 +7,7 @@
     group="container"
     item-key="id"
     class="absolute top-2 bottom-2 flex flex-wrap mx-auto"
-    :style="{ width: containerWidth }"
+    :style="containerStyle"
   >
     <template #item="{ element }">
       <item :item="element" :placeholder="!element" />
@@ -35,14 +35,16 @@ const props = defineProps({
     default: 4,
   },
 })
+const cols = computed(() => props.cols)
+const rows = computed(() => props.rows)
 
 const items = computed({
   get: () => props.items,
   set: (value) => emit('change', value),
 })
-const cols = computed(() => props.cols)
-const rows = computed(() => props.rows)
-const containerWidth = computed(() => cols.value * 5 + 'rem')
+
+const containerStyle = computed(() => ({ width: cols.value * 5 + 'rem' }))
+
 const placeholderItems = computed(() => {
   const cells = rows.value * cols.value || 0
   return Array(cells).fill(null)
