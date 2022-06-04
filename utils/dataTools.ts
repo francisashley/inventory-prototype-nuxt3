@@ -55,9 +55,20 @@ export const addItemToContainer = (container: container, item: item, options: ad
   return container
 }
 
+export const enrichContainerItems = (container: container, items: item[]): container => {
+  return {
+    ...container,
+    items: [...container.items].map((item) => ({
+      ...item,
+      ...findItemById(items, item.id),
+    })),
+  }
+}
+
 export default {
   createItem,
   findItemById,
   createContainer,
   addItemToContainer,
+  enrichContainerItems,
 }

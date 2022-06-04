@@ -7,22 +7,14 @@
 </template>
 
 <script lang="ts" setup>
-import { findItemById } from '@/utils/dataTools'
+import { enrichContainerItems } from '@/utils/dataTools'
 import { initialItems, initialContainers } from '@/utils/initialData'
 
 const items = ref(initialItems)
 const containers = ref(initialContainers)
 
 const getContainers = computed(() => {
-  return [...containers.value].map((container) => {
-    return {
-      ...container,
-      items: [...container.items].map((item) => ({
-        ...item,
-        ...findItemById(items.value, item.id),
-      })),
-    }
-  })
+  return [...containers.value].map((container) => enrichContainerItems(container, items.value))
 })
 
 const onChange = ({ items, id }) => {
