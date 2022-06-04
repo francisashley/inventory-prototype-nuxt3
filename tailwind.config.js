@@ -9,7 +9,11 @@ export default {
     // './nuxt.config.{js,ts}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      spacing: {
+        18: '4.5rem',
+      },
+    },
   },
   variants: {
     extend: {},
