@@ -10,7 +10,7 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { useSizeObserver } from '@/utils/sizeObserver'
 
 const emit = defineEmits(['change'])
@@ -27,7 +27,7 @@ const props = defineProps({
   theme: {
     type: String,
     default: null,
-    validator: (value) => ['blue', 'red'].includes(value),
+    validator: (value: any) => ['blue', 'red'].includes(value),
   },
 })
 

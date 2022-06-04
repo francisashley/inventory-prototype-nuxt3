@@ -4,12 +4,10 @@
   </div>
   <draggable
     v-model="items"
-    group="people"
+    group="container"
     item-key="id"
     class="absolute top-2 bottom-2 flex flex-wrap mx-auto"
     :style="{ width: containerWidth }"
-    @start="drag = true"
-    @end="drag = false"
   >
     <template #item="{ element }">
       <item :item="element" :placeholder="!element" />
@@ -17,7 +15,7 @@
   </draggable>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import Draggable from 'vuedraggable'
 
 const emit = defineEmits(['change'])

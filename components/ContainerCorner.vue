@@ -17,17 +17,17 @@
   />
 </template>
 
-<script setup>
+<script lang="ts" setup>
 const { corner } = defineProps({
   corner: {
     type: String,
     default: 'tl',
-    validator: (value) => ['tl', 'tr', 'bl', 'br'].includes(value),
+    validator: (value: any) => ['tl', 'tr', 'bl', 'br'].includes(value),
   },
   theme: {
     type: String,
     default: null,
-    validator: (value) => ['blue', 'red'].includes(value),
+    validator: (value: any) => ['blue', 'red'].includes(value),
   },
 })
 </script>
