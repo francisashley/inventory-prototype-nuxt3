@@ -6,11 +6,7 @@
     <ContainerCorner corner="bl" :theme="theme" />
     <ContainerCorner corner="br" :theme="theme" />
     <!--GRID-->
-    <ContainerGrid
-      :cols="cols"
-      :items="items"
-      @change="emit('change', { items: $event, id })"
-    />
+    <ContainerGrid :cols="cols" :items="items" @change="emit('change', { items: $event, id })" />
   </div>
 </template>
 

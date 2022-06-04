@@ -12,10 +12,7 @@
       @click.prevent="onClick"
     >
       <template v-if="item">
-        <div
-          v-if="item.amount"
-          class="absolute top-1 left-1 text-white bg-gray-900 px-0.5 leading-none"
-        >
+        <div v-if="item.amount" class="absolute top-1 left-1 text-white bg-gray-900 px-0.5 leading-none">
           {{ item.amount }}
         </div>
         <img
