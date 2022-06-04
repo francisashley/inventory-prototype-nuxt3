@@ -7,17 +7,8 @@
 </template>
 
 <script lang="ts" setup>
-import { createItem, findItemById, createContainer, addItemToContainer } from '@/utils/dataTools'
-
-import fakeItems from '@/assets/data/items.json'
-import fakeContainers from '@/assets/data/containers.json'
-
-const initialItems = fakeItems.map(createItem)
-const initialContainers = fakeContainers.map((container) => createContainer(container))
-
-for (const [i, item] of initialItems.entries()) {
-  initialContainers[0] = addItemToContainer(initialContainers[0], item, { amount: i })
-}
+import { findItemById } from '@/utils/dataTools'
+import { initialItems, initialContainers } from '@/utils/initialData'
 
 const items = ref(initialItems)
 const containers = ref(initialContainers)
