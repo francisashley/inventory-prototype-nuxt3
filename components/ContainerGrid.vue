@@ -6,8 +6,7 @@
     v-model="items"
     group="container"
     item-key="id"
-    class="absolute top-2 bottom-2 flex flex-wrap mx-auto"
-    :style="containerStyle"
+    class="absolute top-0 right-0 bottom-0 left-0 p-2 flex flex-wrap mx-auto"
   >
     <template #item="{ element }">
       <ContainerGridItem :item="element" :placeholder="!element" />
