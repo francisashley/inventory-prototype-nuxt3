@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen flex flex-col flex-1 bg-gray-900">
-    <div v-for="(container, i) in getEnrichedContainers" :key="i" class="mx-auto mt-8">
+    <div v-for="(container, i) in containers" :key="i" class="mx-auto mt-8">
       <Container
         :id="container.id"
         :items="container.items"
@@ -15,26 +15,9 @@
 
 <script lang="ts" setup>
 import toolset from '@/utils/toolset'
-import { initialItems, initialContainers } from '@/utils/initialData'
+import { initialContainers } from '@/utils/initialData'
 
-const items = ref(initialItems)
 const containers = ref(initialContainers)
-
-const getEnrichedContainers = computed(() => {
-  return [...containers.value].map((container) => {
-    return {
-      ...container,
-      items: [...container.items].map((item) =>
-        item
-          ? {
-              ...item,
-              ...toolset.items(items.value).findItemById(item.id),
-            }
-          : null
-      ),
-    }
-  })
-})
 
 const onMove = (event) => {
   const fromContainerIndex = toolset.containers(containers.value).findIndexOfId(event.from.containerId)
