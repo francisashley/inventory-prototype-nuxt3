@@ -37,9 +37,7 @@ const props = defineProps({
   },
 })
 
-const cols = computed(() => props.cols)
-const rows = computed(() => props.rows)
-const cells = computed(() => rows.value * cols.value || 0)
+const cells = computed(() => props.rows * props.cols || 0)
 
 const items = computed(() => {
   return Array(cells.value)
