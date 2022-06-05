@@ -4,7 +4,7 @@
 
 A dependency-free drag and drop container system built in Nuxt 3.
 
-<img src="public/img/demo.gif" alt="Nuxt 3 containers prototype example" title="Nuxt 3 containers prototype example" style="width:400px"/>
+<img src="public/img/demo.gif" alt="Nuxt 3 containers prototype example" title="Nuxt 3 containers prototype example" width="400" />
 </div>
 
 ## Demo
