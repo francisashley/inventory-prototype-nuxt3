@@ -1,12 +1,12 @@
 [
-  { "name": "Ultimate Direction Fastpack 25", "image": "/img/ultimate-direction-fastpack-25.jpg" },
-  { "name": "Sea to summit Silk Liner", "image": "/img/sea-to-summit-silk-liner.jpg" },
-  { "name": "Swiss army knife", "image": "/img/swiss-army-knife.jpg" },
-  { "name": "Starbucks Via Italian Satchel", "image": "/img/starbucks-via-italian-satchel.jpg" },
-  { "name": "Oral B Pro dental floss", "image": "/img/oral-b-dental-floss.jpg" },
-  { "name": "Microfibre towel", "image": "/img/microfibre-towel.jpg" },
-  { "name": "Benadryl", "image": "/img/benadryl.jpg" },
-  { "name": "Fenix 6 Sapphire watch", "image": "/img/fenix-6-watch.jpg" },
-  { "name": "Passport", "image": "/img/passport.jpg" },
-  { "name": "Ciele Cap", "image": "/img/ciele-cap-navy.jpg" }
+  { "name": "Ultimate Direction Fastpack 25", "image": "/img/ultimate-direction-fastpack-25.jpeg" },
+  { "name": "Sea to summit Silk Liner", "image": "/img/sea-to-summit-silk-liner.jpeg" },
+  { "name": "Swiss army knife", "image": "/img/swiss-army-knife.jpeg" },
+  { "name": "Starbucks Via Italian Satchel", "image": "/img/starbucks-via-italian-satchel.jpeg" },
+  { "name": "Oral B Pro dental floss", "image": "/img/oral-b-dental-floss.jpeg" },
+  { "name": "Microfibre towel", "image": "/img/microfibre-towel.jpeg" },
+  { "name": "Benadryl", "image": "/img/benadryl.jpeg" },
+  { "name": "Fenix 6 Sapphire watch", "image": "/img/fenix-6-watch.jpeg" },
+  { "name": "Passport", "image": "/img/passport.jpeg" },
+  { "name": "Ciele Cap", "image": "/img/ciele-cap-navy.jpeg" }
 ]
