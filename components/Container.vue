@@ -2,7 +2,9 @@
   <ContainerOutline :cols="props.cols" :theme="props.theme">
     <ContainerCell v-for="(item, i) in items" :key="i" @drop="onDrop($event, i)">
       <div v-if="item" draggable="true" @dragstart.stop="onDragStart($event, { item, cell: i })">
-        <slot name="item" :item="item" />
+        <slot name="item" :item="item">
+          {{ item.name }}
+        </slot>
       </div>
     </ContainerCell>
   </ContainerOutline>
