@@ -7,4 +7,7 @@ export default defineNuxtConfig({
   components: ['@/components'],
   modules: ['@nuxtjs/tailwindcss'],
   buildModules: ['@nuxtjs/eslint-module'],
+  router: {
+    base: '/nuxt3-containers-prototype/',
+  },
 })
