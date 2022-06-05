@@ -1,15 +1,22 @@
 <template>
   <div
-    ref="containerRef"
     class="relative p-2 border border-thin"
-    :class="{ 'border-blue-400': theme === 'blue', 'border-red-400': theme === 'red', 'border-white': theme === null }"
+    :class="{
+      'border-blue-400': props.theme === 'blue',
+      'border-red-400': props.theme === 'red',
+      'border-white': props.theme === null,
+    }"
   >
-    <ContainerGrid :cols="cols" :rows="rows" :items="items" @change="emit('change', { items: $event, id })" />
+    <div class="flex flex-wrap mx-auto" :style="containerStyle">
+      <ContainerCell v-for="(item, i) in items" :key="i" @drop="onDrop($event, i)">
+        <ContainerItem v-if="item" :item="item" draggable="true" @dragstart="onDragStart($event, { item, cell: i })" />
+      </ContainerCell>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-const emit = defineEmits(['change'])
+const emit = defineEmits(['move'])
 
 const props = defineProps({
   id: {
@@ -35,8 +42,43 @@ const props = defineProps({
   },
 })
 
-const items = computed(() => props.items)
-const theme = computed(() => props.theme)
-const rows = computed(() => props.rows)
 const cols = computed(() => props.cols)
+const rows = computed(() => props.rows)
+const cells = computed(() => rows.value * cols.value || 0)
+
+const containerStyle = computed(() => ({ width: cols.value * 5 + 'rem' }))
+
+const items = computed(() => {
+  return Array(cells.value)
+    .fill(null)
+    .map((cell, i) => props.items[i] || cell)
+})
+
+const onDragStart = (event, { item, cell }) => {
+  event.dataTransfer.dropEffect = 'move'
+  event.dataTransfer.effectAllowed = 'move'
+  event.dataTransfer.setData('item', JSON.stringify(item))
+  event.dataTransfer.setData('containerId', props.id)
+  event.dataTransfer.setData('cellId', cell)
+}
+
+const onDrop = (event, cellId) => {
+  const item = JSON.parse(event.dataTransfer.getData('item'))
+
+  const from = {
+    containerId: Number(event.dataTransfer.getData('containerId')),
+    cellId: Number(event.dataTransfer.getData('cellId')),
+  }
+
+  const to = {
+    containerId: props.id,
+    cellId,
+  }
+
+  const isMovingToAnotherCell = from.containerId + from.cellId !== to.containerId + to.cellId
+
+  if (isMovingToAnotherCell) {
+    emit('move', { item, from, to })
+  }
+}
 </script>

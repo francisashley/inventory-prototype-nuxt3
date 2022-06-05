@@ -7,18 +7,27 @@ interface item {
   updatedAt: string
 }
 
-interface containerItem {
-  id: number
+interface containerItem extends item {
   amount: number
 }
+
+type theme = 'white' | 'red' | 'blue'
 
 interface container {
   id: number
   name: string
-  theme: 'white' | 'red' | 'blue'
+  theme: theme
   items: (containerItem | null)[]
   rows: number
   cols: number
   createdAt: string
   updatedAt: string
+}
+
+interface looseContainer {
+  name?: string
+  theme?: 'white' | 'red' | 'blue'
+  items?: (containerItem | null)[]
+  rows?: number
+  cols?: number
 }
