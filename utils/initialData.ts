@@ -1,6 +1,6 @@
 import toolset from '@/utils/toolset'
 
-import fakeItems from '@/assets/fixtures/items.json'
+import fakeItems from '@/assets/fixtures/item-catalogue.json'
 import fakeContainers from '@/assets/fixtures/containers.json'
 
 const initialItems = fakeItems.map(toolset.createItem)

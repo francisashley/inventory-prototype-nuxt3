@@ -1,9 +1,9 @@
 import containerTools from '@/utils/containerTools'
-import itemTools from '@/utils/itemTools'
+import itemCatalogueTools from '@/utils/itemCatalogueTools'
 
 export default {
   createContainer: containerTools.createContainer,
-  createItem: itemTools.createItem,
+  createItem: itemCatalogueTools.createItem,
   container: (container: container) => {
     return {
       appendItem: (item) => containerTools.appendItem(container, item),
@@ -19,7 +19,7 @@ export default {
   },
   items: (items: item[]) => {
     return {
-      findItemById: (id) => itemTools.findItemById(items, id),
+      findItemById: (id) => itemCatalogueTools.findItemById(items, id),
     }
   },
 }
