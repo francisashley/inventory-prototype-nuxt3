@@ -1,7 +1,6 @@
 interface item {
   id: number
   name: string
-  tags: string[]
   image: string | null
 }
 

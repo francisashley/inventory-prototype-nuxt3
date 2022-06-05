@@ -1,13 +1,11 @@
 interface createItemItemOption {
   name?: string
-  tags?: string[]
   image?: string
 }
 export const createItem = (item: createItemItemOption): item => {
   return {
     id: Math.floor(Math.random() * Math.floor(Math.random() * Date.now())),
     name: item.name || '',
-    tags: item.tags || [],
     image: item.image || null,
   }
 }
