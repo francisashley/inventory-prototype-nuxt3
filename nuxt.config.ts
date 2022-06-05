@@ -8,6 +8,8 @@ export default defineNuxtConfig({
   modules: ['@nuxtjs/tailwindcss'],
   buildModules: ['@nuxtjs/eslint-module'],
   router: {
-    base: '/nuxt3-containers-prototype/',
+    options: {
+      base: '/nuxt3-containers-prototype/',
+    },
   },
 })
