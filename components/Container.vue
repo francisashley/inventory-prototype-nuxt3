@@ -1,7 +1,9 @@
 <template>
   <ContainerOutline :cols="props.cols" :theme="props.theme">
     <ContainerCell v-for="(item, i) in items" :key="i" @drop="onDrop($event, i)">
-      <ContainerItem v-if="item" :item="item" draggable="true" @dragstart="onDragStart($event, { item, cell: i })" />
+      <div v-if="item" draggable="true" @dragstart.stop="onDragStart($event, { item, cell: i })">
+        <slot name="item" :item="item" />
+      </div>
     </ContainerCell>
   </ContainerOutline>
 </template>

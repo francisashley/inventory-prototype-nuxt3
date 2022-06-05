@@ -8,7 +8,11 @@
         :rows="container.rows"
         :cols="container.cols"
         @move="onMove"
-      />
+      >
+        <template #item="{ item }">
+          <Item :item="item" />
+        </template>
+      </Container>
     </div>
   </div>
 </template>
