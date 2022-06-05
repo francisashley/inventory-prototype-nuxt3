@@ -6,6 +6,8 @@ A dependency-free drag and drop container system built in Nuxt 3.
 
 Coming soon.. unfortunately Nuxt3 does not yet support github pages
 
+![Demo animation](public/img/demo.gif)
+
 ## Get started locally
 
 ```bash
