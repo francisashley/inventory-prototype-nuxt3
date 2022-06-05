@@ -9,12 +9,12 @@ interface containerItem extends item {
   amount: number
 }
 
-type theme = 'white' | 'red' | 'blue'
+type containerTheme = 'white' | 'red' | 'blue'
 
 interface container {
   id: number
   name: string
-  theme: theme
+  theme: containerTheme
   items: (containerItem | null)[]
   rows: number
   cols: number
@@ -22,7 +22,7 @@ interface container {
 
 interface looseContainer {
   name?: string
-  theme?: 'white' | 'red' | 'blue'
+  theme?: containerTheme
   items?: (containerItem | null)[]
   rows?: number
   cols?: number
