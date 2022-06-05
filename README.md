@@ -1,6 +1,6 @@
 <div align="center">
 
-# Vue 3 Crates Prototype
+# Vue 3 Containers Prototype
 
 A dependency-free drag and drop system built in Vue (Nuxt) 3.
 
