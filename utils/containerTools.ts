@@ -11,8 +11,6 @@ export const createContainer = (container: looseContainer): container => {
     items: Array(rows * cols).fill(null),
     rows,
     cols,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
   }
 }
 

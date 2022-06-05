@@ -9,8 +9,6 @@ export const createItem = (item: createItemItemOption): item => {
     name: item.name || '',
     tags: item.tags || [],
     image: item.image || null,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
   }
 }
 

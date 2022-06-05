@@ -3,8 +3,6 @@ interface item {
   name: string
   tags: string[]
   image: string | null
-  createdAt: string
-  updatedAt: string
 }
 
 interface containerItem extends item {
@@ -20,8 +18,6 @@ interface container {
   items: (containerItem | null)[]
   rows: number
   cols: number
-  createdAt: string
-  updatedAt: string
 }
 
 interface looseContainer {
