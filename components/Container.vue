@@ -1,18 +1,9 @@
 <template>
-  <div
-    class="relative p-2 border border-thin"
-    :class="{
-      'border-blue-400': props.theme === 'blue',
-      'border-red-400': props.theme === 'red',
-      'border-white': props.theme === null,
-    }"
-  >
-    <div class="flex flex-wrap mx-auto" :style="containerStyle">
-      <ContainerCell v-for="(item, i) in items" :key="i" @drop="onDrop($event, i)">
-        <ContainerItem v-if="item" :item="item" draggable="true" @dragstart="onDragStart($event, { item, cell: i })" />
-      </ContainerCell>
-    </div>
-  </div>
+  <ContainerOutline :cols="props.cols" :theme="props.theme">
+    <ContainerCell v-for="(item, i) in items" :key="i" @drop="onDrop($event, i)">
+      <ContainerItem v-if="item" :item="item" draggable="true" @dragstart="onDragStart($event, { item, cell: i })" />
+    </ContainerCell>
+  </ContainerOutline>
 </template>
 
 <script lang="ts" setup>
@@ -45,8 +36,6 @@ const props = defineProps({
 const cols = computed(() => props.cols)
 const rows = computed(() => props.rows)
 const cells = computed(() => rows.value * cols.value || 0)
-
-const containerStyle = computed(() => ({ width: cols.value * 5 + 'rem' }))
 
 const items = computed(() => {
   return Array(cells.value)
