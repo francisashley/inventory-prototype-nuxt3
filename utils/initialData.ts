@@ -1,14 +1,15 @@
 import toolset from '@/utils/toolset'
 
-import itemCatalogue from '@/assets/fixtures/item-catalogue.json'
-import fakeContainers from '@/assets/fixtures/containers.json'
+import itemFixtures from '@/assets/fixtures/item-catalogue.json'
+import containerFixtures from '@/assets/fixtures/containers.json'
 
-const initialItems = itemCatalogue.map(toolset.createItem)
-const initialContainers = fakeContainers.map((container) => toolset.createContainer(container as looseContainer))
+const itemCatalogue = itemFixtures.map(toolset.createItem)
+const containers = containerFixtures.map((container) => toolset.createContainer(container as looseContainer))
 
-for (const item of initialItems) {
+for (let i = 0; i < 12; i++) {
   const amount = Math.floor(Math.random() * 10)
-  initialContainers[0] = toolset.container(initialContainers[0]).appendItem({ ...item, amount })
+  const item = itemCatalogue[Math.floor(Math.random() * itemCatalogue.length)]
+  containers[0] = toolset.container(containers[0]).appendItem({ ...item, amount })
 }
 
-export { initialItems, initialContainers }
+export default containers

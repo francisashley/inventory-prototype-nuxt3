@@ -15,23 +15,22 @@
 
 <script lang="ts" setup>
 import toolset from '@/utils/toolset'
-import { initialContainers } from '@/utils/initialData'
+import initialContainers from '@/utils/initialData'
 
 const containers = ref(initialContainers)
 
 const onMove = (event) => {
-  const fromContainerIndex = toolset.containers(containers.value).findIndexOfId(event.from.containerId)
   const toContainerIndex = toolset.containers(containers.value).findIndexOfId(event.to.containerId)
 
   const itemAtTarget = toolset.container(containers.value[toContainerIndex]).findItemAtIndex(event.to.cellId)
   const isSwitching = (itemAtTarget?.id && itemAtTarget.id !== event.item.id) || false
 
-  containers.value = [...containers.value].map((container, i) => {
-    if (i === toContainerIndex) {
+  containers.value = [...containers.value].map((container) => {
+    if (container.id === event.to.containerId) {
       container = toolset.container(container).addItemAtIndex(event.to.cellId, event.item)
     }
 
-    if (i === fromContainerIndex) {
+    if (container.id === event.from.containerId) {
       container = toolset.container(container).clearIndex(event.from.cellId)
 
       if (isSwitching) {
