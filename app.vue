@@ -8,8 +8,7 @@
         :id="container.id"
         :cells="container.cells"
         :theme="container.theme"
-        :rows="container.rows"
-        :cols="container.cols"
+        :size="container.size"
         @move="onMove"
       />
     </div>

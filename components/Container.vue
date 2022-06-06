@@ -1,5 +1,5 @@
 <template>
-  <ContainerOutline :cols="props.cols" :theme="props.theme">
+  <ContainerOutline :size="props.size" :theme="props.theme">
     <ContainerCell
       v-for="cell in props.cells"
       :key="cell.id"
@@ -26,13 +26,10 @@ const props = defineProps({
     type: Array as PropType<Cell[]>,
     default: () => [],
   },
-  rows: {
-    type: Number,
-    default: 2,
-  },
-  cols: {
-    type: Number,
-    default: 2,
+  size: {
+    type: Array,
+    default: () => [8, 2],
+    validator: (size) => typeof size[0] === 'number' && typeof size[1] === 'number',
   },
   theme: {
     type: String,

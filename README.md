@@ -58,8 +58,7 @@ interface Container {
   name: string
   theme: 'white' | 'red' | 'blue'
   items: (containerItem | null)[]
-  rows: number
-  cols: number
+  size: [number, number] // [cols, rows]
 }
 ```
 
