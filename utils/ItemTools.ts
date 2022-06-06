@@ -1,8 +1,7 @@
-interface createItemItemOption {
-  name?: string
-  image?: string
-}
-export const createItem = (item: createItemItemOption): Item => {
+/**
+ * Return formatted item
+ */
+const parseItem = (item: Item): Item => {
   return {
     id: Math.floor(Math.random() * Math.floor(Math.random() * Date.now())),
     name: item.name || '',
@@ -10,11 +9,18 @@ export const createItem = (item: createItemItemOption): Item => {
   }
 }
 
+/**
+ * Find item by id
+ */
 export const findItemById = (items: Item[], id: number): Item | null => {
   return items.find((item) => item.id === id) || null
 }
 
-export default {
-  createItem,
-  findItemById,
+export default function (items: Item[]) {
+  items = items.map(parseItem)
+
+  return {
+    get: () => items,
+    findItemById: (id: number) => findItemById(items, id),
+  }
 }

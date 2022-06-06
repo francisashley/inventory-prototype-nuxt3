@@ -1,14 +1,18 @@
-// PRIVATE TOOLS
+/// /////////////////////////////////////////////////////////////////////////////
+// PRIVATE TOOLS                                                              ///
+/// /////////////////////////////////////////////////////////////////////////////
 
 const _randomNumber = () => Math.floor(Math.random() * Math.floor(Math.random() * Date.now()))
 const _generateEmptyArray = (length: number) => Array(length).fill(null)
 
-// CONTAINER TOOLS
+/// /////////////////////////////////////////////////////////////////////////////
+// CONTAINER TOOLS                                                            ///
+/// /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Return properly formatted container
+ * Return formatted container
  */
-export const parseContainer = (container: Container): Container => {
+const parseContainer = (container: Container): Container => {
   const id = 'id' in container ? container.id : _randomNumber()
   const name = 'name' in container ? container.name : ''
   const theme = 'theme' in container ? container.theme : 'white'
@@ -28,29 +32,14 @@ export const parseContainer = (container: Container): Container => {
 /**
  * Find item in cell
  */
-export const findCell = (container: Container, cellId: number) => {
+const findCell = (container: Container, cellId: number) => {
   return container.cells[cellId]
-}
-
-/**
- *  Deposit the item in the first available cell
- */
-export const depositFirstAvailableCell = (container: Container, item: Item, amount: number = 1): Container => {
-  const cells = [...container.cells]
-
-  const cell = cells.find((cell) => cell.item === null)
-
-  if (cell) {
-    cells[cell.id] = { ...cells[cell.id], item, amount }
-  }
-
-  return { ...container, cells }
 }
 
 /**
  * Clear contents of a cell
  */
-export const clearCell = (container: Container, cellId: number) => {
+const clearCell = (container: Container, cellId: number) => {
   return {
     ...container,
     cells: [...container.cells].map((cell, index) => {
@@ -66,7 +55,7 @@ export const clearCell = (container: Container, cellId: number) => {
 /**
  * Deposit item in cell
  */
-export const depositCell = (container: Container, cellId: number, item: Item, amount: number) => {
+const depositCell = (container: Container, cellId: number, item: Item, amount: number) => {
   return {
     ...container,
     cells: [...container.cells].map((cell) => {
@@ -80,14 +69,113 @@ export const depositCell = (container: Container, cellId: number, item: Item, am
   }
 }
 
-export default function (container: Container) {
-  container = parseContainer(container)
+/// /////////////////////////////////////////////////////////////////////////////
+// MULTI CONTAINER TOOLS                                                      ///
+/// /////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Find container in containers
+ */
+const multiContainerFind = (containers: Container[], containerId: number) => {
+  return containers.find((container) => container.id === containerId)
+}
+
+/**
+ * Find item in cell in containers
+ */
+const multiContainerFindCell = (containers: Container[], path: CellPath) => {
+  return findCell(multiContainerFind(containers, path[0]), path[1])
+}
+
+/**
+ * Replace container in containers
+ */
+const multiContainerReplace = (
+  containers: Container[],
+  containerId: number,
+  fn: (container: Container) => Container
+) => {
+  return [...containers].map((container) => {
+    return container.id === containerId ? fn(container) : container
+  })
+}
+
+/**
+ * Clear contents of a cell in containers
+ */
+const multiContainerClearCell = (containers: Container[], path: CellPath) => {
+  return multiContainerReplace(containers, path[0], (container) => clearCell(container, path[1]))
+}
+
+/**
+ * Deposit item in cell in containers
+ */
+const multiContainerDepositCell = (containers: Container[], path: CellPath, item: Item, amount: number) => {
+  return multiContainerReplace(containers, path[0], (container) => depositCell(container, path[1], item, amount))
+}
+
+/**
+ *  Deposit the item in the first available cell
+ */
+const depositFirstAvailableCell = (
+  containers: Container[],
+  path: CellPath,
+  item: Item,
+  amount: number = 1
+): Container[] => {
+  return multiContainerReplace(containers, path[0], (container) => {
+    const cells = [...container.cells]
+
+    const cell = cells.find((cell) => cell.item === null)
+
+    if (cell) {
+      cells[cell.id] = { ...cells[cell.id], item, amount }
+    }
+
+    return { ...container, cells }
+  })
+}
+
+/**
+ * Switch items between two cells
+ */
+const switchItems = (containers: Container[], pathA: CellPath, pathB: CellPath) => {
+  const pathACell = multiContainerFindCell(containers, pathA)
+  const pathBCell = multiContainerFindCell(containers, pathB)
+
+  containers = multiContainerClearCell(containers, pathA)
+  containers = multiContainerClearCell(containers, pathB)
+
+  containers = multiContainerDepositCell(containers, pathA, pathBCell.item, pathACell.amount)
+  containers = multiContainerDepositCell(containers, pathB, pathACell.item, pathBCell.amount)
+
+  return containers
+}
+
+/**
+ * Move item from one cell to another
+ */
+const moveItem = (containers: Container[], fromPath: CellPath, toPath: CellPath) => {
+  const fromCell = multiContainerFindCell(containers, fromPath)
+
+  containers = multiContainerClearCell(containers, fromPath)
+  containers = multiContainerDepositCell(containers, toPath, fromCell.item, fromCell.amount)
+
+  return containers
+}
+
+export default function (containers: Container[]) {
+  containers = [...containers].map(parseContainer)
 
   return {
-    get: () => container,
-    findCell: (cellId) => findCell(container, cellId),
-    clearCell: (item) => clearCell(container, item),
-    depositCell: (cellId, item, amount) => depositCell(container, cellId, item, amount),
-    depositFirstAvailableCell: (item, amount) => depositFirstAvailableCell(container, item, amount),
+    get: (): Container[] => containers,
+    findCell: (path: CellPath) => multiContainerFindCell(containers, path),
+    clearCell: (path: CellPath) => multiContainerClearCell(containers, path),
+    depositCell: (path: CellPath, item: Item, amount: number) =>
+      multiContainerDepositCell(containers, path, item, amount),
+    switchItems: (pathA: CellPath, pathB: CellPath) => switchItems(containers, pathA, pathB),
+    moveItem: (fromPath: CellPath, toPath: CellPath) => moveItem(containers, fromPath, toPath),
+    depositFirstAvailableCell: (path: CellPath, item: Item, amount: number) =>
+      depositFirstAvailableCell(containers, path, item, amount),
   }
 }
