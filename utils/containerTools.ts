@@ -1,81 +1,79 @@
 /**
  * Create a new container.
  */
-export const createContainer = (container: looseContainer): container => {
-  const rows = container.rows || 2
-  const cols = container.cols || 8
+export const create = (container: Container): Container => {
+  const { rows = 2, cols = 8, name = '', theme = 'white' } = container
+
+  const containerId = Math.floor(Math.random() * Math.floor(Math.random() * Date.now()))
+
+  const cells = Array(rows * cols)
+    .fill(null)
+    .map((_, cellId) => ({ id: cellId, path: [containerId, cellId], item: null, amount: 0 }))
+
+  return { id: containerId, name, theme, cells, rows, cols }
+}
+
+/**
+ * Find item in cell
+ */
+export const findCell = (container: Container, cellId: number) => {
+  return container.cells[cellId]
+}
+
+/**
+ *  Deposit the item in the first available cell
+ */
+export const depositFirstAvailableCell = (container: Container, item: Item, amount: number = 1): Container => {
+  const cells = [...container.cells]
+
+  const cell = cells.find((cell) => cell.item === null)
+
+  if (cell) {
+    cells[cell.id] = { ...cells[cell.id], item, amount }
+  }
+
+  return { ...container, cells }
+}
+
+/**
+ * Clear contents of a cell
+ */
+export const clearCell = (container: Container, cellId: number) => {
   return {
-    id: Math.floor(Math.random() * Math.floor(Math.random() * Date.now())),
-    name: container.name || '',
-    theme: container.theme || 'white',
-    items: Array(rows * cols).fill(null),
-    rows,
-    cols,
+    ...container,
+    cells: [...container.cells].map((cell, index) => {
+      if (index === cellId) {
+        return { ...cell, item: null }
+      } else {
+        return cell
+      }
+    }),
   }
 }
 
 /**
- * Add an item at index. The item will merge if an item of the same type already exists there.
+ * Deposit item in cell
  */
-export const addItemAtIndex = (container: container, index: number, item: containerItem): container => {
-  const items = [...container.items]
-
-  const isMerging = items[index] && items[index].id === item.id
-
-  if (isMerging) {
-    items[index] = { ...items[index], amount: items[index].amount + (item.amount || 1) }
-  } else {
-    items[index] = { ...item, amount: item.amount || 1 }
+export const depositCell = (container: Container, cellId: number, item: Item, amount: number) => {
+  return {
+    ...container,
+    cells: [...container.cells].map((cell) => {
+      if (cell.id === cellId) {
+        amount = cell.item?.id === item.id ? cell.amount + amount : amount
+        return { ...cell, item, amount }
+      } else {
+        return cell
+      }
+    }),
   }
-
-  return { ...container, items }
 }
 
-/**
- * Add an item at the first available spot.
- */
-export const appendItem = (container: container, item: containerItem): container => {
-  const items = [...container.items]
-
-  let index = items.findIndex((item) => item === null)
-  index = typeof index === 'number' ? index : items.length - 1
-
-  return addItemAtIndex(container, index, { ...item, amount: item.amount || 1 })
-}
-
-/**
- * Remove item at index.
- */
-export const clearIndex = (container: container, index: number): container => {
-  const items = [...container.items]
-
-  if (typeof index === 'number') {
-    items[index] = null
+export default function (container: Container) {
+  return {
+    create: () => create(container),
+    findCell: (cellId) => findCell(container, cellId),
+    clearCell: (item) => clearCell(container, item),
+    depositCell: (cellId, item, amount) => depositCell(container, cellId, item, amount),
+    depositFirstAvailableCell: (item, amount) => depositFirstAvailableCell(container, item, amount),
   }
-
-  return { ...container, items }
-}
-
-/**
- * Get item at index
- */
-export const findItemAtIndex = (container: container, index: number): item => {
-  return [...container.items][index]
-}
-
-/**
- * Find index of Id
- */
-
-export const findIndexOfId = (containers: container[], id: number) => {
-  return containers.findIndex((container) => container.id === id)
-}
-
-export default {
-  createContainer,
-  addItemAtIndex,
-  appendItem,
-  clearIndex,
-  findItemAtIndex,
-  findIndexOfId,
 }

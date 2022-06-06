@@ -1,16 +1,20 @@
 <template>
   <ContainerOutline :cols="props.cols" :theme="props.theme">
-    <ContainerCell v-for="(item, i) in items" :key="i" @drop="onDrop($event, i)">
-      <div v-if="item" draggable="true" @dragstart.stop="onDragStart($event, { item, cell: i })">
-        <slot name="item" :item="item">
-          <item :item="item" />
-        </slot>
-      </div>
+    <ContainerCell
+      v-for="cell in props.cells"
+      :key="cell.id"
+      :draggable="Boolean(cell.item)"
+      :path="[id, cell.id]"
+      @drop="onDrop($event, cell.id)"
+    >
+      <item v-if="cell.item" :item="cell.item" :amount="cell.amount" />
     </ContainerCell>
   </ContainerOutline>
 </template>
 
 <script lang="ts" setup>
+import { PropType } from 'nuxt/dist/app/compat/capi'
+
 const emit = defineEmits(['move'])
 
 const props = defineProps({
@@ -18,8 +22,8 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  items: {
-    type: Array,
+  cells: {
+    type: Array as PropType<Cell[]>,
     default: () => [],
   },
   rows: {
@@ -33,43 +37,19 @@ const props = defineProps({
   theme: {
     type: String,
     default: null,
-    validator: (value: any) => ['blue', 'red'].includes(value),
+    validator: (value: any) => ['blue', 'red', 'white'].includes(value),
   },
 })
 
-const cells = computed(() => props.rows * props.cols || 0)
-
-const items = computed(() => {
-  return Array(cells.value)
-    .fill(null)
-    .map((cell, i) => props.items[i] || cell)
-})
-
-const onDragStart = (event, { item, cell }) => {
-  event.dataTransfer.dropEffect = 'move'
-  event.dataTransfer.effectAllowed = 'move'
-  event.dataTransfer.setData('item', JSON.stringify(item))
-  event.dataTransfer.setData('containerId', props.id)
-  event.dataTransfer.setData('cellId', cell)
-}
-
 const onDrop = (event, cellId) => {
-  const item = JSON.parse(event.dataTransfer.getData('item'))
+  const from = JSON.parse(event.dataTransfer.getData('path'))
 
-  const from = {
-    containerId: Number(event.dataTransfer.getData('containerId')),
-    cellId: Number(event.dataTransfer.getData('cellId')),
-  }
+  const to = [props.id, cellId]
 
-  const to = {
-    containerId: props.id,
-    cellId,
-  }
+  const isMovingCell = from + '' !== to + ''
 
-  const isMovingToAnotherCell = from.containerId + from.cellId !== to.containerId + to.cellId
-
-  if (isMovingToAnotherCell) {
-    emit('move', { item, from, to })
+  if (isMovingCell) {
+    emit('move', { from, to })
   }
 }
 </script>

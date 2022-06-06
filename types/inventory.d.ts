@@ -1,28 +1,22 @@
-interface item {
+interface Item {
   id: number
   name: string
   image: string | null
 }
 
-interface containerItem extends item {
+type CellPath = number[]
+interface Cell extends item {
+  id: number
+  path: CellPath
+  item: Item | null
   amount: number
 }
 
-type containerTheme = 'white' | 'red' | 'blue'
-
-interface container {
+interface Container {
   id: number
   name: string
-  theme: containerTheme
-  items: (containerItem | null)[]
+  theme: 'white' | 'red' | 'blue'
+  cells: Cell[]
   rows: number
   cols: number
-}
-
-interface looseContainer {
-  name?: string
-  theme?: containerTheme
-  items?: (containerItem | null)[]
-  rows?: number
-  cols?: number
 }

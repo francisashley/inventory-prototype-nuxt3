@@ -3,16 +3,12 @@
     <div v-for="(container, i) in containers" :key="i" class="mx-auto mt-8">
       <Container
         :id="container.id"
-        :items="container.items"
+        :cells="container.cells"
         :theme="container.theme"
         :rows="container.rows"
         :cols="container.cols"
         @move="onMove"
-      >
-        <template #item="{ item }">
-          <Item :item="item" />
-        </template>
-      </Container>
+      />
     </div>
   </div>
 </template>
@@ -24,25 +20,15 @@ import initialContainers from '@/utils/initialData'
 const containers = ref(initialContainers)
 
 const onMove = (event) => {
-  const toContainerIndex = toolset.containers(containers.value).findIndexOfId(event.to.containerId)
+  const fromCell = toolset.containers(containers.value).findCell(event.from)
+  const toCell = toolset.containers(containers.value).findCell(event.to)
 
-  const itemAtTarget = toolset.container(containers.value[toContainerIndex]).findItemAtIndex(event.to.cellId)
-  const isSwitching = (itemAtTarget?.id && itemAtTarget.id !== event.item.id) || false
+  const shouldSwitch = toCell.item && toCell.item.id !== fromCell.item.id
 
-  containers.value = [...containers.value].map((container) => {
-    if (container.id === event.to.containerId) {
-      container = toolset.container(container).addItemAtIndex(event.to.cellId, event.item)
-    }
-
-    if (container.id === event.from.containerId) {
-      container = toolset.container(container).clearIndex(event.from.cellId)
-
-      if (isSwitching) {
-        container = toolset.container(container).addItemAtIndex(event.from.cellId, itemAtTarget)
-      }
-    }
-
-    return container
-  })
+  if (shouldSwitch) {
+    containers.value = toolset.containers(containers.value).switchItems(event.from, event.to)
+  } else {
+    containers.value = toolset.containers(containers.value).moveItem(event.from, event.to)
+  }
 }
 </script>

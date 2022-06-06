@@ -8,7 +8,9 @@
         @dragleave="onDragLeave"
         @drop="onDrop"
       >
-        <slot />
+        <div draggable="true" @dragstart.stop="onDragStart($event)">
+          <slot />
+        </div>
       </div>
       <div
         v-if="isHovering"
@@ -20,6 +22,13 @@
 </template>
 
 <script lang="ts" setup>
+const props = defineProps({
+  path: {
+    type: Array,
+    default: () => [],
+  },
+})
+
 const isHovering = ref(false)
 const onDragEnter = () => {
   isHovering.value = true
@@ -29,5 +38,11 @@ const onDragLeave = () => {
 }
 const onDrop = (event) => {
   isHovering.value = false
+}
+
+const onDragStart = (event) => {
+  event.dataTransfer.dropEffect = 'move'
+  event.dataTransfer.effectAllowed = 'move'
+  event.dataTransfer.setData('path', JSON.stringify(props.path))
 }
 </script>

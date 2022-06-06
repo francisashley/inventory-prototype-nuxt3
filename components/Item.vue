@@ -4,7 +4,7 @@
     :title="props.item.name"
   >
     <div class="absolute top-0.5 left-0 text-white bg-gray-800 px-0.5 leading-none">
-      {{ props.item.amount }}
+      {{ props.amount }}
     </div>
     <img
       v-if="props.item.image"
@@ -23,6 +23,10 @@ const props = defineProps({
   item: {
     type: Object,
     default: () => ({}),
+  },
+  amount: {
+    type: Number,
+    default: 1,
   },
 })
 </script>
