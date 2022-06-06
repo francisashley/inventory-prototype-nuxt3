@@ -1,16 +1,28 @@
+// PRIVATE TOOLS
+
+const _randomNumber = () => Math.floor(Math.random() * Math.floor(Math.random() * Date.now()))
+const _generateEmptyArray = (length: number) => Array(length).fill(null)
+
+// CONTAINER TOOLS
+
 /**
- * Create a new container.
+ * Return properly formatted container
  */
-export const create = (container: Container): Container => {
-  const { rows = 2, cols = 8, name = '', theme = 'white' } = container
+export const parseContainer = (container: Container): Container => {
+  const id = 'id' in container ? container.id : _randomNumber()
+  const name = 'name' in container ? container.name : ''
+  const theme = 'theme' in container ? container.theme : 'white'
+  const rows = 'rows' in container ? container.rows : 2
+  const cols = 'cols' in container ? container.cols : 8
 
-  const containerId = Math.floor(Math.random() * Math.floor(Math.random() * Date.now()))
+  const cells = _generateEmptyArray(rows * cols).map((_, cellId) => ({
+    id: cellId,
+    path: [id, cellId],
+    item: container?.cells?.[cellId]?.item || null,
+    amount: container?.cells?.[cellId]?.amount || 0,
+  }))
 
-  const cells = Array(rows * cols)
-    .fill(null)
-    .map((_, cellId) => ({ id: cellId, path: [containerId, cellId], item: null, amount: 0 }))
-
-  return { id: containerId, name, theme, cells, rows, cols }
+  return { id, name, theme, cells, rows, cols }
 }
 
 /**
@@ -69,8 +81,10 @@ export const depositCell = (container: Container, cellId: number, item: Item, am
 }
 
 export default function (container: Container) {
+  container = parseContainer(container)
+
   return {
-    create: () => create(container),
+    get: () => container,
     findCell: (cellId) => findCell(container, cellId),
     clearCell: (item) => clearCell(container, item),
     depositCell: (cellId, item, amount) => depositCell(container, cellId, item, amount),
