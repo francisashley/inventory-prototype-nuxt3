@@ -7,16 +7,11 @@
   <img src="public/img/demo.gif" alt="Nuxt 3 containers prototype example" title="Nuxt 3 containers prototype example" width="500" />
 </div>
 
-## ToDo
+## Installation
 
-- [ ] Can import component into another project
-- [x] Can drag items between containers
-- [ ] Can control the amount of an item dragged between containers
-- [ ] Has clean API
-- [ ] API is documented
+This is a prototype and cannot be installed. Copy this code into another project and modify.
 
-
-## Basic usage
+## Usage
 
 ```html
 <container :items="items" @move="onMove" />
@@ -94,3 +89,11 @@ tools.containers(containers).moveCell(fromPath, toPath): Container              
 tools.catalogue.createItem(item): Item                                          // Create an item
 tools.catalogue.findItemById(items, id): Item                                   // Find an item by id
 ```
+
+## ToDo
+
+- [ ] Can import component into another project
+- [x] Can drag items between containers
+- [ ] Can control the amount of an item dragged between containers
+- [ ] Has clean API
+- [ ] API is documented
