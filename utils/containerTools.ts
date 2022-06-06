@@ -125,7 +125,7 @@ const multiContainerFind = (containers: Container[], containerId: number) => {
 /**
  * Find item in cell in containers
  */
-const multiContainerFindCell = (containers: Container[], path: CellPath) => {
+const multiContainerFindCell = (containers: Container[], path: Path) => {
   return findCell(multiContainerFind(containers, path[0]), path[1])
 }
 
@@ -145,14 +145,14 @@ const multiContainerReplace = (
 /**
  * Clear contents of a cell in containers
  */
-const multiContainerClearCell = (containers: Container[], path: CellPath) => {
+const multiContainerClearCell = (containers: Container[], path: Path) => {
   return multiContainerReplace(containers, path[0], (container) => clearCell(container, path[1]))
 }
 
 /**
  * Deposit item in cell in containers
  */
-const multiContainerDepositCell = (containers: Container[], path: CellPath, item: Item, amount: number) => {
+const multiContainerDepositCell = (containers: Container[], path: Path, item: Item, amount: number) => {
   return multiContainerReplace(containers, path[0], (container) => depositCell(container, path[1], item, amount))
 }
 
@@ -161,7 +161,7 @@ const multiContainerDepositCell = (containers: Container[], path: CellPath, item
  */
 const depositFirstAvailableCell = (
   containers: Container[],
-  path: CellPath,
+  path: Path,
   item: Item,
   amount: number = 1
 ): Container[] => {
@@ -181,7 +181,7 @@ const depositFirstAvailableCell = (
 /**
  * Switch items between two cells
  */
-const switchItems = (containers: Container[], pathA: CellPath, pathB: CellPath) => {
+const switchItems = (containers: Container[], pathA: Path, pathB: Path) => {
   const pathACell = multiContainerFindCell(containers, pathA)
   const pathBCell = multiContainerFindCell(containers, pathB)
 
@@ -197,7 +197,7 @@ const switchItems = (containers: Container[], pathA: CellPath, pathB: CellPath) 
 /**
  * Move item from one cell to another
  */
-const moveItem = (containers: Container[], fromPath: CellPath, toPath: CellPath) => {
+const moveItem = (containers: Container[], fromPath: Path, toPath: Path) => {
   const fromCell = multiContainerFindCell(containers, fromPath)
 
   containers = multiContainerClearCell(containers, fromPath)
@@ -211,13 +211,12 @@ export default function (containers: Container[]) {
 
   return {
     get: (): Container[] => containers,
-    findCell: (path: CellPath) => multiContainerFindCell(containers, path),
-    clearCell: (path: CellPath) => multiContainerClearCell(containers, path),
-    depositCell: (path: CellPath, item: Item, amount: number) =>
-      multiContainerDepositCell(containers, path, item, amount),
-    switchItems: (pathA: CellPath, pathB: CellPath) => switchItems(containers, pathA, pathB),
-    moveItem: (fromPath: CellPath, toPath: CellPath) => moveItem(containers, fromPath, toPath),
-    depositFirstAvailableCell: (path: CellPath, item: Item, amount: number) =>
+    findCell: (path: Path) => multiContainerFindCell(containers, path),
+    clearCell: (path: Path) => multiContainerClearCell(containers, path),
+    depositCell: (path: Path, item: Item, amount: number) => multiContainerDepositCell(containers, path, item, amount),
+    switchItems: (pathA: Path, pathB: Path) => switchItems(containers, pathA, pathB),
+    moveItem: (fromPath: Path, toPath: Path) => moveItem(containers, fromPath, toPath),
+    depositFirstAvailableCell: (path: Path, item: Item, amount: number) =>
       depositFirstAvailableCell(containers, path, item, amount),
   }
 }

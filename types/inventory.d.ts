@@ -4,10 +4,10 @@ interface Item {
   image: string | null
 }
 
-type CellPath = number[]
+type Path = number[]
 interface Cell extends item {
   id: number
-  path: CellPath
+  path: Path
   item: Item | null
   amount: number
 }
