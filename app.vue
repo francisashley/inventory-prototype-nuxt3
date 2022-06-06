@@ -10,7 +10,10 @@
         :theme="container.theme"
         :size="container.size"
         @move="onMove"
+        @mouseover-cell="onMouseoverCell"
+        @mouseleave-cell="onMouseleaveCell"
       />
+      <CellTooltip :cell="tooltipCell" />
     </div>
   </div>
 </template>
@@ -34,6 +37,7 @@ for (let i = 0; i < 12; i++) {
 
 // State
 const containers = ref(initialContainers)
+const tooltipCell = ref(null)
 
 // Handle moving items between cells
 const onMove = ({ from: fromPath, to: toPath }) => {
@@ -54,5 +58,15 @@ const onAddRandomItem = (containerId: number) => {
   const randomItemIndex = Math.floor(Math.random() * items.length)
   const item = items[randomItemIndex]
   containers.value = ct(containers.value).depositFirstAvailableCell([containerId], item, randomAmount)
+}
+
+const onMouseoverCell = (cell) => {
+  if (cell.item) {
+    tooltipCell.value = cell
+  }
+}
+
+const onMouseleaveCell = () => {
+  tooltipCell.value = null
 }
 </script>

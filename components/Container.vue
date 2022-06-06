@@ -6,8 +6,15 @@
       :draggable="Boolean(cell.item)"
       :path="[id, cell.id]"
       @drop="onDrop($event, cell.id)"
+      @mousedown="onMouseleaveCell()"
     >
-      <item v-if="cell.item" :item="cell.item" :amount="cell.amount" />
+      <item
+        v-if="cell.item"
+        :item="cell.item"
+        :amount="cell.amount"
+        @mouseenter="onMouseoverCell(cell)"
+        @mouseleave="onMouseleaveCell()"
+      />
     </ContainerCell>
   </ContainerOutline>
 </template>
@@ -15,7 +22,7 @@
 <script lang="ts" setup>
 import { PropType } from 'nuxt/dist/app/compat/capi'
 
-const emit = defineEmits(['move'])
+const emit = defineEmits(['move', 'mouseover-cell', 'mouseleave-cell'])
 
 const props = defineProps({
   id: {
@@ -48,5 +55,13 @@ const onDrop = (event, cellId) => {
   if (isMovingCell) {
     emit('move', { from, to })
   }
+}
+
+const onMouseoverCell = (cell) => {
+  emit('mouseover-cell', cell)
+}
+
+const onMouseleaveCell = () => {
+  emit('mouseleave-cell')
 }
 </script>

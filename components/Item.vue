@@ -1,7 +1,6 @@
 <template>
   <div
     class="flex text-white text-xs border border-thin p-2 relative h-18 w-18 border-gray-800 hover:border-gray-500 bg-gray-800"
-    :title="props.item.name"
   >
     <div class="absolute top-0.5 left-0 text-white bg-gray-800 px-0.5 leading-none">
       {{ props.amount }}
