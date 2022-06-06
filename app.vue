@@ -1,6 +1,9 @@
 <template>
   <div class="min-h-screen flex flex-col flex-1 bg-gray-900">
     <div v-for="(container, i) in containers" :key="i" class="mx-auto mt-8">
+      <button class="rounded bg-blue-600 mb-2 text-xs text-white py-1 px-2" @click="onAddRandomItem(container.id)">
+        Add random item
+      </button>
       <Container
         :id="container.id"
         :cells="container.cells"
@@ -45,5 +48,12 @@ const onMove = ({ from: fromPath, to: toPath }) => {
   } else {
     containers.value = ct(containers.value).moveItem(fromPath, toPath)
   }
+}
+
+const onAddRandomItem = (containerId: number) => {
+  const randomAmount = Math.floor(Math.random() * 10) + 1
+  const randomItemIndex = Math.floor(Math.random() * items.length)
+  const item = items[randomItemIndex]
+  containers.value = ct(containers.value).depositFirstAvailableCell([containerId], item, randomAmount)
 }
 </script>
