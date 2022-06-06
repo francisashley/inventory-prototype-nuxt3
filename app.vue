@@ -34,16 +34,16 @@ for (let i = 0; i < 12; i++) {
 const containers = ref(initialContainers)
 
 // Handle moving items between cells
-const onMove = (event) => {
-  const fromCell = ct(containers.value).findCell(event.from)
-  const toCell = ct(containers.value).findCell(event.to)
+const onMove = ({ from: fromPath, to: toPath }) => {
+  const fromCell = ct(containers.value).findCell(fromPath)
+  const toCell = ct(containers.value).findCell(toPath)
 
   const shouldSwitch = toCell.item && toCell.item.id !== fromCell.item.id
 
   if (shouldSwitch) {
-    containers.value = ct(containers.value).switchItems(event.from, event.to)
+    containers.value = ct(containers.value).switchItems(fromPath, toPath)
   } else {
-    containers.value = ct(containers.value).moveItem(event.from, event.to)
+    containers.value = ct(containers.value).moveItem(fromPath, toPath)
   }
 }
 </script>
