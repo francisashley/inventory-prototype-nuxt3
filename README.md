@@ -1,8 +1,8 @@
 <div align="center">
 
-  # Inventory Prototype (built in Nuxt 3)
+# Inventory Prototype (built in Nuxt 3)
 
-  A dependency-free inventory system built in Vue (Nuxt) 3.
+A dependency-free inventory system built in Vue (Nuxt) 3.
 
   <img src="public/img/demo.gif" alt="Inventory prototype example" title="Inventory prototype example" width="500" />
 </div>
@@ -17,11 +17,9 @@ This is a prototype and cannot be installed. Copy this code into another project
 <container :items="items" @move="onMove" />
 
 <script>
-  const items = initialItems;
+  const items = initialItems
 
-  const onMove = ({itemId, from: {}, to: { }}) => {
-
-  }
+  const onMove = ({ itemId, from: {}, to: {} }) => {}
 </script>
 ```
 
@@ -31,18 +29,18 @@ This is a prototype and cannot be installed. Copy this code into another project
 
 #### Props
 
-| name | type   | default   | description |
-|------|--------|-----------|-------------|
-| id   | `number` | required  | Used to identify which container the item is in.|
-| items | `(item\|null)[]` | [] | The items in the cells.|
-| rows | `number` | 2 | The amount of rows to show in the container.|
-| cols | `number` | 2 | The amount of columns to show in the container. |
-| theme | `"blue"\|"red"\|"white"` | `"white"` | The container border colour. |
+| name  | type                     | default   | description                                      |
+| ----- | ------------------------ | --------- | ------------------------------------------------ |
+| id    | `number`                 | required  | Used to identify which container the item is in. |
+| items | `(item\|null)[]`         | []        | The items in the cells.                          |
+| rows  | `number`                 | 2         | The amount of rows to show in the container.     |
+| cols  | `number`                 | 2         | The amount of columns to show in the container.  |
+| theme | `"blue"\|"red"\|"white"` | `"white"` | The container border colour.                     |
 
 #### Events
 
-| name | props | description |
-|------|--------|-----------|
+| name  | props       | description                                                              |
+| ----- | ----------- | ------------------------------------------------------------------------ |
 | @move | `MoveEvent` | This event fires after having dragged and dropped the item in a new cell |
 
 ## Types
