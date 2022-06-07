@@ -1,5 +1,5 @@
 {
-  "name": "nuxt3-containers-prototype",
+  "name": "inventory-prototype-nuxt3",
   "private": true,
   "scripts": {
     "build": "nuxt build",

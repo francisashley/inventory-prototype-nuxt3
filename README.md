@@ -1,10 +1,10 @@
 <div align="center">
 
-  # Vue 3 Containers Prototype
+  # Inventory Prototype (built in Nuxt 3)
 
-  A dependency-free drag and drop system built in Vue (Nuxt) 3.
+  A dependency-free inventory system built in Vue (Nuxt) 3.
 
-  <img src="public/img/demo.gif" alt="Nuxt 3 containers prototype example" title="Nuxt 3 containers prototype example" width="500" />
+  <img src="public/img/demo.gif" alt="Inventory prototype example" title="Inventory prototype example" width="500" />
 </div>
 
 ## Installation
