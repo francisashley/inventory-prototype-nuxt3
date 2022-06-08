@@ -13,6 +13,14 @@ This repo has diverged from drag-n-drop-prototype-nuxt3 in the direction of buil
 
 Just a thought.. possibly continue with drag and drop but holding shift while dragging only drags one
 
+Another though..
+
+- dragging drags the entire cell
+- clicking collects the item in hand
+- shift clicking picks up just one item
+- holding shift while clicking, picks up multiple
+
+
 THE FOLLOWING INFO IN THE README IS PROBABLY COMPLETELY WRONG AND NEEDS UPDATING.
 
 ## Installation
