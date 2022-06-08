@@ -11,6 +11,8 @@ A dependency-free inventory system built in Vue (Nuxt) 3.
 
 This repo has diverged from drag-n-drop-prototype-nuxt3 in the direction of building a mechanic which can support fine tuning the amount of items that are picked up. It is not possible to fine tune the amount of items that are picked up with dragging and dropping. Thinking about updating to something similar to Stardew Valley / Terraria. Arma 3 is also an inspiration for how the items are designed in the containers (potentially spanning multiple cells). 
 
+Just a thought.. possibly continue with drag and drop but holding shift while dragging only drags one
+
 THE FOLLOWING INFO IN THE README IS PROBABLY COMPLETELY WRONG AND NEEDS UPDATING.
 
 ## Installation
