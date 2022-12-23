@@ -5,8 +5,9 @@
       :key="cell.id"
       :draggable="Boolean(cell.item)"
       :path="[id, cell.id]"
-      @drop="onDrop($event, cell.id)"
       @mousedown="onMouseleaveCell()"
+      @dragstart="onDragStart($event, cell.amount)"
+      @drop="onDrop(cell.id)"
     >
       <item
         v-if="cell.item"
@@ -21,6 +22,7 @@
 
 <script lang="ts" setup>
 import { PropType } from 'nuxt/dist/app/compat/capi'
+import { useState } from '../composables/state'
 
 const emit = defineEmits(['move', 'mouseover-cell', 'mouseleave-cell'])
 
@@ -45,8 +47,10 @@ const props = defineProps({
   },
 })
 
-const onDrop = (event, cellId) => {
-  const from = JSON.parse(event.dataTransfer.getData('path'))
+const { payload, setPayload, clearPayload } = useState('default')
+
+const onDrop = (cellId) => {
+  const from = payload.value.from
 
   const to = [props.id, cellId]
 
@@ -55,6 +59,8 @@ const onDrop = (event, cellId) => {
   if (isMovingCell) {
     emit('move', { from, to })
   }
+
+  clearPayload()
 }
 
 const onMouseoverCell = (cell) => {
@@ -63,5 +69,9 @@ const onMouseoverCell = (cell) => {
 
 const onMouseleaveCell = () => {
   emit('mouseleave-cell')
+}
+
+const onDragStart = (path, amount) => {
+  setPayload(path, amount)
 }
 </script>

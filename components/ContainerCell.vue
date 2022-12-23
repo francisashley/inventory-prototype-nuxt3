@@ -8,7 +8,7 @@
         @dragleave="onDragLeave"
         @drop="onDrop"
       >
-        <div draggable="true" @dragstart.stop="onDragStart($event)">
+        <div draggable="true" @dragstart.stop="onDragStart($event)" @dragend.stop="onDragEnd($event)">
           <slot />
         </div>
       </div>
@@ -29,20 +29,29 @@ const props = defineProps({
   },
 })
 
+const emits = defineEmits(['dragstart', 'dragend'])
+
 const isHovering = ref(false)
+
 const onDragEnter = () => {
   isHovering.value = true
 }
+
 const onDragLeave = () => {
   isHovering.value = false
 }
-const onDrop = (event) => {
+
+const onDrop = () => {
   isHovering.value = false
 }
 
 const onDragStart = (event) => {
   event.dataTransfer.dropEffect = 'move'
   event.dataTransfer.effectAllowed = 'move'
-  event.dataTransfer.setData('path', JSON.stringify(props.path))
+  emits('dragstart', props.path)
+}
+
+const onDragEnd = () => {
+  emits('dragend', props.path)
 }
 </script>
