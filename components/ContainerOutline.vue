@@ -2,9 +2,9 @@
   <div
     class="relative p-2 border border-thin overflow-scroll"
     :class="{
-      'border-blue-400': props.theme === 'blue',
-      'border-red-400': props.theme === 'red',
-      'border-white': props.theme === null,
+      'border-blue-400': props.color === 'blue',
+      'border-red-400': props.color === 'red',
+      'border-white': props.color === null,
     }"
     :style="containerStyle"
   >
@@ -21,7 +21,7 @@ const props = defineProps({
     default: () => [8, 2],
     validator: (size) => typeof size[0] === 'number' && typeof size[1] === 'number',
   },
-  theme: {
+  color: {
     type: String,
     default: null,
     validator: (value: any) => ['blue', 'red'].includes(value),

@@ -1,5 +1,5 @@
 <template>
-  <ContainerOutline :size="props.size" :theme="props.theme">
+  <ContainerOutline :size="props.size" :color="props.color">
     <ContainerCell
       v-for="cell in props.cells"
       :key="cell.id"
@@ -38,7 +38,7 @@ const props = defineProps({
     default: () => [8, 2],
     validator: (size) => typeof size[0] === 'number' && typeof size[1] === 'number',
   },
-  theme: {
+  color: {
     type: String,
     default: null,
     validator: (value: any) => ['blue', 'red', 'white'].includes(value),

@@ -7,7 +7,7 @@
       <Container
         :id="container.id"
         :cells="container.cells"
-        :theme="container.theme"
+        :color="container.theme"
         :size="container.size"
         @move="onMove"
         @mouseover-cell="onMouseoverCell"
