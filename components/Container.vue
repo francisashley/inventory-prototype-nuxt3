@@ -17,6 +17,7 @@
         @mouseleave="onMouseleaveCell()"
       />
     </ContainerCell>
+    <CellTooltip :cell="hoveredCell" />
   </ContainerOutline>
 </template>
 
@@ -48,6 +49,7 @@ const props = defineProps({
 })
 
 const { payload, setPayload, clearPayload } = useState('default')
+const hoveredCell = ref(null)
 
 const onDrop = (cellId) => {
   const from = payload.value.from
@@ -64,11 +66,13 @@ const onDrop = (cellId) => {
 }
 
 const onMouseoverCell = (cell) => {
-  emit('mouseover-cell', cell)
+  if (cell.item) {
+    hoveredCell.value = cell
+  }
 }
 
 const onMouseleaveCell = () => {
-  emit('mouseleave-cell')
+  hoveredCell.value = null
 }
 
 const onDragStart = (path, amount) => {

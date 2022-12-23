@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="stagedCell"
-    class="pointer-events-none absolute flex text-white text-xs p-2 bg-black"
+    class="pointer-events-none fixed flex text-white text-xs p-2 bg-black"
     :style="style"
     :class="{
       transition: closing,
