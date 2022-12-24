@@ -169,9 +169,9 @@ const switchItems = (containers: Container[], pathA: Path, pathB: Path) => {
   containers = multiContainerClearCell(containers, pathA)
   containers = multiContainerClearCell(containers, pathB)
 
-  containers = multiContainerDepositCell(containers, pathA, pathBCell.item, pathACell.amount)
-  containers = multiContainerDepositCell(containers, pathB, pathACell.item, pathBCell.amount)
 
+  containers = multiContainerDepositCell(containers, pathA, pathBCell.item, pathBCell.amount)
+  containers = multiContainerDepositCell(containers, pathB, pathACell.item, pathACell.amount)
   return [...containers].map(parseContainer)
 }
 
