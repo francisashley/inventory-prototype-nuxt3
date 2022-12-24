@@ -1,7 +1,7 @@
 <template>
   <ContainerOutline :size="props.size" :color="props.color">
     <ContainerCell
-      v-for="cell in props.cells"
+      v-for="cell in container.cells"
       :key="cell.id"
       :draggable="Boolean(cell.item)"
       :path="[id, cell.id]"
@@ -23,9 +23,8 @@
 
 <script lang="ts" setup>
 import { PropType } from 'nuxt/dist/app/compat/capi'
-import { useState } from '../composables/state'
-
-const emit = defineEmits(['move', 'mouseover-cell', 'mouseleave-cell'])
+import { useContainers } from '../composables/useContainers'
+import { usePayload } from '../composables/usePayload'
 
 const props = defineProps({
   id: {
@@ -48,21 +47,39 @@ const props = defineProps({
   },
 })
 
-const { payload, setPayload, clearPayload } = useState('default')
+const emit = defineEmits(['change'])
+
+// state
+const { initContainer, updateContainer, containers, move } = useContainers()
+const { payload, setPayload, clearPayload } = usePayload()
 const hoveredCell = ref(null)
+
+initContainer(props)
+watch(props, () => {
+  updateContainer(props.id, props)
+})
+
+// actual container
+const container = computed(() => {
+  return containers.value.find((container) => container.id === props.id)
+})
+
+// callbacks
+const onDragStart = (path, amount) => {
+  setPayload(path, amount)
+}
 
 const onDrop = (cellId) => {
   const from = payload.value.from
-
   const to = [props.id, cellId]
-
   const isMovingCell = from + '' !== to + ''
 
   if (isMovingCell) {
-    emit('move', { from, to })
+    move(from, to)
   }
 
   clearPayload()
+  emit('change', container.value)
 }
 
 const onMouseoverCell = (cell) => {
@@ -73,9 +90,5 @@ const onMouseoverCell = (cell) => {
 
 const onMouseleaveCell = () => {
   hoveredCell.value = null
-}
-
-const onDragStart = (path, amount) => {
-  setPayload(path, amount)
 }
 </script>
