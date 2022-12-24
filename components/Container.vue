@@ -24,7 +24,7 @@
 <script lang="ts" setup>
 import { PropType } from 'nuxt/dist/app/compat/capi'
 import { useContainers } from '../composables/useContainers'
-import { usePayload } from '../composables/usePayload'
+import { useHand } from '../composables/useHand'
 import { Cell } from '../interfaces/inventory'
 
 const props = defineProps({
@@ -52,7 +52,7 @@ const emit = defineEmits(['change'])
 
 // state
 const { initContainer, updateContainer, containers, move } = useContainers()
-const { payload, setPayload, clearPayload } = usePayload()
+const { hand, setHand, clearHand } = useHand()
 const hoveredCell = ref(null)
 
 initContainer(props)
@@ -67,11 +67,11 @@ const container = computed(() => {
 
 // callbacks
 const onDragStart = (path, amount) => {
-  setPayload(path, amount)
+  setHand(path, amount)
 }
 
 const onDrop = (cellId) => {
-  const from = payload.value.from
+  const from = hand.value.from
   const to = [props.id, cellId]
   const isMovingCell = from + '' !== to + ''
 
@@ -79,7 +79,7 @@ const onDrop = (cellId) => {
     move(from, to)
   }
 
-  clearPayload()
+  clearHand()
   emit('change', container.value)
 }
 
