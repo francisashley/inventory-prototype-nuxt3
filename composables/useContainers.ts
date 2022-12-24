@@ -1,6 +1,6 @@
 import { reactive, computed } from 'vue'
 import { Container } from '../interfaces/inventory'
-import ct from '@/utils/containerTools'
+import ct from '@/utils/container.utils'
 
 const state = reactive<{ containers: Container[] }>({
   containers: [],

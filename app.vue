@@ -20,8 +20,8 @@ import { ref } from 'vue'
 import itemFixtures from '@/assets/fixtures/item-catalogue.json'
 import containerFixtures from '@/assets/fixtures/containers.json'
 
-import ct from '@/utils/containerTools'
-import it from '@/utils/itemTools'
+import ct from '@/utils/container.utils'
+import it from '@/utils/item.utils'
 
 // Generate initial data
 const items = it(itemFixtures as Item[]).get()
