@@ -1,27 +1,6 @@
 import { Container, ContainerSize, Cell, Item, Path } from '../interfaces/inventory'
-
-/// /////////////////////////////////////////////////////////////////////////////
-// PRIVATE TOOLS                                                              ///
-/// /////////////////////////////////////////////////////////////////////////////
-
-const _randomNumber = () => Math.floor(Math.random() * Math.floor(Math.random() * Date.now()))
-const _generateEmptyArray = (length: number) => Array(length).fill(null)
-
-/**
- * Returns the index of the last element in the array where predicate is true, and -1
- * otherwise.
- * @param array The source array to search in
- * @param predicate find calls predicate once for each element of the array, in descending
- * order, until it finds one where predicate returns true. If such an element is found,
- * findLastIndex immediately returns that element index. Otherwise, findLastIndex returns -1.
- */
-function findLastIndex<T>(array: Array<T>, predicate: (value: T, index: number, obj: T[]) => boolean): number {
-  let l = array.length
-  while (l--) {
-    if (predicate(array[l], l, array)) return l
-  }
-  return -1
-}
+import { generateId } from '@/utils/id.utils'
+import { generateArray, findLastIndex } from '@/utils/array.utils'
 
 /// /////////////////////////////////////////////////////////////////////////////
 // CONTAINER TOOLS                                                            ///
@@ -31,7 +10,7 @@ function findLastIndex<T>(array: Array<T>, predicate: (value: T, index: number, 
  * Return formatted container
  */
 const parseContainer = (container: Container): Container => {
-  const id = 'id' in container ? container.id : _randomNumber()
+  const id = 'id' in container ? container.id : generateId()
   const name = 'name' in container ? container.name : ''
   const color = 'color' in container ? container.color : 'white'
   const size = 'size' in container ? container.size : ([8, 2] as ContainerSize)
@@ -63,7 +42,7 @@ const parseContainer = (container: Container): Container => {
   const currentCells = container.cells || []
   const totalCells = calculateTotalCells(size, currentCells)
 
-  const cells = _generateEmptyArray(totalCells).map((_, cellId) => ({
+  const cells = generateArray(totalCells).map((_, cellId) => ({
     id: cellId,
     path: [id, cellId],
     item: container?.cells?.[cellId]?.item || null,
