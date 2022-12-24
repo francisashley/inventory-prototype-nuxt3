@@ -51,7 +51,7 @@ This is a prototype and cannot be installed. Copy this code into another project
 | items | `(item\|null)[]`         | []        | The items in the cells.                          |
 | rows  | `number`                 | 2         | The amount of rows to show in the container.     |
 | cols  | `number`                 | 2         | The amount of columns to show in the container.  |
-| theme | `"blue"\|"red"\|"white"` | `"white"` | The container border colour.                     |
+| color | `"blue"\|"red"\|"white"` | `"white"` | The container border colour.                     |
 
 #### Events
 
@@ -65,7 +65,7 @@ This is a prototype and cannot be installed. Copy this code into another project
 interface Container {
   id: number
   name: string
-  theme: 'white' | 'red' | 'blue'
+  color: 'white' | 'red' | 'blue'
   items: (containerItem | null)[]
   size: [number, number] // [cols, rows]
 }

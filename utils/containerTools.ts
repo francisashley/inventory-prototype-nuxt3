@@ -31,7 +31,7 @@ function findLastIndex<T>(array: Array<T>, predicate: (value: T, index: number, 
 const parseContainer = (container: Container): Container => {
   const id = 'id' in container ? container.id : _randomNumber()
   const name = 'name' in container ? container.name : ''
-  const theme = 'theme' in container ? container.theme : 'white'
+  const color = 'color' in container ? container.color : 'white'
   const size = 'size' in container ? container.size : ([8, 2] as ContainerSize)
 
   const calculateTotalCells = (containerSize: ContainerSize, currentCells: Cell[]) => {
@@ -68,7 +68,7 @@ const parseContainer = (container: Container): Container => {
     amount: container?.cells?.[cellId]?.amount || 0,
   }))
 
-  return { id, name, theme, cells, size }
+  return { id, name, color, cells, size }
 }
 
 /**

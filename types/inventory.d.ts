@@ -16,7 +16,7 @@ type ContainerSize = [number, number]
 interface Container {
   id: number
   name: string
-  theme: 'white' | 'red' | 'blue'
+  color: 'white' | 'red' | 'blue'
   cells: Cell[]
   size: ContainerSize
 }
