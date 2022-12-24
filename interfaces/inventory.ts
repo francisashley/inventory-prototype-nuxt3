@@ -1,19 +1,21 @@
-interface Item {
+export interface Item {
   id: number
   name: string
   image: string | null
 }
 
-type Path = number[]
-interface Cell extends item {
+export type Path = number[]
+
+export interface Cell extends Item {
   id: number
   path: Path
   item: Item | null
   amount: number
 }
 
-type ContainerSize = [number, number]
-interface Container {
+export type ContainerSize = [number, number]
+
+export interface Container {
   id: number
   name: string
   color: 'white' | 'red' | 'blue'

@@ -1,3 +1,5 @@
+import { Item } from '../interfaces/inventory'
+
 /**
  * Return formatted item
  */

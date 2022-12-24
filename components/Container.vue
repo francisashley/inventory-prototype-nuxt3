@@ -25,6 +25,7 @@
 import { PropType } from 'nuxt/dist/app/compat/capi'
 import { useContainers } from '../composables/useContainers'
 import { usePayload } from '../composables/usePayload'
+import { Cell } from '../interfaces/inventory'
 
 const props = defineProps({
   id: {
