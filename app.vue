@@ -21,10 +21,10 @@ import itemFixtures from '@/assets/fixtures/item-catalogue.json'
 import containerFixtures from '@/assets/fixtures/containers.json'
 
 import ct from '@/utils/container.utils'
-import it from '@/utils/item.utils'
+import { parseItem } from '@/utils/item.utils'
 
 // Generate initial data
-const items = it(itemFixtures as Item[]).get()
+const items = itemFixtures.map(parseItem)
 let initialContainers = ct(containerFixtures as Container[]).get()
 
 for (let i = 0; i < 12; i++) {
