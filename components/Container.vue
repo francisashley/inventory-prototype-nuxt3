@@ -51,7 +51,7 @@ const props = defineProps({
 const emit = defineEmits(['change'])
 
 // state
-const { initContainer, updateContainer, containers, move } = useContainers()
+const { initContainer, updateContainer, containers, move, swap, findCell } = useContainers()
 const { hand, setHand, clearHand } = useHand()
 const hoveredCell = ref(null)
 
@@ -73,10 +73,18 @@ const onDragStart = (path, amount) => {
 const onDrop = (cellId) => {
   const from = hand.value.from
   const to = [props.id, cellId]
-  const isMovingCell = from + '' !== to + ''
 
-  if (isMovingCell) {
+  const fromCell = findCell(from)
+  const toCell = findCell(to)
+
+  if (
+    typeof fromCell.item !== 'undefined' &&
+    typeof toCell.item !== 'undefined' &&
+    fromCell.item?.id === toCell.item?.id
+  ) {
     move(from, to)
+  } else {
+    swap(from, to)
   }
 
   clearHand()

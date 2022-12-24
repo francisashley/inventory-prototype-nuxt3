@@ -6,7 +6,7 @@ export interface Item {
 
 export type Path = number[]
 
-export interface Cell extends Item {
+export interface Cell {
   id: number
   path: Path
   item: Item | null

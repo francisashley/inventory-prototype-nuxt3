@@ -1,6 +1,6 @@
 import { reactive, computed } from 'vue'
-import { Container } from '../interfaces/inventory'
-import ct from '@/utils/container.utils'
+import { Container, Path, Item } from '../interfaces/inventory'
+import containerTools from '@/utils/container.utils'
 
 const state = reactive<{ containers: Container[] }>({
   containers: [],
@@ -25,21 +25,35 @@ export function useContainers() {
     state.containers = state.containers.filter((container) => container.id !== id)
   }
 
-  const getContainer = (id: number) => {
+  const findContainer = (id: number) => {
     return state.containers.find((container) => container.id === id)
   }
 
-  const move = (from: number[], to: number[]) => {
-    const fromCell = ct(state.containers).findCell(from)
-    const toCell = ct(state.containers).findCell(to)
+  const findCell = (path: Path) => {
+    return containerTools.findCell(findContainer(path[0]), path[1])
+  }
 
-    const shouldSwitch = toCell.item && toCell.item.id !== fromCell.item.id
+  const clearCell = (path: Path) => {
+    return containerTools.clearCell(findContainer(path[0]), path[1])
+  }
 
-    if (shouldSwitch) {
-      state.containers = ct(state.containers).switchItems(from, to)
-    } else {
-      state.containers = [...ct(state.containers).moveItem(from, to)]
-    }
+  const depositCell = (path: Path, item: Item, amount: number) => {
+    return containerTools.depositCell(findContainer(path[0]), path[1], item, amount)
+  }
+
+  const move = (from: Path, to: Path) => {
+    const fromCell = findCell(from)
+    updateContainer(findContainer(from[0]).id, clearCell(from))
+    updateContainer(findContainer(to[0]).id, depositCell(to, fromCell.item, fromCell.amount))
+  }
+
+  const swap = (from: Path, to: Path) => {
+    const fromCell = findCell(from)
+    const toCell = findCell(to)
+    updateContainer(findContainer(from[0]).id, clearCell(from))
+    updateContainer(findContainer(from[0]).id, depositCell(from, toCell.item, toCell.amount))
+    updateContainer(findContainer(to[0]).id, clearCell(to))
+    updateContainer(findContainer(to[0]).id, depositCell(to, fromCell.item, fromCell.amount))
   }
 
   return {
@@ -47,7 +61,9 @@ export function useContainers() {
     initContainer,
     updateContainer,
     removeContainer,
-    getContainer,
+    findContainer,
     move,
+    swap,
+    findCell,
   }
 }

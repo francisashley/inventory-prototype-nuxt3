@@ -1,15 +1,11 @@
-import { Container, ContainerSize, Cell, Item, Path } from '../interfaces/inventory'
+import { Container, ContainerSize, Cell, Item } from '../interfaces/inventory'
 import { generateId } from '@/utils/id.utils'
 import { generateArray, findLastIndex } from '@/utils/array.utils'
-
-/// /////////////////////////////////////////////////////////////////////////////
-// CONTAINER TOOLS                                                            ///
-/// /////////////////////////////////////////////////////////////////////////////
 
 /**
  * Return formatted container
  */
-const parseContainer = (container: Container): Container => {
+export const parseContainer = (container: Container): Container => {
   const id = 'id' in container ? container.id : generateId()
   const name = 'name' in container ? container.name : ''
   const color = 'color' in container ? container.color : 'white'
@@ -55,19 +51,19 @@ const parseContainer = (container: Container): Container => {
 /**
  * Find item in cell
  */
-const findCell = (container: Container, cellId: number) => {
+export const findCell = (container: Container, cellId: number) => {
   return container.cells[cellId]
 }
 
 /**
  * Clear contents of a cell
  */
-const clearCell = (container: Container, cellId: number) => {
+export const clearCell = (container: Container, cellId: number) => {
   return {
     ...container,
     cells: [...container.cells].map((cell, index) => {
       if (index === cellId) {
-        return { ...cell, item: null }
+        return { ...cell, item: null, amount: 0 }
       } else {
         return cell
       }
@@ -78,13 +74,12 @@ const clearCell = (container: Container, cellId: number) => {
 /**
  * Deposit item in cell
  */
-const depositCell = (container: Container, cellId: number, item: Item, amount: number) => {
+export const depositCell = (container: Container, cellId: number, item: Item, amount: number) => {
   return {
     ...container,
     cells: [...container.cells].map((cell) => {
       if (cell.id === cellId) {
-        amount = cell.item?.id === item.id ? cell.amount + amount : amount
-        return { ...cell, item, amount }
+        return { ...cell, item, amount: cell.amount + amount }
       } else {
         return cell
       }
@@ -92,112 +87,25 @@ const depositCell = (container: Container, cellId: number, item: Item, amount: n
   }
 }
 
-/// /////////////////////////////////////////////////////////////////////////////
-// MULTI CONTAINER TOOLS                                                      ///
-/// /////////////////////////////////////////////////////////////////////////////
-
-/**
- * Find container in containers
- */
-const multiContainerFind = (containers: Container[], containerId: number) => {
-  return containers.find((container) => container.id === containerId)
-}
-
-/**
- * Find item in cell in containers
- */
-const multiContainerFindCell = (containers: Container[], path: Path) => {
-  return findCell(multiContainerFind(containers, path[0]), path[1])
-}
-
-/**
- * Replace container in containers
- */
-const multiContainerReplace = (
-  containers: Container[],
-  containerId: number,
-  fn: (container: Container) => Container
-) => {
-  return [...containers].map((container) => {
-    return container.id === containerId ? fn(container) : container
-  })
-}
-
-/**
- * Clear contents of a cell in containers
- */
-const multiContainerClearCell = (containers: Container[], path: Path) => {
-  return multiContainerReplace(containers, path[0], (container) => clearCell(container, path[1]))
-}
-
-/**
- * Deposit item in cell in containers
- */
-const multiContainerDepositCell = (containers: Container[], path: Path, item: Item, amount: number) => {
-  return multiContainerReplace(containers, path[0], (container) => depositCell(container, path[1], item, amount))
-}
-
 /**
  *  Deposit the item in the first available cell
  */
-const depositFirstAvailableCell = (
-  containers: Container[],
-  path: Path,
-  item: Item,
-  amount: number = 1
-): Container[] => {
-  return multiContainerReplace(containers, path[0], (container) => {
-    const cells = [...container.cells]
+export const depositFirstAvailableCell = (container: Container, item: Item, amount: number = 1): Container => {
+  const cells = [...container.cells]
 
-    const cell = cells.find((cell) => cell.item === null)
+  const cell = cells.find((cell) => cell.item === null)
 
-    if (cell) {
-      cells[cell.id] = { ...cells[cell.id], item, amount }
-    }
-
-    return parseContainer({ ...container, cells })
-  })
-}
-
-/**
- * Switch items between two cells
- */
-const switchItems = (containers: Container[], pathA: Path, pathB: Path) => {
-  const pathACell = multiContainerFindCell(containers, pathA)
-  const pathBCell = multiContainerFindCell(containers, pathB)
-
-  containers = multiContainerClearCell(containers, pathA)
-  containers = multiContainerClearCell(containers, pathB)
-
-
-  containers = multiContainerDepositCell(containers, pathA, pathBCell.item, pathBCell.amount)
-  containers = multiContainerDepositCell(containers, pathB, pathACell.item, pathACell.amount)
-  return [...containers].map(parseContainer)
-}
-
-/**
- * Move item from one cell to another
- */
-const moveItem = (containers: Container[], fromPath: Path, toPath: Path) => {
-  const fromCell = multiContainerFindCell(containers, fromPath)
-
-  containers = multiContainerClearCell(containers, fromPath)
-  containers = multiContainerDepositCell(containers, toPath, fromCell.item, fromCell.amount)
-
-  return [...containers].map(parseContainer)
-}
-
-export default function (containers: Container[]) {
-  containers = [...containers].map(parseContainer)
-
-  return {
-    get: (): Container[] => containers,
-    findCell: (path: Path) => multiContainerFindCell(containers, path),
-    clearCell: (path: Path) => multiContainerClearCell(containers, path),
-    depositCell: (path: Path, item: Item, amount: number) => multiContainerDepositCell(containers, path, item, amount),
-    switchItems: (pathA: Path, pathB: Path) => switchItems(containers, pathA, pathB),
-    moveItem: (fromPath: Path, toPath: Path) => moveItem(containers, fromPath, toPath),
-    depositFirstAvailableCell: (path: Path, item: Item, amount: number) =>
-      depositFirstAvailableCell(containers, path, item, amount),
+  if (cell) {
+    cells[cell.id] = { ...cells[cell.id], item, amount }
   }
+
+  return parseContainer({ ...container, cells })
+}
+
+export default {
+  parseContainer,
+  findCell,
+  clearCell,
+  depositCell,
+  depositFirstAvailableCell,
 }
