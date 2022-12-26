@@ -4,7 +4,7 @@
       v-for="cell in container.cells"
       :key="cell.id"
       :draggable="Boolean(cell.item)"
-      :path="[id, cell.id]"
+      :path="cell.path"
       @dragstart="onDragStart($event, cell)"
       @drop="onDrop(cell.id)"
       @mouseenter="setHoveredCell(cell.item ? cell : null)"
