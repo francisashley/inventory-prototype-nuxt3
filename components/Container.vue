@@ -62,11 +62,6 @@ const {
 // initialise container
 const { container } = createContainer(props)
 
-// actual container
-const container = computed(() => {
-  return containers.value.find((container) => container.id === props.id)
-})
-
 // callbacks
 const onDragStart = (path, cell) => {
   setHand(path, cell.item.amount)
