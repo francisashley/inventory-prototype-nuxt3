@@ -35,18 +35,24 @@ for (let i = 0; i < 12; i++) {
 
 const containers = ref(initialContainers)
 
-const onChange = (changedContainer) => {
-  containers.value = containers.value.map((container) =>
-    container.id === changedContainer.id ? changedContainer : container
-  )
+const findContainer = (id) => {
+  return containers.value.find((container) => container.id === id)
+}
+
+const replaceContainer = (id, container) => {
+  containers.value = containers.value.map((c) => (c.id === id ? container : c))
+}
+
+const onChange = (updatedContainer) => {
+  replaceContainer(updatedContainer.id, updatedContainer)
 }
 
 const onAddRandomItem = (containerId: number) => {
   const randomAmount = Math.floor(Math.random() * 10) + 1
   const randomItemIndex = Math.floor(Math.random() * items.length)
   const item = items[randomItemIndex]
-  containers.value = containers.value.map((container) => {
-    return container.id === containerId ? depositFirstAvailableCell(container, item, randomAmount) : container
-  })
+  const container = findContainer(containerId)
+  const updatedContainer = depositFirstAvailableCell(container, item, randomAmount)
+  replaceContainer(containerId, updatedContainer)
 }
 </script>
