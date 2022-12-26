@@ -30,7 +30,7 @@ for (let i = 0; i < 12; i++) {
   const randomAmount = Math.floor(Math.random() * 10) + 1
   const randomItemIndex = Math.floor(Math.random() * items.length)
   const item = items[randomItemIndex]
-  initialContainers[0] = depositFirstAvailableCell(initialContainers[0], item, randomAmount)
+  initialContainers[0] = depositFirstAvailableCell(initialContainers[0], { ...item, amount: randomAmount })
 }
 
 const containers = ref(initialContainers)

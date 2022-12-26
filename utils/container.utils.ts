@@ -42,7 +42,6 @@ export const parseContainer = (container: Container): Container => {
     id: cellId,
     path: [id, cellId],
     item: container?.cells?.[cellId]?.item || null,
-    amount: container?.cells?.[cellId]?.amount || 0,
   }))
 
   return { id, name, color, cells, size }
@@ -63,7 +62,7 @@ export const clearCell = (container: Container, cellId: number) => {
     ...container,
     cells: [...container.cells].map((cell, index) => {
       if (index === cellId) {
-        return { ...cell, item: null, amount: 0 }
+        return { ...cell, item: null }
       } else {
         return cell
       }
@@ -74,12 +73,16 @@ export const clearCell = (container: Container, cellId: number) => {
 /**
  * Deposit item in cell
  */
-export const depositCell = (container: Container, cellId: number, item: Item, amount: number) => {
+export const depositCell = (container: Container, cellId: number, item: Item) => {
   return {
     ...container,
     cells: [...container.cells].map((cell) => {
       if (cell.id === cellId) {
-        return { ...cell, item, amount: cell.amount + amount }
+        if (cell.item && cell.item.id === item.id) {
+          return { ...cell, item: { ...cell.item, amount: cell.item.amount + item.amount } }
+        } else {
+          return { ...cell, item }
+        }
       } else {
         return cell
       }
@@ -90,13 +93,13 @@ export const depositCell = (container: Container, cellId: number, item: Item, am
 /**
  *  Deposit the item in the first available cell
  */
-export const depositFirstAvailableCell = (container: Container, item: Item, amount: number = 1): Container => {
+export const depositFirstAvailableCell = (container: Container, item: Item): Container => {
   const cells = [...container.cells]
 
   const cell = cells.find((cell) => cell.item === null)
 
   if (cell) {
-    cells[cell.id] = { ...cells[cell.id], item, amount }
+    cells[cell.id] = { ...cells[cell.id], item }
   }
 
   return parseContainer({ ...container, cells })

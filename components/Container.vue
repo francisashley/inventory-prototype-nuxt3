@@ -5,13 +5,13 @@
       :key="cell.id"
       :draggable="Boolean(cell.item)"
       :path="[id, cell.id]"
-      @dragstart="onDragStart($event, cell.amount)"
+      @dragstart="onDragStart($event, cell)"
       @drop="onDrop(cell.id)"
       @mouseenter="setHoveredCell(cell.item ? cell : null)"
       @mousedown="setHoveredCell(null)"
       @mouseleave="setHoveredCell(null)"
     >
-      <Item v-if="cell.item" :item="cell.item" :amount="cell.amount" />
+      <Item v-if="cell.item" :item="cell.item" />
     </ContainerCell>
     <CellTooltip :cell="hoveredCell" />
   </ContainerOutline>
@@ -72,8 +72,8 @@ const container = computed(() => {
 })
 
 // callbacks
-const onDragStart = (path, amount) => {
-  setHand(path, amount)
+const onDragStart = (path, cell) => {
+  setHand(path, cell.item.amount)
 }
 
 const onDrop = (cellId) => {

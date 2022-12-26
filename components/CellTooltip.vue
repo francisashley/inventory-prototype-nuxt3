@@ -9,7 +9,7 @@
       'opacity-100': !closing,
     }"
   >
-    {{ stagedCell.amount }} x {{ stagedCell.item.name }}
+    {{ stagedCell.item.amount }} x {{ stagedCell.item.name }}
   </div>
 </template>
 

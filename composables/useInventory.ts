@@ -52,23 +52,23 @@ export function useInventory() {
     return containerTools.clearCell(findContainer(path[0]), path[1])
   }
 
-  const depositCell = (path: Path, item: Item, amount: number) => {
-    return containerTools.depositCell(findContainer(path[0]), path[1], item, amount)
+  const depositCell = (path: Path, item: Item) => {
+    return containerTools.depositCell(findContainer(path[0]), path[1], item)
   }
 
   const move = (from: Path, to: Path) => {
     const fromCell = findCell(from)
     updateContainer(findContainer(from[0]).id, clearCell(from))
-    updateContainer(findContainer(to[0]).id, depositCell(to, fromCell.item, fromCell.amount))
+    updateContainer(findContainer(to[0]).id, depositCell(to, fromCell.item))
   }
 
   const swap = (from: Path, to: Path) => {
     const fromCell = findCell(from)
     const toCell = findCell(to)
     updateContainer(findContainer(from[0]).id, clearCell(from))
-    updateContainer(findContainer(from[0]).id, depositCell(from, toCell.item, toCell.amount))
+    updateContainer(findContainer(from[0]).id, depositCell(from, toCell.item))
     updateContainer(findContainer(to[0]).id, clearCell(to))
-    updateContainer(findContainer(to[0]).id, depositCell(to, fromCell.item, fromCell.amount))
+    updateContainer(findContainer(to[0]).id, depositCell(to, fromCell.item))
   }
 
   const setHand = (from: number[], amount: number) => {
