@@ -22,6 +22,8 @@ import { PropType } from 'nuxt/dist/app/compat/capi'
 import { useInventory } from '../composables/useInventory'
 import { Cell } from '../interfaces/inventory'
 
+const emit = defineEmits(['change'])
+
 const props = defineProps({
   id: {
     type: Number,
@@ -43,11 +45,8 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['change'])
-
-// state
 const {
-  initContainer,
+  addContainer,
   updateContainer,
   containers,
   move,
@@ -60,7 +59,9 @@ const {
   setHoveredCell,
 } = useInventory()
 
-initContainer(props)
+// add container on initial load
+addContainer(props)
+
 watch(props, () => {
   updateContainer(props.id, props)
 })

@@ -26,7 +26,7 @@ export function useInventory() {
     state.hoveredCell = cell
   }
 
-  const initContainer = (container: Container) => {
+  const addContainer = (container: Container) => {
     state.containers = [...state.containers, container]
   }
 
@@ -81,7 +81,7 @@ export function useInventory() {
 
   return {
     containers,
-    initContainer,
+    addContainer,
     updateContainer,
     removeContainer,
     findContainer,
