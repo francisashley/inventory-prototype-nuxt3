@@ -1,5 +1,5 @@
 import { reactive, computed } from 'vue'
-import { Container, Path, Item } from '../interfaces/inventory'
+import { Container, Path, Item, Cell } from '../interfaces/inventory'
 import containerTools from '@/utils/container.utils'
 
 type Hand = {
@@ -7,9 +7,10 @@ type Hand = {
   amount: number
 }
 
-const state = reactive<{ containers: Container[]; hand: Hand | null }>({
+const state = reactive<{ containers: Container[]; hand: Hand | null; hoveredCell: Cell | null }>({
   containers: [],
   hand: null,
+  hoveredCell: null,
 })
 
 export function useInventory() {
@@ -18,6 +19,12 @@ export function useInventory() {
   })
 
   const hand = computed(() => state.hand)
+
+  const hoveredCell = computed(() => state.hoveredCell)
+
+  const setHoveredCell = (cell: Cell | null) => {
+    state.hoveredCell = cell
+  }
 
   const initContainer = (container: Container) => {
     state.containers = [...state.containers, container]
@@ -84,5 +91,7 @@ export function useInventory() {
     hand,
     setHand,
     clearHand,
+    hoveredCell,
+    setHoveredCell,
   }
 }

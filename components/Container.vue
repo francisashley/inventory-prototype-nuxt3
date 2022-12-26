@@ -5,11 +5,11 @@
       :key="cell.id"
       :draggable="Boolean(cell.item)"
       :path="[id, cell.id]"
-      @mousedown="onMouseleaveCell()"
       @dragstart="onDragStart($event, cell.amount)"
       @drop="onDrop(cell.id)"
-      @mouseenter="onMouseoverCell(cell)"
-      @mouseleave="onMouseleaveCell()"
+      @mouseenter="setHoveredCell(cell.item ? cell : null)"
+      @mousedown="setHoveredCell(null)"
+      @mouseleave="setHoveredCell(null)"
     >
       <item v-if="cell.item" :item="cell.item" :amount="cell.amount" />
     </ContainerCell>
@@ -46,9 +46,19 @@ const props = defineProps({
 const emit = defineEmits(['change'])
 
 // state
-const { initContainer, updateContainer, containers, move, swap, findCell, hand, setHand, clearHand } = useInventory()
-
-const hoveredCell = ref(null)
+const {
+  initContainer,
+  updateContainer,
+  containers,
+  move,
+  swap,
+  findCell,
+  hand,
+  setHand,
+  clearHand,
+  hoveredCell,
+  setHoveredCell,
+} = useInventory()
 
 initContainer(props)
 watch(props, () => {
@@ -84,15 +94,5 @@ const onDrop = (cellId) => {
 
   clearHand()
   emit('change', container.value)
-}
-
-const onMouseoverCell = (cell) => {
-  if (cell.item) {
-    hoveredCell.value = cell
-  }
-}
-
-const onMouseleaveCell = () => {
-  hoveredCell.value = null
 }
 </script>
