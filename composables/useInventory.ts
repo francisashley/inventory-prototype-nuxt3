@@ -75,7 +75,7 @@ export function useInventory() {
     updateContainer(findContainer(to[0]).id, depositCell(to, fromCell.item))
   }
 
-  const setHand = (from: number[], amount: number) => {
+  const pickup = (from: number[], amount: number) => {
     state.hand = { from, amount }
   }
 
@@ -93,7 +93,7 @@ export function useInventory() {
     swap,
     findCell,
     hand,
-    setHand,
+    pickup,
     clearHand,
     hoveredCell,
     setHoveredCell,

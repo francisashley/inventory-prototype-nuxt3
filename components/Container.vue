@@ -44,25 +44,15 @@ const props = defineProps({
   },
 })
 
-const {
-  createContainer,
-  updateContainer,
-  move,
-  swap,
-  findCell,
-  hand,
-  setHand,
-  clearHand,
-  hoveredCell,
-  setHoveredCell,
-} = useInventory()
+const { createContainer, updateContainer, move, swap, findCell, hand, pickup, clearHand, hoveredCell, setHoveredCell } =
+  useInventory()
 
 // initialise container
 const { container } = createContainer(props)
 
 // callbacks
 const onDrag = (cell) => {
-  setHand(cell.path, cell.item.amount)
+  pickup(cell.path, cell.item.amount)
 }
 
 const onDrop = (cellId) => {
