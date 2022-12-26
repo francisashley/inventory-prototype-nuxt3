@@ -3,10 +3,10 @@
     <div class="tw-border tw-border-thin tw-border-gray-800 tw-relative tw-h-full tw-w-full">
       <div
         class="tw-absolute -tw-inset-px"
-        @dragenter.prevent="onDragEnter"
+        @dragenter.prevent="setIsHovering(true)"
         @dragover.prevent
-        @dragleave="onDragLeave"
-        @drop="onDrop"
+        @dragleave="setIsHovering(false)"
+        @drop="setIsHovering(false)"
       >
         <div draggable="true" @dragstart.stop="onDragStart($event)" @dragend.stop="onDragEnd($event)">
           <slot />
@@ -32,17 +32,8 @@ const props = defineProps({
 const emits = defineEmits(['dragstart', 'dragend'])
 
 const isHovering = ref(false)
-
-const onDragEnter = () => {
-  isHovering.value = true
-}
-
-const onDragLeave = () => {
-  isHovering.value = false
-}
-
-const onDrop = () => {
-  isHovering.value = false
+const setIsHovering = (value: boolean) => {
+  isHovering.value = value
 }
 
 const onDragStart = (event) => {
