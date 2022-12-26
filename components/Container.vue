@@ -8,14 +8,10 @@
       @mousedown="onMouseleaveCell()"
       @dragstart="onDragStart($event, cell.amount)"
       @drop="onDrop(cell.id)"
+      @mouseenter="onMouseoverCell(cell)"
+      @mouseleave="onMouseleaveCell()"
     >
-      <item
-        v-if="cell.item"
-        :item="cell.item"
-        :amount="cell.amount"
-        @mouseenter="onMouseoverCell(cell)"
-        @mouseleave="onMouseleaveCell()"
-      />
+      <item v-if="cell.item" :item="cell.item" :amount="cell.amount" />
     </ContainerCell>
     <CellTooltip :cell="hoveredCell" />
   </ContainerOutline>
