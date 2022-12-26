@@ -3,29 +3,26 @@
     <ContainerCell
       v-for="cell in container.cells"
       :key="cell.id"
+      :path="cell.path"
       :draggable="Boolean(cell.item)"
-      :path="[id, cell.id]"
-      @mousedown="onMouseleaveCell()"
-      @dragstart="onDragStart($event, cell.amount)"
+      @drag="onDrag(cell)"
       @drop="onDrop(cell.id)"
+      @hover="setHoveredCell(cell.item ? cell : null)"
+      @hoverLeave="setHoveredCell(null)"
     >
-      <item
-        v-if="cell.item"
-        :item="cell.item"
-        :amount="cell.amount"
-        @mouseenter="onMouseoverCell(cell)"
-        @mouseleave="onMouseleaveCell()"
-      />
+      <Item v-if="cell.item" :item="cell.item" />
     </ContainerCell>
-    <CellTooltip :cell="hoveredCell" />
+    <HeldItem :item="hand && !hand.isDragging ? hand.item : null" />
+    <CellTooltip v-if="!hand" :cell="hoveredCell" />
   </ContainerOutline>
 </template>
 
 <script lang="ts" setup>
-import { PropType } from 'nuxt/dist/app/compat/capi'
-import { useContainers } from '../composables/useContainers'
-import { useHand } from '../composables/useHand'
+import { PropType } from 'vue'
+import { useInventory } from '../composables/useInventory'
 import { Cell } from '../interfaces/inventory'
+
+const emit = defineEmits(['change'])
 
 const props = defineProps({
   id: {
@@ -48,26 +45,15 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['change'])
+const { createContainer, updateContainer, move, swap, findCell, hand, pickup, clearHand, hoveredCell, setHoveredCell } =
+  useInventory()
 
-// state
-const { initContainer, updateContainer, containers, move, swap, findCell } = useContainers()
-const { hand, setHand, clearHand } = useHand()
-const hoveredCell = ref(null)
-
-initContainer(props)
-watch(props, () => {
-  updateContainer(props.id, props)
-})
-
-// actual container
-const container = computed(() => {
-  return containers.value.find((container) => container.id === props.id)
-})
+// initialise container
+const { container } = createContainer(props)
 
 // callbacks
-const onDragStart = (path, amount) => {
-  setHand(path, amount)
+const onDrag = (cell) => {
+  pickup(cell.path, cell.item.amount, true)
 }
 
 const onDrop = (cellId) => {
@@ -90,14 +76,6 @@ const onDrop = (cellId) => {
   clearHand()
   emit('change', container.value)
 }
-
-const onMouseoverCell = (cell) => {
-  if (cell.item) {
-    hoveredCell.value = cell
-  }
-}
-
-const onMouseleaveCell = () => {
-  hoveredCell.value = null
-}
+// update container when props change
+watch(props, () => updateContainer(props.id, props))
 </script>

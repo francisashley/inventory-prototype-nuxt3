@@ -1,27 +1,38 @@
 <template>
-  <div class="p-1 h-20 w-20 bg-gray-900">
-    <div class="border border-thin border-gray-800 relative h-full w-full">
+  <div
+    class="tw-p-1 tw-h-20 tw-w-20 tw-bg-gray-900"
+    @mouseenter="emit('hover')"
+    @mousedown="emit('hoverLeave')"
+    @mouseleave="emit('hoverLeave')"
+    @click="onLeftClick"
+    @contextmenu="onRightClick"
+  >
+    <div class="tw-border tw-border-thin tw-border-gray-800 tw-relative tw-h-full tw-w-full tw-select-none">
       <div
-        class="absolute -inset-px"
-        @dragenter.prevent="onDragEnter"
+        class="tw-absolute -tw-inset-px"
+        @dragenter.prevent="setIsHovering(true)"
         @dragover.prevent
-        @dragleave="onDragLeave"
-        @drop="onDrop"
+        @dragleave="setIsHovering(false)"
+        @drop="setIsHovering(false)"
       >
-        <div draggable="true" @dragstart.stop="onDragStart($event)" @dragend.stop="onDragEnd($event)">
+        <div draggable="true" @dragstart.stop="onDrag($event)">
           <slot />
         </div>
+        <div
+          v-if="isHovering"
+          class="tw-absolute -tw-inset-px tw-pointer-events-none tw-border tw-border-thin tw-border-gray-500"
+          :class="{ 'tw-opacity-40': isHovering, 'tw-bg-gray-700': isHovering }"
+        />
       </div>
-      <div
-        v-if="isHovering"
-        class="absolute -inset-px pointer-events-none border border-thin border-gray-500"
-        :class="{ 'opacity-40': isHovering, 'bg-gray-700': isHovering }"
-      />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { useInventory } from '../composables/useInventory'
+
+const emit = defineEmits(['drag', 'hover', 'hoverLeave', 'change'])
+
 const props = defineProps({
   path: {
     type: Array,
@@ -29,29 +40,40 @@ const props = defineProps({
   },
 })
 
-const emits = defineEmits(['dragstart', 'dragend'])
+const { deposit, exchange, findCell, hand, pickup } = useInventory()
 
 const isHovering = ref(false)
+const setIsHovering = (value: boolean) => {
+  isHovering.value = value
+}
+const onLeftClick = () => {
+  const cell = findCell(props.path)
+  const hasEmptyHand = !hand.value?.item
 
-const onDragEnter = () => {
-  isHovering.value = true
+  if (hasEmptyHand) {
+    pickup(props.path, cell.item.amount)
+  } else if (!cell.item || hand.value.item.id === cell.item.id) {
+    deposit(props.path)
+    emit('change', props.path)
+  } else {
+    exchange(props.path)
+    emit('change', props.path)
+  }
 }
 
-const onDragLeave = () => {
-  isHovering.value = false
+const onRightClick = (event) => {
+  event.preventDefault()
+
+  const cell = findCell(props.path)
+
+  if (!hand.value?.item || hand.value.item.id === cell.item?.id) {
+    pickup(props.path, 1)
+  }
 }
 
-const onDrop = () => {
-  isHovering.value = false
-}
-
-const onDragStart = (event) => {
+const onDrag = (event) => {
   event.dataTransfer.dropEffect = 'move'
   event.dataTransfer.effectAllowed = 'move'
-  emits('dragstart', props.path)
-}
-
-const onDragEnd = () => {
-  emits('dragend', props.path)
+  emit('drag', props.path)
 }
 </script>

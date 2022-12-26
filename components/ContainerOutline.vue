@@ -1,14 +1,14 @@
 <template>
   <div
-    class="relative p-2 border border-thin overflow-scroll"
+    class="tw-relative tw-p-2 tw-border tw-border-thin tw-overflow-scroll"
     :class="{
-      'border-blue-400': props.color === 'blue',
-      'border-red-400': props.color === 'red',
-      'border-white': props.color === null,
+      'tw-border-blue-400': props.color === 'blue',
+      'tw-border-red-400': props.color === 'red',
+      'tw-border-white': props.color === null,
     }"
     :style="containerStyle"
   >
-    <div class="flex flex-wrap mx-auto">
+    <div class="tw-flex tw-flex-wrap tw-mx-auto">
       <slot />
     </div>
   </div>

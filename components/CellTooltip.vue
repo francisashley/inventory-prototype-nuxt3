@@ -1,15 +1,15 @@
 <template>
   <div
     v-if="stagedCell"
-    class="pointer-events-none fixed flex text-white text-xs p-2 bg-black"
+    class="tw-pointer-events-none tw-fixed tw-flex tw-text-white tw-text-xs tw-p-2 tw-bg-black"
     :style="style"
     :class="{
       transition: closing,
-      'opacity-0': closing,
-      'opacity-100': !closing,
+      'tw-opacity-0': closing,
+      'tw-opacity-100': !closing,
     }"
   >
-    {{ stagedCell.amount }} x {{ stagedCell.item.name }}
+    {{ stagedCell.item.amount }} x {{ stagedCell.item.name }}
   </div>
 </template>
 

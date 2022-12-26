@@ -1,17 +1,33 @@
-import { Container, ContainerSize, Cell, Item } from '../interfaces/inventory'
+import { Container, ContainerSize, Cell, Item, InputItem } from '../interfaces/inventory'
 import { generateId } from '@/utils/id.utils'
 import { generateArray, findLastIndex } from '@/utils/array.utils'
 
 /**
  * Return formatted container
  */
-export const parseContainer = (container: Container): Container => {
-  const id = 'id' in container ? container.id : generateId()
-  const name = 'name' in container ? container.name : ''
-  const color = 'color' in container ? container.color : 'white'
-  const size = 'size' in container ? container.size : ([8, 2] as ContainerSize)
+type createContainerOptions = {
+  id?: number
+  name?: string
+  color?: 'white' | 'red' | 'blue'
+  size?: ContainerSize
+  items?: InputItem[]
+}
 
-  const calculateTotalCells = (containerSize: ContainerSize, currentCells: Cell[]) => {
+export const createContainer = (options: createContainerOptions): Container => {
+  const id = options.id ?? generateId()
+  const name = options.name ?? ''
+  const color = options.color ?? 'white'
+  const size = options.size ?? ([8, 2] as ContainerSize)
+  const cells = generateCells(id, size, options.items || [])
+
+  return { id, name, color, cells, size }
+}
+
+/**
+ * Generate container cells from input data
+ */
+export const generateCells = (id: number, size: ContainerSize, currentCells: InputItem[]): Cell[] => {
+  const calculateTotalCells = (containerSize: ContainerSize, currentCells: InputItem[]) => {
     const containerCols = containerSize[0]
     const containerRows = containerSize[1]
 
@@ -35,17 +51,15 @@ export const parseContainer = (container: Container): Container => {
     return currentNeededCells
   }
 
-  const currentCells = container.cells || []
   const totalCells = calculateTotalCells(size, currentCells)
 
   const cells = generateArray(totalCells).map((_, cellId) => ({
     id: cellId,
     path: [id, cellId],
-    item: container?.cells?.[cellId]?.item || null,
-    amount: container?.cells?.[cellId]?.amount || 0,
+    item: currentCells?.[cellId]?.item || null,
   }))
 
-  return { id, name, color, cells, size }
+  return cells
 }
 
 /**
@@ -63,7 +77,23 @@ export const clearCell = (container: Container, cellId: number) => {
     ...container,
     cells: [...container.cells].map((cell, index) => {
       if (index === cellId) {
-        return { ...cell, item: null, amount: 0 }
+        return { ...cell, item: null }
+      } else {
+        return cell
+      }
+    }),
+  }
+}
+
+/**
+ * Set item in cell
+ */
+export const setCell = (container: Container, cellId: number, item: Item) => {
+  return {
+    ...container,
+    cells: [...container.cells].map((cell) => {
+      if (cell.id === cellId) {
+        return { ...cell, item }
       } else {
         return cell
       }
@@ -74,38 +104,36 @@ export const clearCell = (container: Container, cellId: number) => {
 /**
  * Deposit item in cell
  */
-export const depositCell = (container: Container, cellId: number, item: Item, amount: number) => {
-  return {
-    ...container,
-    cells: [...container.cells].map((cell) => {
-      if (cell.id === cellId) {
-        return { ...cell, item, amount: cell.amount + amount }
-      } else {
-        return cell
-      }
-    }),
+export const depositCell = (container: Container, cellId: number, item: Item) => {
+  const cell = findCell(container, cellId)
+
+  if (cell.item && cell.item.id === item.id) {
+    return setCell(container, cellId, { ...cell.item, amount: cell.item.amount + item.amount })
+  } else {
+    return setCell(container, cellId, item)
   }
 }
 
 /**
  *  Deposit the item in the first available cell
  */
-export const depositFirstAvailableCell = (container: Container, item: Item, amount: number = 1): Container => {
-  const cells = [...container.cells]
+export const depositFirstAvailableCell = (cells: Cell[], item: Item): Cell[] => {
+  cells = [...cells]
 
   const cell = cells.find((cell) => cell.item === null)
 
   if (cell) {
-    cells[cell.id] = { ...cells[cell.id], item, amount }
+    cells[cell.id] = { ...cells[cell.id], item }
   }
 
-  return parseContainer({ ...container, cells })
+  return cells
 }
 
 export default {
-  parseContainer,
+  createContainer,
   findCell,
   clearCell,
+  setCell,
   depositCell,
   depositFirstAvailableCell,
 }
