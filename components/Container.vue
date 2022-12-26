@@ -48,7 +48,6 @@ const props = defineProps({
 const {
   createContainer,
   updateContainer,
-  containers,
   move,
   swap,
   findCell,
