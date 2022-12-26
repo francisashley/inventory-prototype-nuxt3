@@ -1,5 +1,6 @@
 export default {
   mode: 'jit',
+  prefix: 'tw-',
   content: [
     './components/**/*.{vue,js}',
     './layouts/**/*.vue',

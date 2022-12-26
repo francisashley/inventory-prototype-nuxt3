@@ -1,7 +1,10 @@
 <template>
-  <div class="min-h-screen flex flex-col flex-1 bg-gray-900">
-    <div v-for="(container, i) in containers" :key="i" class="mx-auto mt-8">
-      <button class="rounded bg-blue-600 mb-2 text-xs text-white py-1 px-2" @click="onAddRandomItem(container.id)">
+  <div class="tw-min-h-screen tw-flex tw-flex-col tw-flex-1 tw-bg-gray-900">
+    <div v-for="(container, i) in containers" :key="i" class="tw-mx-auto tw-mt-8">
+      <button
+        class="tw-rounded tw-bg-blue-600 tw-mb-2 tw-text-xs tw-text-white tw-py-1 tw-px-2"
+        @click="onAddRandomItem(container.id)"
+      >
         Add random item
       </button>
       <Container

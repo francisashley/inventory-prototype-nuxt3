@@ -1,8 +1,8 @@
 <template>
-  <div class="p-1 h-20 w-20 bg-gray-900">
-    <div class="border border-thin border-gray-800 relative h-full w-full">
+  <div class="tw-p-1 tw-h-20 tw-w-20 tw-bg-gray-900">
+    <div class="tw-border tw-border-thin tw-border-gray-800 tw-relative tw-h-full tw-w-full">
       <div
-        class="absolute -inset-px"
+        class="tw-absolute -tw-inset-px"
         @dragenter.prevent="onDragEnter"
         @dragover.prevent
         @dragleave="onDragLeave"
@@ -14,8 +14,8 @@
       </div>
       <div
         v-if="isHovering"
-        class="absolute -inset-px pointer-events-none border border-thin border-gray-500"
-        :class="{ 'opacity-40': isHovering, 'bg-gray-700': isHovering }"
+        class="tw-absolute -tw-inset-px tw-pointer-events-none tw-border tw-border-thin tw-border-gray-500"
+        :class="{ 'tw-opacity-40': isHovering, 'tw-bg-gray-700': isHovering }"
       />
     </div>
   </div>
