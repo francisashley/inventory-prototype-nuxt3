@@ -1,3 +1,8 @@
+export interface InputItem {
+  cell: number
+  item: Item
+}
+
 export interface Container {
   id: number
   name: string
@@ -9,7 +14,7 @@ export interface Container {
 export interface Item {
   id: number
   name: string
-  image: string | null
+  image?: string
   amount: number
 }
 

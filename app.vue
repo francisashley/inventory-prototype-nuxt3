@@ -23,11 +23,11 @@ import { ref } from 'vue'
 import itemFixtures from '@/assets/fixtures/item-catalogue.json'
 import containerFixtures from '@/assets/fixtures/containers.json'
 
-import { parseContainer, depositFirstAvailableCell } from '@/utils/container.utils'
+import { createContainer, depositFirstAvailableCell } from '@/utils/container.utils'
 import { parseItem } from '@/utils/item.utils'
 
 const items = itemFixtures.map(parseItem)
-const initialContainers = [...containerFixtures].map(parseContainer)
+const initialContainers = [...containerFixtures].map(createContainer)
 
 for (let i = 0; i < 12; i++) {
   const randomAmount = Math.floor(Math.random() * 10) + 1

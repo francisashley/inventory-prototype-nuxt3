@@ -5,12 +5,21 @@ import { generateArray, findLastIndex } from '@/utils/array.utils'
 /**
  * Return formatted container
  */
-export const parseContainer = (container: Container): Container => {
-  const id = 'id' in container ? container.id : generateId()
-  const name = 'name' in container ? container.name : ''
-  const color = 'color' in container ? container.color : 'white'
-  const size = 'size' in container ? container.size : ([8, 2] as ContainerSize)
-  const cells = generateCells(id, size, container.cells || [])
+type createContainerOptions = {
+  id?: number
+  name?: string
+  color?: 'white' | 'red' | 'blue'
+  size?: ContainerSize
+  cells?: Cell[]
+}
+
+export const createContainer = (options: createContainerOptions): Container => {
+  const id = options.id ?? generateId()
+  const name = options.name ?? ''
+  const color = options.color ?? 'white'
+  const size = options.size ?? ([8, 2] as ContainerSize)
+  const cells = generateCells(id, size, options.cells || [])
+
   return { id, name, color, cells, size }
 }
 
@@ -108,11 +117,11 @@ export const depositFirstAvailableCell = (container: Container, item: Item): Con
     cells[cell.id] = { ...cells[cell.id], item }
   }
 
-  return parseContainer({ ...container, cells })
+  return createContainer({ ...container, cells })
 }
 
 export default {
-  parseContainer,
+  createContainer,
   findCell,
   clearCell,
   depositCell,
