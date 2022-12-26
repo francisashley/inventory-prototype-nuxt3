@@ -11,7 +11,7 @@
       @mousedown="setHoveredCell(null)"
       @mouseleave="setHoveredCell(null)"
     >
-      <item v-if="cell.item" :item="cell.item" :amount="cell.amount" />
+      <Item v-if="cell.item" :item="cell.item" :amount="cell.amount" />
     </ContainerCell>
     <CellTooltip :cell="hoveredCell" />
   </ContainerOutline>
