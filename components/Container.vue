@@ -23,8 +23,7 @@
 
 <script lang="ts" setup>
 import { PropType } from 'nuxt/dist/app/compat/capi'
-import { useContainers } from '../composables/useContainers'
-import { useHand } from '../composables/useHand'
+import { useInventory } from '../composables/useInventory'
 import { Cell } from '../interfaces/inventory'
 
 const props = defineProps({
@@ -51,8 +50,8 @@ const props = defineProps({
 const emit = defineEmits(['change'])
 
 // state
-const { initContainer, updateContainer, containers, move, swap, findCell } = useContainers()
-const { hand, setHand, clearHand } = useHand()
+const { initContainer, updateContainer, containers, move, swap, findCell, hand, setHand, clearHand } = useInventory()
+
 const hoveredCell = ref(null)
 
 initContainer(props)

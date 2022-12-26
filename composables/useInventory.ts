@@ -2,14 +2,22 @@ import { reactive, computed } from 'vue'
 import { Container, Path, Item } from '../interfaces/inventory'
 import containerTools from '@/utils/container.utils'
 
-const state = reactive<{ containers: Container[] }>({
+type Hand = {
+  from: number[]
+  amount: number
+}
+
+const state = reactive<{ containers: Container[]; hand: Hand | null }>({
   containers: [],
+  hand: null,
 })
 
-export function useContainers() {
+export function useInventory() {
   const containers = computed(() => {
     return state.containers
   })
+
+  const hand = computed(() => state.hand)
 
   const initContainer = (container: Container) => {
     state.containers = [...state.containers, container]
@@ -56,6 +64,14 @@ export function useContainers() {
     updateContainer(findContainer(to[0]).id, depositCell(to, fromCell.item, fromCell.amount))
   }
 
+  const setHand = (from: number[], amount: number) => {
+    state.hand = { from, amount }
+  }
+
+  const clearHand = () => {
+    state.hand = null
+  }
+
   return {
     containers,
     initContainer,
@@ -65,5 +81,8 @@ export function useContainers() {
     move,
     swap,
     findCell,
+    hand,
+    setHand,
+    clearHand,
   }
 }
