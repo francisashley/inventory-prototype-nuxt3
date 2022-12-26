@@ -10,7 +10,14 @@ export const parseContainer = (container: Container): Container => {
   const name = 'name' in container ? container.name : ''
   const color = 'color' in container ? container.color : 'white'
   const size = 'size' in container ? container.size : ([8, 2] as ContainerSize)
+  const cells = generateCells(id, size, container.cells || [])
+  return { id, name, color, cells, size }
+}
 
+/**
+ * Generate container cells from input data
+ */
+export const generateCells = (id: number, size: ContainerSize, currentCells: Cell[]): Cell[] => {
   const calculateTotalCells = (containerSize: ContainerSize, currentCells: Cell[]) => {
     const containerCols = containerSize[0]
     const containerRows = containerSize[1]
@@ -35,16 +42,15 @@ export const parseContainer = (container: Container): Container => {
     return currentNeededCells
   }
 
-  const currentCells = container.cells || []
   const totalCells = calculateTotalCells(size, currentCells)
 
   const cells = generateArray(totalCells).map((_, cellId) => ({
     id: cellId,
     path: [id, cellId],
-    item: container?.cells?.[cellId]?.item || null,
+    item: currentCells?.[cellId]?.item || null,
   }))
 
-  return { id, name, color, cells, size }
+  return cells
 }
 
 /**
