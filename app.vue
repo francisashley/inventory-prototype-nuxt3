@@ -53,9 +53,9 @@ const onChange = (updatedContainer) => {
 const onAddRandomItem = (containerId: number) => {
   const randomAmount = Math.floor(Math.random() * 10) + 1
   const randomItemIndex = Math.floor(Math.random() * items.length)
-  const item = items[randomItemIndex]
+  const item = { ...items[randomItemIndex], amount: randomAmount }
   const container = findContainer(containerId)
-  const updatedContainer = depositFirstAvailableCell(container, item, randomAmount)
+  const updatedContainer = depositFirstAvailableCell(container, item)
   replaceContainer(containerId, updatedContainer)
 }
 </script>
