@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType } from 'nuxt/dist/app/compat/capi'
+import { PropType } from 'vue'
 import { useInventory } from '../composables/useInventory'
 import { Cell } from '../interfaces/inventory'
 
