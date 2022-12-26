@@ -4,7 +4,7 @@ import containerTools from '@/utils/container.utils'
 
 type Hand = {
   from: number[]
-  amount: number
+  item: Item
 }
 
 const state = reactive<{ containers: Container[]; hand: Hand | null; hoveredCell: Cell | null }>({
