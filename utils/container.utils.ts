@@ -1,4 +1,4 @@
-import { Container, ContainerSize, Cell, Item } from '../interfaces/inventory'
+import { Container, ContainerSize, Cell, Item, InputItem } from '../interfaces/inventory'
 import { generateId } from '@/utils/id.utils'
 import { generateArray, findLastIndex } from '@/utils/array.utils'
 
@@ -10,7 +10,7 @@ type createContainerOptions = {
   name?: string
   color?: 'white' | 'red' | 'blue'
   size?: ContainerSize
-  cells?: Cell[]
+  items?: InputItem[]
 }
 
 export const createContainer = (options: createContainerOptions): Container => {
@@ -18,7 +18,7 @@ export const createContainer = (options: createContainerOptions): Container => {
   const name = options.name ?? ''
   const color = options.color ?? 'white'
   const size = options.size ?? ([8, 2] as ContainerSize)
-  const cells = generateCells(id, size, options.cells || [])
+  const cells = generateCells(id, size, options.items || [])
 
   return { id, name, color, cells, size }
 }
@@ -26,8 +26,8 @@ export const createContainer = (options: createContainerOptions): Container => {
 /**
  * Generate container cells from input data
  */
-export const generateCells = (id: number, size: ContainerSize, currentCells: Cell[]): Cell[] => {
-  const calculateTotalCells = (containerSize: ContainerSize, currentCells: Cell[]) => {
+export const generateCells = (id: number, size: ContainerSize, currentCells: InputItem[]): Cell[] => {
+  const calculateTotalCells = (containerSize: ContainerSize, currentCells: InputItem[]) => {
     const containerCols = containerSize[0]
     const containerRows = containerSize[1]
 
@@ -108,8 +108,8 @@ export const depositCell = (container: Container, cellId: number, item: Item) =>
 /**
  *  Deposit the item in the first available cell
  */
-export const depositFirstAvailableCell = (container: Container, item: Item): Container => {
-  const cells = [...container.cells]
+export const depositFirstAvailableCell = (cells: Cell[], item: Item): Cell[] => {
+  cells = [...cells]
 
   const cell = cells.find((cell) => cell.item === null)
 
@@ -117,7 +117,7 @@ export const depositFirstAvailableCell = (container: Container, item: Item): Con
     cells[cell.id] = { ...cells[cell.id], item }
   }
 
-  return createContainer({ ...container, cells })
+  return cells
 }
 
 export default {
