@@ -1,3 +1,4 @@
+const plugin = require('tailwindcss/plugin')
 export default {
   mode: 'jit',
   prefix: 'tw-',
@@ -19,5 +20,13 @@ export default {
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    plugin(function ({ addUtilities }) {
+      addUtilities({
+        '.text-shadow': {
+          textShadow: '0px 0px 3px rgb(0 0 0)',
+        },
+      })
+    }),
+  ],
 }

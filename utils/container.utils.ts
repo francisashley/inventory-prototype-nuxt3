@@ -86,22 +86,31 @@ export const clearCell = (container: Container, cellId: number) => {
 }
 
 /**
- * Deposit item in cell
+ * Set item in cell
  */
-export const depositCell = (container: Container, cellId: number, item: Item) => {
+export const setCell = (container: Container, cellId: number, item: Item) => {
   return {
     ...container,
     cells: [...container.cells].map((cell) => {
       if (cell.id === cellId) {
-        if (cell.item && cell.item.id === item.id) {
-          return { ...cell, item: { ...cell.item, amount: cell.item.amount + item.amount } }
-        } else {
-          return { ...cell, item }
-        }
+        return { ...cell, item }
       } else {
         return cell
       }
     }),
+  }
+}
+
+/**
+ * Deposit item in cell
+ */
+export const depositCell = (container: Container, cellId: number, item: Item) => {
+  const cell = findCell(container, cellId)
+
+  if (cell.item && cell.item.id === item.id) {
+    return setCell(container, cellId, { ...cell.item, amount: cell.item.amount + item.amount })
+  } else {
+    return setCell(container, cellId, item)
   }
 }
 
@@ -124,6 +133,7 @@ export default {
   createContainer,
   findCell,
   clearCell,
+  setCell,
   depositCell,
   depositFirstAvailableCell,
 }

@@ -12,7 +12,8 @@
     >
       <Item v-if="cell.item" :item="cell.item" />
     </ContainerCell>
-    <CellTooltip :cell="hoveredCell" />
+    <HeldItem :item="hand && !hand.isDragging ? hand.item : null" />
+    <CellTooltip v-if="!hand" :cell="hoveredCell" />
   </ContainerOutline>
 </template>
 
@@ -52,7 +53,7 @@ const { container } = createContainer(props)
 
 // callbacks
 const onDrag = (cell) => {
-  pickup(cell.path, cell.item.amount)
+  pickup(cell.path, cell.item.amount, true)
 }
 
 const onDrop = (cellId) => {
