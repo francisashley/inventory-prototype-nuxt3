@@ -1,5 +1,10 @@
 <template>
-  <div class="tw-p-1 tw-h-20 tw-w-20 tw-bg-gray-900">
+  <div
+    class="tw-p-1 tw-h-20 tw-w-20 tw-bg-gray-900"
+    @mouseenter="emit('hover')"
+    @mousedown="emit('hoverLeave')"
+    @mouseleave="emit('hoverLeave')"
+  >
     <div class="tw-border tw-border-thin tw-border-gray-800 tw-relative tw-h-full tw-w-full">
       <div
         class="tw-absolute -tw-inset-px"
@@ -8,7 +13,7 @@
         @dragleave="setIsHovering(false)"
         @drop="setIsHovering(false)"
       >
-        <div draggable="true" @dragstart.stop="onDragStart($event)" @dragend.stop="onDragEnd($event)">
+        <div draggable="true" @dragstart.stop="onDrag($event)">
           <slot />
         </div>
       </div>
@@ -29,20 +34,16 @@ const props = defineProps({
   },
 })
 
-const emits = defineEmits(['dragstart', 'dragend'])
+const emit = defineEmits(['drag', 'hover', 'hoverLeave'])
 
 const isHovering = ref(false)
 const setIsHovering = (value: boolean) => {
   isHovering.value = value
 }
 
-const onDragStart = (event) => {
+const onDrag = (event) => {
   event.dataTransfer.dropEffect = 'move'
   event.dataTransfer.effectAllowed = 'move'
-  emits('dragstart', props.path)
-}
-
-const onDragEnd = () => {
-  emits('dragend', props.path)
+  emit('drag', props.path)
 }
 </script>

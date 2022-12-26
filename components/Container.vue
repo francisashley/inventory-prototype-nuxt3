@@ -3,13 +3,12 @@
     <ContainerCell
       v-for="cell in container.cells"
       :key="cell.id"
-      :draggable="Boolean(cell.item)"
       :path="cell.path"
-      @dragstart="onDragStart($event, cell)"
+      :draggable="Boolean(cell.item)"
+      @drag="onDrag(cell)"
       @drop="onDrop(cell.id)"
-      @mouseenter="setHoveredCell(cell.item ? cell : null)"
-      @mousedown="setHoveredCell(null)"
-      @mouseleave="setHoveredCell(null)"
+      @hover="setHoveredCell(cell.item ? cell : null)"
+      @hoverLeave="setHoveredCell(null)"
     >
       <Item v-if="cell.item" :item="cell.item" />
     </ContainerCell>
@@ -62,8 +61,8 @@ const {
 const { container } = createContainer(props)
 
 // callbacks
-const onDragStart = (path, cell) => {
-  setHand(path, cell.item.amount)
+const onDrag = (cell) => {
+  setHand(cell.path, cell.item.amount)
 }
 
 const onDrop = (cellId) => {
