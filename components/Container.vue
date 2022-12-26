@@ -46,7 +46,7 @@ const props = defineProps({
 })
 
 const {
-  addContainer,
+  createContainer,
   updateContainer,
   containers,
   move,
@@ -59,12 +59,8 @@ const {
   setHoveredCell,
 } = useInventory()
 
-// add container on initial load
-addContainer(props)
-
-watch(props, () => {
-  updateContainer(props.id, props)
-})
+// initialise container
+const { container } = createContainer(props)
 
 // actual container
 const container = computed(() => {
@@ -96,4 +92,6 @@ const onDrop = (cellId) => {
   clearHand()
   emit('change', container.value)
 }
+// update container when props change
+watch(props, () => updateContainer(props.id, props))
 </script>
