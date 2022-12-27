@@ -1,6 +1,6 @@
 <template>
   <ContainerOutline :size="props.size" :color="props.color">
-    <ContainerCell
+    <ContainerSlot
       v-for="cell in container.cells"
       :key="cell.id"
       :path="cell.path"
@@ -11,7 +11,7 @@
       @hoverLeave="setHoveredCell(null)"
     >
       <Item v-if="cell.item" :item="cell.item" />
-    </ContainerCell>
+    </ContainerSlot>
     <HeldItem :item="hand && !hand.isDragging ? hand.item : null" />
     <CellTooltip v-if="!hand" :cell="hoveredCell" />
   </ContainerOutline>
