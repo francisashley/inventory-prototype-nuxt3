@@ -24,15 +24,17 @@
 import { ref } from 'vue'
 import AddItemButton from './components/AddItemButton.vue'
 
-import itemFixtures from '@/assets/fixtures/item-catalogue.json'
 import containerFixtures from '@/assets/fixtures/containers.json'
 
 import { depositFirstAvailableSlot } from '@/utils/container.utils'
-import { createItem } from '@/utils/item.utils'
-import { getRandomItem, generateSlots } from '@/utils/demo.utils'
+
+import { generateSlots } from '@/utils/demo.utils'
 import { generateId } from '@/utils/id.utils'
 
-const items = itemFixtures.map(createItem)
+import { useDemo } from '@/composables/useDemo'
+
+const { generateRandomItem } = useDemo()
+
 const initialContainers = [...containerFixtures].map((containerFixture) => {
   const size = [8, 2]
   const id = generateId()
@@ -42,7 +44,7 @@ const initialContainers = [...containerFixtures].map((containerFixture) => {
 })
 
 for (let i = 0; i < 12; i++) {
-  const item = getRandomItem(items)
+  const item = generateRandomItem()
   initialContainers[0].slots = depositFirstAvailableSlot(initialContainers[0].slots, item)
 }
 
@@ -61,7 +63,7 @@ const onChange = (updatedContainer) => {
 }
 
 const onAddRandomItem = (containerId: number) => {
-  const item = getRandomItem(items)
+  const item = generateRandomItem()
   const container = findContainer(containerId)
   container.slots = depositFirstAvailableSlot(container.slots, item)
   replaceContainer(containerId, container)
