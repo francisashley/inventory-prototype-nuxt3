@@ -1,13 +1,5 @@
 <template>
-  <div
-    class="tw-relative tw-p-2 tw-border tw-border-thin tw-overflow-scroll"
-    :class="{
-      'tw-border-blue-400': props.color === 'blue',
-      'tw-border-red-400': props.color === 'red',
-      'tw-border-white': props.color === null,
-    }"
-    :style="containerStyle"
-  >
+  <div :style="containerStyle">
     <div class="tw-flex tw-flex-wrap tw-mx-auto">
       <slot />
     </div>
@@ -20,11 +12,6 @@ const props = defineProps({
     type: Array,
     default: () => [8, 2],
     validator: (size) => typeof size[0] === 'number' && typeof size[1] === 'number',
-  },
-  color: {
-    type: String,
-    default: null,
-    validator: (value: any) => ['blue', 'red'].includes(value),
   },
 })
 

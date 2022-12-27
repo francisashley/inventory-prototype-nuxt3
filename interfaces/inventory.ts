@@ -6,7 +6,6 @@ export interface Input {
 export interface Container {
   id: number
   name: string
-  color: 'white' | 'red' | 'blue'
   cells: Cell[]
   size: ContainerSize
 }

@@ -1,5 +1,5 @@
 <template>
-  <ContainerOutline :size="props.size" :color="props.color">
+  <ContainerOutline :size="props.size">
     <ContainerSlot v-for="cell in container.cells" :key="cell.id" :path="cell.path">
       <Item v-if="cell.item" :item="cell.item" />
     </ContainerSlot>
@@ -17,14 +17,12 @@ type ContainerProps = {
   name?: string
   cells: Cell[]
   size: [number, number]
-  color?: 'blue' | 'red' | 'white'
 }
 
 const props = withDefaults(defineProps<ContainerProps>(), {
   name: null,
   cells: () => [],
   size: () => [8, 2],
-  color: null,
 })
 
 const { createContainer, updateContainer, hand, hoveredCell } = useInventory()

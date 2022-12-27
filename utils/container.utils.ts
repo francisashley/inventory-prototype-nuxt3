@@ -8,7 +8,6 @@ import { generateArray, findLastIndex } from '@/utils/array.utils'
 type createContainerOptions = {
   id?: number
   name?: string
-  color?: 'white' | 'red' | 'blue'
   size?: ContainerSize
   items?: Input[]
 }
@@ -16,11 +15,10 @@ type createContainerOptions = {
 export const createContainer = (options: createContainerOptions): Container => {
   const id = options.id ?? generateId()
   const name = options.name ?? ''
-  const color = options.color ?? 'white'
   const size = options.size ?? ([8, 2] as ContainerSize)
   const cells = generateCells(id, size, options.items || [])
 
-  return { id, name, color, cells, size }
+  return { ...options, id, name, cells, size }
 }
 
 /**

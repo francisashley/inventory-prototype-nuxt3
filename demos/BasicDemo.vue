@@ -4,8 +4,13 @@
     <Container
       :id="container.id"
       :cells="container.cells"
-      :color="container.color"
       :size="container.size"
+      class="tw-relative tw-p-2 tw-border tw-border-thin tw-overflow-scroll"
+      :class="{
+        'tw-border-blue-400': container.color === 'blue',
+        'tw-border-red-400': container.color === 'red',
+        'tw-border-white': container.color === null,
+      }"
       @change="onChange"
     />
   </div>
