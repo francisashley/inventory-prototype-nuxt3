@@ -3,7 +3,6 @@
     <AddItemButton @click="onAddRandomItem(container.id)" />
     <Container
       :id="container.id"
-      :cells="container.cells"
       class="tw-relative tw-p-2 tw-border tw-border-thin tw-overflow-scroll tw-flex tw-flex-wrap tw-mx-auto"
       :class="{
         'tw-border-blue-400': container.color === 'blue',
@@ -13,6 +12,7 @@
         width: container.size[0] * 5 + 1.25 + 'rem',
         height: container.size[1] * 5 + 1.25 + 'rem',
       }"
+      :value="container.cells"
       @change="onChange"
     />
   </div>

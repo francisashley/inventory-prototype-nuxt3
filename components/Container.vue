@@ -14,21 +14,21 @@ const emit = defineEmits(['change'])
 
 type ContainerProps = {
   id: number
-  cells: Cell[]
+  value: Cell[]
 }
 
 const props = withDefaults(defineProps<ContainerProps>(), {
   name: null,
-  cells: () => [],
+  value: () => [],
 })
 
 const { createContainer, updateContainer, hand, hoveredCell } = useInventory()
 
 // initialise container
-const { container } = createContainer(props)
+const { container } = createContainer({ ...props, cells: props.value })
 
 // update container when props change
-watch(props, () => updateContainer(props.id, props))
+watch(props, () => updateContainer(props.id, { ...props, cells: props.value }))
 
 const onChange = () => {
   emit('change', container)
