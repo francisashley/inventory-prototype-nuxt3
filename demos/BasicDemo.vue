@@ -5,11 +5,15 @@
       :id="container.id"
       :cells="container.cells"
       :size="container.size"
-      class="tw-relative tw-p-2 tw-border tw-border-thin tw-overflow-scroll"
+      class="tw-relative tw-p-2 tw-border tw-border-thin tw-overflow-scroll tw-flex tw-flex-wrap tw-mx-auto"
       :class="{
         'tw-border-blue-400': container.color === 'blue',
         'tw-border-red-400': container.color === 'red',
         'tw-border-white': container.color === null,
+      }"
+      :style="{
+        width: container.size[0] * 5 + 1.25 + 'rem',
+        height: container.size[1] * 5 + 1.25 + 'rem',
       }"
       @change="onChange"
     />
