@@ -6,6 +6,7 @@
     @mouseleave="setHoveredCell(null)"
     @click="onLeftClick"
     @contextmenu="onRightClick"
+    @drop="onDrop"
   >
     <div class="tw-border tw-border-thin tw-border-gray-800 tw-relative tw-h-full tw-w-full tw-select-none">
       <div
@@ -39,7 +40,8 @@ type ContainerSlotsProps = {
 
 const props = defineProps<ContainerSlotsProps>()
 
-const { registerCell, deposit, exchange, findCell, hand, pickup, setHoveredCell } = useInventory()
+const { registerCell, deposit, exchange, findCell, hand, pickup, setHoveredCell, move, clearHand, swap } =
+  useInventory()
 
 const cell = registerCell(props.path)
 
@@ -74,6 +76,25 @@ const onRightClick = (event) => {
 const onDrag = (event) => {
   event.dataTransfer.dropEffect = 'move'
   event.dataTransfer.effectAllowed = 'move'
-  emit('drag', props.path)
+  pickup(cell.value.path, cell.value.item.amount, true)
+}
+
+const onDrop = () => {
+  const from = hand.value.from
+
+  const fromCell = findCell(from)
+  const toCell = findCell(props.path)
+
+  if (
+    typeof fromCell.item !== 'undefined' &&
+    typeof toCell.item !== 'undefined' &&
+    fromCell.item?.id === toCell.item?.id
+  ) {
+    move(from, props.path)
+  } else {
+    swap(from, props.path)
+  }
+
+  clearHand()
 }
 </script>
