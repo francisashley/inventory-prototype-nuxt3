@@ -22,10 +22,10 @@ const props = withDefaults(defineProps<ContainerProps>(), {
   value: () => [],
 })
 
-const { createContainer, updateContainer, hand, hoveredSlot } = useInventory()
+const { registerContainer, updateContainer, hand, hoveredSlot } = useInventory()
 
 // initialise container
-const { container } = createContainer({ ...props, slots: props.value })
+const container = registerContainer({ ...props, slots: props.value })
 
 // update container when props change
 watch(props, () => updateContainer(props.id, { ...props, slots: props.value }))

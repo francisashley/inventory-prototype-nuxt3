@@ -23,12 +23,9 @@ export function useInventory() {
     state.hoveredSlot = slot
   }
 
-  const createContainer = (container: Container) => {
+  const registerContainer = (container: Container) => {
     state.containers = [...state.containers, container]
-
-    return {
-      container: computed(() => containers.value.find((c) => c.id === container.id)),
-    }
+    return computed(() => containers.value.find((c) => c.id === container.id))
   }
 
   const updateContainer = (id: number, updatedContainer: Container) => {
@@ -130,11 +127,12 @@ export function useInventory() {
   }
 
   return {
+    // register
+    registerContainer,
+    registerSlot,
     containers,
-    createContainer,
     updateContainer,
     findContainer,
-    registerSlot,
     move,
     swap,
     exchange,
