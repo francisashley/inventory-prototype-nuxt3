@@ -14,7 +14,9 @@
       }"
       :value="container.cells"
       @change="onChange"
-    />
+    >
+      <ContainerSlot v-for="cell in container.cells" :key="cell.id" :path="cell.path" />
+    </Container>
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ContainerSlot v-for="cell in container.cells" :key="cell.id" :path="cell.path" @change="onChange" />
+    <slot />
     <HeldItem :item="hand && !hand.isDragging ? hand.item : null" />
     <CellTooltip v-if="!hand" :cell="hoveredCell" />
   </div>
@@ -30,7 +30,6 @@ const { container } = createContainer({ ...props, cells: props.value })
 // update container when props change
 watch(props, () => updateContainer(props.id, { ...props, cells: props.value }))
 
-const onChange = () => {
-  emit('change', container)
-}
+// update container when props change
+watch(container, () => emit('change', container))
 </script>
