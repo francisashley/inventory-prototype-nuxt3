@@ -14,14 +14,15 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import AddItemButton from './components/AddItemButton.vue'
+
 import itemFixtures from '@/assets/fixtures/item-catalogue.json'
 import containerFixtures from '@/assets/fixtures/containers.json'
 
 import { createContainer, depositFirstAvailableCell } from '@/utils/container.utils'
-import { parseItem } from '@/utils/item.utils'
+import { createItem } from '@/utils/item.utils'
 import { getRandomItem } from '@/utils/demo.utils'
 
-const items = itemFixtures.map(parseItem)
+const items = itemFixtures.map(createItem)
 const initialContainers = [...containerFixtures].map(createContainer)
 
 for (let i = 0; i < 12; i++) {

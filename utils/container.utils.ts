@@ -1,4 +1,4 @@
-import { Container, ContainerSize, Cell, Item, InputItem } from '../interfaces/inventory'
+import { Container, ContainerSize, Cell, Item, Input } from '../interfaces/inventory'
 import { generateId } from '@/utils/id.utils'
 import { generateArray, findLastIndex } from '@/utils/array.utils'
 
@@ -10,7 +10,7 @@ type createContainerOptions = {
   name?: string
   color?: 'white' | 'red' | 'blue'
   size?: ContainerSize
-  items?: InputItem[]
+  items?: Input[]
 }
 
 export const createContainer = (options: createContainerOptions): Container => {
@@ -26,8 +26,8 @@ export const createContainer = (options: createContainerOptions): Container => {
 /**
  * Generate container cells from input data
  */
-export const generateCells = (id: number, size: ContainerSize, currentCells: InputItem[]): Cell[] => {
-  const calculateTotalCells = (containerSize: ContainerSize, currentCells: InputItem[]) => {
+export const generateCells = (id: number, size: ContainerSize, currentCells: Input[]): Cell[] => {
+  const calculateTotalCells = (containerSize: ContainerSize, currentCells: Input[]) => {
     const containerCols = containerSize[0]
     const containerRows = containerSize[1]
 

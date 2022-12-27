@@ -1,4 +1,4 @@
-export interface InputItem {
+export interface Input {
   cell: number
   item: Item
 }
