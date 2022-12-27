@@ -5,7 +5,7 @@ export interface Input {
 
 export interface Container {
   id: number
-  cells: Cell[]
+  cells: ContainerSlot[]
 }
 
 export interface Item {
@@ -15,7 +15,7 @@ export interface Item {
   amount: number
 }
 
-export interface Cell {
+export interface ContainerSlot {
   id: number
   path: Path
   item: Item | null

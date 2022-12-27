@@ -8,13 +8,13 @@
 
 <script lang="ts" setup>
 import { useInventory } from '../composables/useInventory'
-import { Cell } from '../interfaces/inventory'
+import { ContainerSlot } from '../interfaces/inventory'
 
 const emit = defineEmits(['change'])
 
 type ContainerProps = {
   id: number
-  value: Cell[]
+  value: ContainerSlot[]
 }
 
 const props = withDefaults(defineProps<ContainerProps>(), {

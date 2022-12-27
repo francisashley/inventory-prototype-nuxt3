@@ -1,4 +1,4 @@
-import { Container, Cell, Item } from '../interfaces/inventory'
+import { Container, ContainerSlot, Item } from '../interfaces/inventory'
 
 /**
  * Find item in cell
@@ -55,7 +55,7 @@ export const depositCell = (container: Container, cellId: number, item: Item) =>
 /**
  *  Deposit the item in the first available cell
  */
-export const depositFirstAvailableCell = (cells: Cell[], item: Item): Cell[] => {
+export const depositFirstAvailableCell = (cells: ContainerSlot[], item: Item): ContainerSlot[] => {
   cells = [...cells]
 
   const cell = cells.find((cell) => cell.item === null)

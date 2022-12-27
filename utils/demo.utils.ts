@@ -1,4 +1,4 @@
-import { ContainerSize, Cell, Item, Input } from '../interfaces/inventory'
+import { ContainerSize, ContainerSlot, Item, Input } from '../interfaces/inventory'
 import { generateArray, findLastIndex } from '@/utils/array.utils'
 
 export const getRandomItem = (items: Item[]) => {
@@ -11,7 +11,7 @@ export const getRandomItem = (items: Item[]) => {
 /**
  * Generate container cells from input data
  */
-export const generateCells = (id: number, size: ContainerSize, currentCells: Input[]): Cell[] => {
+export const generateCells = (id: number, size: ContainerSize, currentCells: Input[]): ContainerSlot[] => {
   const calculateTotalCells = (containerSize: ContainerSize, currentCells: Input[]) => {
     const containerCols = containerSize[0]
     const containerRows = containerSize[1]
