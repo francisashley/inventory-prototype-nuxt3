@@ -38,20 +38,20 @@ export function useInventory() {
     return state.containers.find((container) => container.id === id)
   }
 
-  const findSlot = (path: Path) => {
-    return containerTools.findSlot(findContainer(path[0]), path[1])
+  const findSlot = ([containerId, slotId]: Path) => {
+    return containerTools.findSlot(findContainer(containerId), slotId)
   }
 
-  const clearSlot = (path: Path) => {
-    return containerTools.clearSlot(findContainer(path[0]), path[1])
+  const clearSlot = ([containerId, slotId]: Path) => {
+    return containerTools.clearSlot(findContainer(containerId), slotId)
   }
 
-  const depositSlot = (path: Path, item: Item) => {
-    return containerTools.depositSlot(findContainer(path[0]), path[1], item)
+  const depositSlot = ([containerId, slotId]: Path, item: Item) => {
+    return containerTools.depositSlot(findContainer(containerId), slotId, item)
   }
 
-  const setSlot = (path: Path, item: Item) => {
-    return containerTools.setSlot(findContainer(path[0]), path[1], item)
+  const setSlot = ([containerId, slotId]: Path, item: Item) => {
+    return containerTools.setSlot(findContainer(containerId), slotId, item)
   }
 
   const move = (from: Path, to: Path) => {
@@ -122,8 +122,8 @@ export function useInventory() {
     state.hand = null
   }
 
-  const registerSlot = (path: Path) => {
-    return computed(() => findSlot(path))
+  const registerSlot = ([containerId, slotId]: Path) => {
+    return computed(() => findSlot([containerId, slotId]))
   }
 
   return {
