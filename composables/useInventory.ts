@@ -37,10 +37,6 @@ export function useInventory() {
     })
   }
 
-  const removeContainer = (id: number) => {
-    state.containers = state.containers.filter((container) => container.id !== id)
-  }
-
   const findContainer = (id: number) => {
     return state.containers.find((container) => container.id === id)
   }
@@ -137,7 +133,6 @@ export function useInventory() {
     containers,
     createContainer,
     updateContainer,
-    removeContainer,
     findContainer,
     registerSlot,
     move,
