@@ -98,5 +98,6 @@ const onDrop = () => {
   }
 
   clearHand()
+  emit('change', props.path)
 }
 </script>
