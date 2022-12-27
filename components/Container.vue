@@ -1,8 +1,6 @@
 <template>
   <div>
-    <ContainerSlot v-for="cell in container.cells" :key="cell.id" :path="cell.path">
-      <Item v-if="cell.item" :item="cell.item" />
-    </ContainerSlot>
+    <ContainerSlot v-for="cell in container.cells" :key="cell.id" :path="cell.path" />
     <HeldItem :item="hand && !hand.isDragging ? hand.item : null" />
     <CellTooltip v-if="!hand" :cell="hoveredCell" />
   </div>
