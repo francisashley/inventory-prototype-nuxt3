@@ -4,12 +4,10 @@
     <Container
       :id="container.id"
       :cells="container.cells"
-      :size="container.size"
       class="tw-relative tw-p-2 tw-border tw-border-thin tw-overflow-scroll tw-flex tw-flex-wrap tw-mx-auto"
       :class="{
         'tw-border-blue-400': container.color === 'blue',
         'tw-border-red-400': container.color === 'red',
-        'tw-border-white': container.color === null,
       }"
       :style="{
         width: container.size[0] * 5 + 1.25 + 'rem',
@@ -27,12 +25,19 @@ import AddItemButton from './components/AddItemButton.vue'
 import itemFixtures from '@/assets/fixtures/item-catalogue.json'
 import containerFixtures from '@/assets/fixtures/containers.json'
 
-import { createContainer, depositFirstAvailableCell } from '@/utils/container.utils'
+import { depositFirstAvailableCell } from '@/utils/container.utils'
 import { createItem } from '@/utils/item.utils'
-import { getRandomItem } from '@/utils/demo.utils'
+import { getRandomItem, generateCells } from '@/utils/demo.utils'
+import { generateId } from '@/utils/id.utils'
 
 const items = itemFixtures.map(createItem)
-const initialContainers = [...containerFixtures].map(createContainer)
+const initialContainers = [...containerFixtures].map((containerFixture) => {
+  const size = [8, 2]
+  const id = generateId()
+  const cells = generateCells(id, size, [])
+
+  return { id, name: containerFixture.name, color: containerFixture.color, cells, size }
+})
 
 for (let i = 0; i < 12; i++) {
   const item = getRandomItem(items)

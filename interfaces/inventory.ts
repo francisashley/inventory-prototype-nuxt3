@@ -5,9 +5,7 @@ export interface Input {
 
 export interface Container {
   id: number
-  name: string
   cells: Cell[]
-  size: ContainerSize
 }
 
 export interface Item {

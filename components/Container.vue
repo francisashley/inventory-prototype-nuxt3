@@ -14,15 +14,12 @@ const emit = defineEmits(['change'])
 
 type ContainerProps = {
   id: number
-  name?: string
   cells: Cell[]
-  size: [number, number]
 }
 
 const props = withDefaults(defineProps<ContainerProps>(), {
   name: null,
   cells: () => [],
-  size: () => [8, 2],
 })
 
 const { createContainer, updateContainer, hand, hoveredCell } = useInventory()
