@@ -1,9 +1,9 @@
 <template>
   <div
     class="tw-p-1 tw-h-20 tw-w-20 tw-bg-gray-900"
-    @mouseenter="setHoveredCell(cell.item ? cell : null)"
-    @mousedown="setHoveredCell(null)"
-    @mouseleave="setHoveredCell(null)"
+    @mouseenter="setHoveredSlot(cell.item ? cell : null)"
+    @mousedown="setHoveredSlot(null)"
+    @mouseleave="setHoveredSlot(null)"
     @click="onLeftClick"
     @contextmenu="onRightClick"
     @drop="onDrop"
@@ -42,7 +42,7 @@ type ContainerSlotsProps = {
 
 const props = defineProps<ContainerSlotsProps>()
 
-const { registerCell, deposit, exchange, findCell, hand, pickup, setHoveredCell, move, clearHand, swap } =
+const { registerCell, deposit, exchange, findCell, hand, pickup, setHoveredSlot, move, clearHand, swap } =
   useInventory()
 
 const cell = registerCell(props.path)

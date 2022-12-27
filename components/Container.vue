@@ -2,7 +2,7 @@
   <div>
     <slot />
     <HeldItem :item="hand && !hand.isDragging ? hand.item : null" />
-    <SlotTooltip v-if="!hand" :item="hoveredCell ? hoveredCell.item : null" />
+    <SlotTooltip v-if="!hand" :item="hoveredSlot ? hoveredSlot.item : null" />
   </div>
 </template>
 
@@ -22,7 +22,7 @@ const props = withDefaults(defineProps<ContainerProps>(), {
   value: () => [],
 })
 
-const { createContainer, updateContainer, hand, hoveredCell } = useInventory()
+const { createContainer, updateContainer, hand, hoveredSlot } = useInventory()
 
 // initialise container
 const { container } = createContainer({ ...props, cells: props.value })

@@ -8,19 +8,19 @@ type Hand = {
   isDragging: boolean
 }
 
-const state = reactive<{ containers: Container[]; hand: Hand | null; hoveredCell: Cell | null }>({
+const state = reactive<{ containers: Container[]; hand: Hand | null; hoveredSlot: Cell | null }>({
   containers: [],
-  hoveredCell: null,
+  hoveredSlot: null,
   hand: null,
 })
 
 export function useInventory() {
   const containers = computed(() => state.containers)
-  const hoveredCell = computed(() => state.hoveredCell)
+  const hoveredSlot = computed(() => state.hoveredSlot)
   const hand = computed(() => state.hand)
 
-  const setHoveredCell = (cell: Cell | null) => {
-    state.hoveredCell = cell
+  const setHoveredSlot = (cell: Cell | null) => {
+    state.hoveredSlot = cell
   }
 
   const createContainer = (container: Container) => {
@@ -148,7 +148,7 @@ export function useInventory() {
     pickup,
     clearHand,
     hand,
-    hoveredCell,
-    setHoveredCell,
+    hoveredSlot,
+    setHoveredSlot,
   }
 }
