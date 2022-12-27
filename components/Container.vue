@@ -2,7 +2,7 @@
   <div>
     <slot />
     <HeldItem :item="hand && !hand.isDragging ? hand.item : null" />
-    <CellTooltip v-if="!hand" :cell="hoveredCell" />
+    <SlotTooltip v-if="!hand" :item="hoveredCell ? hoveredCell.item : null" />
   </div>
 </template>
 
