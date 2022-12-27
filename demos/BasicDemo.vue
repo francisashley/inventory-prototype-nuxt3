@@ -1,5 +1,5 @@
 <template>
-  <div v-for="(container, i) in containers" :key="i" class="tw-mx-auto tw-mt-8">
+  <div v-for="(container, i) in demoContainers" :key="i" class="tw-mx-auto tw-mt-8">
     <AddItemButton @click="onAddRandomItem(container.id)" />
     <Container
       :id="container.id"
@@ -21,51 +21,30 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
 import AddItemButton from './components/AddItemButton.vue'
-
-import containerFixtures from '@/assets/fixtures/containers.json'
-
+import { useDemo } from '@/composables/useDemo'
 import { depositFirstAvailableSlot } from '@/utils/container.utils'
 
-import { generateSlots } from '@/utils/demo.utils'
-import { generateId } from '@/utils/id.utils'
-
-import { useDemo } from '@/composables/useDemo'
-
-const { generateRandomItem } = useDemo()
-
-const initialContainers = [...containerFixtures].map((containerFixture) => {
-  const size = [8, 2]
-  const id = generateId()
-  const slots = generateSlots(id, size, [])
-
-  return { id, name: containerFixture.name, color: containerFixture.color, slots, size }
-})
-
-for (let i = 0; i < 12; i++) {
-  const item = generateRandomItem()
-  initialContainers[0].slots = depositFirstAvailableSlot(initialContainers[0].slots, item)
-}
-
-const containers = ref(initialContainers)
-
-const findContainer = (id) => {
-  return containers.value.find((container) => container.id === id)
-}
-
-const replaceContainer = (id, container) => {
-  containers.value = containers.value.map((c) => (c.id === id ? container : c))
-}
+const { demoContainers, setDemoContainers, generateRandomItem } = useDemo()
 
 const onChange = (updatedContainer) => {
-  replaceContainer(updatedContainer.id, updatedContainer)
+  const updatedDemoContainers = demoContainers.value.map((container) => {
+    return container.id === updatedContainer.id ? updatedContainer : container
+  })
+  setDemoContainers(updatedDemoContainers)
 }
 
 const onAddRandomItem = (containerId: number) => {
-  const item = generateRandomItem()
-  const container = findContainer(containerId)
-  container.slots = depositFirstAvailableSlot(container.slots, item)
-  replaceContainer(containerId, container)
+  const updatedDemoContainers = demoContainers.value.map((demoContainer) => {
+    if (demoContainer.id === containerId) {
+      const item = generateRandomItem()
+      return {
+        ...demoContainer,
+        slots: depositFirstAvailableSlot(demoContainer.slots, item),
+      }
+    }
+    return demoContainer
+  })
+  setDemoContainers(updatedDemoContainers)
 }
 </script>
