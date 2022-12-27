@@ -19,8 +19,8 @@ export function useInventory() {
   const hoveredSlot = computed(() => state.hoveredSlot)
   const hand = computed(() => state.hand)
 
-  const setHoveredSlot = (cell: ContainerSlot | null) => {
-    state.hoveredSlot = cell
+  const setHoveredSlot = (slot: ContainerSlot | null) => {
+    state.hoveredSlot = slot
   }
 
   const createContainer = (container: Container) => {
@@ -45,38 +45,38 @@ export function useInventory() {
     return state.containers.find((container) => container.id === id)
   }
 
-  const findCell = (path: Path) => {
-    return containerTools.findCell(findContainer(path[0]), path[1])
+  const findSlot = (path: Path) => {
+    return containerTools.findSlot(findContainer(path[0]), path[1])
   }
 
-  const clearCell = (path: Path) => {
-    return containerTools.clearCell(findContainer(path[0]), path[1])
+  const clearSlot = (path: Path) => {
+    return containerTools.clearSlot(findContainer(path[0]), path[1])
   }
 
-  const depositCell = (path: Path, item: Item) => {
-    return containerTools.depositCell(findContainer(path[0]), path[1], item)
+  const depositSlot = (path: Path, item: Item) => {
+    return containerTools.depositSlot(findContainer(path[0]), path[1], item)
   }
 
-  const setCell = (path: Path, item: Item) => {
-    return containerTools.setCell(findContainer(path[0]), path[1], item)
+  const setSlot = (path: Path, item: Item) => {
+    return containerTools.setSlot(findContainer(path[0]), path[1], item)
   }
 
   const move = (from: Path, to: Path) => {
-    const fromCell = findCell(from)
-    updateContainer(findContainer(from[0]).id, clearCell(from))
-    updateContainer(findContainer(to[0]).id, depositCell(to, fromCell.item))
+    const fromSlot = findSlot(from)
+    updateContainer(findContainer(from[0]).id, clearSlot(from))
+    updateContainer(findContainer(to[0]).id, depositSlot(to, fromSlot.item))
   }
 
   const swap = (from: Path, to: Path) => {
-    const fromCell = findCell(from)
-    const toCell = findCell(to)
-    state.hand = { ...state.hand, item: toCell.item }
+    const fromSlot = findSlot(from)
+    const toSlot = findSlot(to)
+    state.hand = { ...state.hand, item: toSlot.item }
 
-    updateContainer(findContainer(to[0]).id, clearCell(to))
-    updateContainer(findContainer(to[0]).id, depositCell(to, fromCell.item))
+    updateContainer(findContainer(to[0]).id, clearSlot(to))
+    updateContainer(findContainer(to[0]).id, depositSlot(to, fromSlot.item))
 
-    updateContainer(findContainer(from[0]).id, clearCell(from))
-    updateContainer(findContainer(from[0]).id, depositCell(from, toCell.item))
+    updateContainer(findContainer(from[0]).id, clearSlot(from))
+    updateContainer(findContainer(from[0]).id, depositSlot(from, toSlot.item))
   }
 
   const pickup = (from: Path, amount: number, isDragging = false) => {
@@ -84,30 +84,30 @@ export function useInventory() {
       const updatedItem = { ...state.hand.item, amount: state.hand.item.amount + amount }
       state.hand = { ...state.hand, item: updatedItem, isDragging }
     } else {
-      state.hand = { from, item: { ...findCell(from).item, amount }, isDragging }
+      state.hand = { from, item: { ...findSlot(from).item, amount }, isDragging }
     }
 
     if (isDragging) {
       return
     }
 
-    const fromCell = findCell(from)
-    if (fromCell.item.amount - amount > 0) {
+    const fromSlot = findSlot(from)
+    if (fromSlot.item.amount - amount > 0) {
       updateContainer(
         findContainer(from[0]).id,
-        setCell(from, { ...fromCell.item, amount: fromCell.item.amount - amount })
+        setSlot(from, { ...fromSlot.item, amount: fromSlot.item.amount - amount })
       )
     } else {
-      updateContainer(findContainer(from[0]).id, clearCell(from))
+      updateContainer(findContainer(from[0]).id, clearSlot(from))
     }
   }
 
   const exchange = (to: Path) => {
-    const toCell = findCell(to)
+    const toSlot = findSlot(to)
     const hand = state.hand
-    state.hand = { ...state.hand, item: toCell.item }
-    updateContainer(findContainer(to[0]).id, clearCell(to))
-    updateContainer(findContainer(to[0]).id, depositCell(to, hand.item))
+    state.hand = { ...state.hand, item: toSlot.item }
+    updateContainer(findContainer(to[0]).id, clearSlot(to))
+    updateContainer(findContainer(to[0]).id, depositSlot(to, hand.item))
   }
 
   const deposit = (to: Path, amount?: number) => {
@@ -122,15 +122,15 @@ export function useInventory() {
 
     const item = hand.item
 
-    updateContainer(findContainer(to[0]).id, depositCell(to, item))
+    updateContainer(findContainer(to[0]).id, depositSlot(to, item))
   }
 
   const clearHand = () => {
     state.hand = null
   }
 
-  const registerCell = (path: Path) => {
-    return computed(() => findCell(path))
+  const registerSlot = (path: Path) => {
+    return computed(() => findSlot(path))
   }
 
   return {
@@ -139,12 +139,12 @@ export function useInventory() {
     updateContainer,
     removeContainer,
     findContainer,
-    registerCell,
+    registerSlot,
     move,
     swap,
     exchange,
     deposit,
-    findCell,
+    findSlot,
     pickup,
     clearHand,
     hand,

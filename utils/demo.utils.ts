@@ -9,40 +9,40 @@ export const getRandomItem = (items: Item[]) => {
 }
 
 /**
- * Generate container cells from input data
+ * Generate container slots from input data
  */
-export const generateCells = (id: number, size: ContainerSize, currentCells: Input[]): ContainerSlot[] => {
-  const calculateTotalCells = (containerSize: ContainerSize, currentCells: Input[]) => {
+export const generateSlots = (id: number, size: ContainerSize, currentSlots: Input[]): ContainerSlot[] => {
+  const calculateTotalSlots = (containerSize: ContainerSize, currentSlots: Input[]) => {
     const containerCols = containerSize[0]
     const containerRows = containerSize[1]
 
-    const lastFilledIndex = findLastIndex(currentCells, (cell) => cell.item !== null)
+    const lastFilledIndex = findLastIndex(currentSlots, (slot) => slot.item !== null)
     const lastFilledRow = lastFilledIndex === -1 ? 0 : Math.floor(lastFilledIndex / containerSize[0])
 
-    const currentNeededCells = (lastFilledRow + 1) * containerCols
+    const currentNeededSlots = (lastFilledRow + 1) * containerCols
 
-    const minimumCells = containerCols * containerRows
+    const minimumSlots = containerCols * containerRows
 
-    if (currentNeededCells < minimumCells) {
-      return minimumCells
+    if (currentNeededSlots < minimumSlots) {
+      return minimumSlots
     }
 
-    const currentFilledCellsAmount = currentCells.filter((cell) => cell.item !== null).length
+    const currentFilledSlotsAmount = currentSlots.filter((slot) => slot.item !== null).length
 
-    if (currentFilledCellsAmount >= currentNeededCells - 1) {
-      return currentNeededCells + containerCols
+    if (currentFilledSlotsAmount >= currentNeededSlots - 1) {
+      return currentNeededSlots + containerCols
     }
 
-    return currentNeededCells
+    return currentNeededSlots
   }
 
-  const totalCells = calculateTotalCells(size, currentCells)
+  const totalSlots = calculateTotalSlots(size, currentSlots)
 
-  const cells = generateArray(totalCells).map((_, cellId) => ({
-    id: cellId,
-    path: [id, cellId],
-    item: currentCells?.[cellId]?.item || null,
+  const slots = generateArray(totalSlots).map((_, slotId) => ({
+    id: slotId,
+    path: [id, slotId],
+    item: currentSlots?.[slotId]?.item || null,
   }))
 
-  return cells
+  return slots
 }

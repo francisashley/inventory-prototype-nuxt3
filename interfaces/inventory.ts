@@ -1,11 +1,11 @@
 export interface Input {
-  cell: number
+  slot: number
   item: Item
 }
 
 export interface Container {
   id: number
-  cells: ContainerSlot[]
+  slots: ContainerSlot[]
 }
 
 export interface Item {

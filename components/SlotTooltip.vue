@@ -41,10 +41,10 @@ watch(props, () => {
     stagedItem.value = props.item
   } else {
     closing.value = true
-    const cellIdBeingClosed = stagedItem.value?.id
+    const slotIdBeingClosed = stagedItem.value?.id
     setTimeout(() => {
       closing.value = false
-      if (!stagedItem.value || stagedItem.value.id === cellIdBeingClosed) {
+      if (!stagedItem.value || stagedItem.value.id === slotIdBeingClosed) {
         stagedItem.value = null
       }
     }, 300)

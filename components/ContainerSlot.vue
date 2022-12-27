@@ -1,7 +1,7 @@
 <template>
   <div
     class="tw-p-1 tw-h-20 tw-w-20 tw-bg-gray-900"
-    @mouseenter="setHoveredSlot(cell.item ? cell : null)"
+    @mouseenter="setHoveredSlot(slot.item ? slot : null)"
     @mousedown="setHoveredSlot(null)"
     @mouseleave="setHoveredSlot(null)"
     @click="onLeftClick"
@@ -17,8 +17,8 @@
         @drop="setIsHovering(false)"
       >
         <div draggable="true" @dragstart.stop="onDrag($event)">
-          <slot :cell="cell">
-            <Item v-if="cell.item" :item="cell.item" />
+          <slot :path="slot.path" :item="slot.item ?? null">
+            <Item v-if="slot.item" :item="slot.item" />
           </slot>
         </div>
         <div
@@ -42,21 +42,21 @@ type ContainerSlotsProps = {
 
 const props = defineProps<ContainerSlotsProps>()
 
-const { registerCell, deposit, exchange, findCell, hand, pickup, setHoveredSlot, move, clearHand, swap } =
+const { registerSlot, deposit, exchange, findSlot, hand, pickup, setHoveredSlot, move, clearHand, swap } =
   useInventory()
 
-const cell = registerCell(props.path)
+const slot = registerSlot(props.path)
 
 const isHovering = ref(false)
 const setIsHovering = (value: boolean) => (isHovering.value = value)
 
 const onLeftClick = () => {
-  const cell = findCell(props.path)
+  const slot = findSlot(props.path)
   const hasEmptyHand = !hand.value?.item
 
   if (hasEmptyHand) {
-    pickup(props.path, cell.item.amount)
-  } else if (!cell.item || hand.value.item.id === cell.item.id) {
+    pickup(props.path, slot.item.amount)
+  } else if (!slot.item || hand.value.item.id === slot.item.id) {
     deposit(props.path)
     emit('change', props.path)
   } else {
@@ -68,9 +68,9 @@ const onLeftClick = () => {
 const onRightClick = (event) => {
   event.preventDefault()
 
-  const cell = findCell(props.path)
+  const slot = findSlot(props.path)
 
-  if (!hand.value?.item || hand.value.item.id === cell.item?.id) {
+  if (!hand.value?.item || hand.value.item.id === slot.item?.id) {
     pickup(props.path, 1)
   }
 }
@@ -78,19 +78,19 @@ const onRightClick = (event) => {
 const onDrag = (event) => {
   event.dataTransfer.dropEffect = 'move'
   event.dataTransfer.effectAllowed = 'move'
-  pickup(cell.value.path, cell.value.item.amount, true)
+  pickup(slot.value.path, slot.value.item.amount, true)
 }
 
 const onDrop = () => {
   const from = hand.value.from
 
-  const fromCell = findCell(from)
-  const toCell = findCell(props.path)
+  const fromSlot = findSlot(from)
+  const toSlot = findSlot(props.path)
 
   if (
-    typeof fromCell.item !== 'undefined' &&
-    typeof toCell.item !== 'undefined' &&
-    fromCell.item?.id === toCell.item?.id
+    typeof fromSlot.item !== 'undefined' &&
+    typeof toSlot.item !== 'undefined' &&
+    fromSlot.item?.id === toSlot.item?.id
   ) {
     move(from, props.path)
   } else {

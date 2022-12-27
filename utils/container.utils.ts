@@ -1,76 +1,76 @@
 import { Container, ContainerSlot, Item } from '../interfaces/inventory'
 
 /**
- * Find item in cell
+ * Find item in slot
  */
-export const findCell = (container: Container, cellId: number) => {
-  return container.cells[cellId]
+export const findSlot = (container: Container, slotId: number) => {
+  return container.slots[slotId]
 }
 
 /**
- * Clear contents of a cell
+ * Clear contents of a slot
  */
-export const clearCell = (container: Container, cellId: number) => {
+export const clearSlot = (container: Container, slotId: number) => {
   return {
     ...container,
-    cells: [...container.cells].map((cell, index) => {
-      if (index === cellId) {
-        return { ...cell, item: null }
+    slots: [...container.slots].map((slot, index) => {
+      if (index === slotId) {
+        return { ...slot, item: null }
       } else {
-        return cell
+        return slot
       }
     }),
   }
 }
 
 /**
- * Set item in cell
+ * Set item in slot
  */
-export const setCell = (container: Container, cellId: number, item: Item) => {
+export const setSlot = (container: Container, slotId: number, item: Item) => {
   return {
     ...container,
-    cells: [...container.cells].map((cell) => {
-      if (cell.id === cellId) {
-        return { ...cell, item }
+    slots: [...container.slots].map((slot) => {
+      if (slot.id === slotId) {
+        return { ...slot, item }
       } else {
-        return cell
+        return slot
       }
     }),
   }
 }
 
 /**
- * Deposit item in cell
+ * Deposit item in slot
  */
-export const depositCell = (container: Container, cellId: number, item: Item) => {
-  const cell = findCell(container, cellId)
+export const depositSlot = (container: Container, slotId: number, item: Item) => {
+  const slot = findSlot(container, slotId)
 
-  if (cell.item && cell.item.id === item.id) {
-    return setCell(container, cellId, { ...cell.item, amount: cell.item.amount + item.amount })
+  if (slot.item && slot.item.id === item.id) {
+    return setSlot(container, slotId, { ...slot.item, amount: slot.item.amount + item.amount })
   } else {
-    return setCell(container, cellId, item)
+    return setSlot(container, slotId, item)
   }
 }
 
 /**
- *  Deposit the item in the first available cell
+ *  Deposit the item in the first available slot
  */
-export const depositFirstAvailableCell = (cells: ContainerSlot[], item: Item): ContainerSlot[] => {
-  cells = [...cells]
+export const depositFirstAvailableSlot = (slots: ContainerSlot[], item: Item): ContainerSlot[] => {
+  slots = [...slots]
 
-  const cell = cells.find((cell) => cell.item === null)
+  const slot = slots.find((slot) => slot.item === null)
 
-  if (cell) {
-    cells[cell.id] = { ...cells[cell.id], item }
+  if (slot) {
+    slots[slot.id] = { ...slots[slot.id], item }
   }
 
-  return cells
+  return slots
 }
 
 export default {
-  findCell,
-  clearCell,
-  setCell,
-  depositCell,
-  depositFirstAvailableCell,
+  findSlot,
+  clearSlot,
+  setSlot,
+  depositSlot,
+  depositFirstAvailableSlot,
 }

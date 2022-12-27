@@ -10,7 +10,7 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  cellId: {
+  slotId: {
     type: Number,
     required: true,
   },
@@ -24,7 +24,7 @@ const onDragStart = (event) => {
   event.dataTransfer.dropEffect = 'move'
   event.dataTransfer.effectAllowed = 'move'
   event.dataTransfer.setData('containerId', props.containerId)
-  event.dataTransfer.setData('cellId', props.cellId)
+  event.dataTransfer.setData('slotId', props.slotId)
   event.dataTransfer.setData('item', props.itemId)
 }
 </script>

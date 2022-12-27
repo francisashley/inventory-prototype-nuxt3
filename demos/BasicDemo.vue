@@ -12,10 +12,10 @@
         width: container.size[0] * 5 + 1.25 + 'rem',
         height: container.size[1] * 5 + 1.25 + 'rem',
       }"
-      :value="container.cells"
+      :value="container.slots"
       @change="onChange"
     >
-      <ContainerSlot v-for="cell in container.cells" :key="cell.id" :path="cell.path" />
+      <ContainerSlot v-for="slot in container.slots" :key="slot.id" :path="slot.path" />
     </Container>
   </div>
 </template>
@@ -27,23 +27,23 @@ import AddItemButton from './components/AddItemButton.vue'
 import itemFixtures from '@/assets/fixtures/item-catalogue.json'
 import containerFixtures from '@/assets/fixtures/containers.json'
 
-import { depositFirstAvailableCell } from '@/utils/container.utils'
+import { depositFirstAvailableSlot } from '@/utils/container.utils'
 import { createItem } from '@/utils/item.utils'
-import { getRandomItem, generateCells } from '@/utils/demo.utils'
+import { getRandomItem, generateSlots } from '@/utils/demo.utils'
 import { generateId } from '@/utils/id.utils'
 
 const items = itemFixtures.map(createItem)
 const initialContainers = [...containerFixtures].map((containerFixture) => {
   const size = [8, 2]
   const id = generateId()
-  const cells = generateCells(id, size, [])
+  const slots = generateSlots(id, size, [])
 
-  return { id, name: containerFixture.name, color: containerFixture.color, cells, size }
+  return { id, name: containerFixture.name, color: containerFixture.color, slots, size }
 })
 
 for (let i = 0; i < 12; i++) {
   const item = getRandomItem(items)
-  initialContainers[0].cells = depositFirstAvailableCell(initialContainers[0].cells, item)
+  initialContainers[0].slots = depositFirstAvailableSlot(initialContainers[0].slots, item)
 }
 
 const containers = ref(initialContainers)
@@ -63,7 +63,7 @@ const onChange = (updatedContainer) => {
 const onAddRandomItem = (containerId: number) => {
   const item = getRandomItem(items)
   const container = findContainer(containerId)
-  container.cells = depositFirstAvailableCell(container.cells, item)
+  container.slots = depositFirstAvailableSlot(container.slots, item)
   replaceContainer(containerId, container)
 }
 </script>
