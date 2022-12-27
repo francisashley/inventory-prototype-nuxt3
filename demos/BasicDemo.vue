@@ -1,6 +1,6 @@
 <template>
   <div v-for="(container, i) in demoContainers" :key="i" class="tw-mx-auto tw-mt-8">
-    <AddItemButton @click="onAddRandomItem(container.id)" />
+    <AddItemButton @click="addRandomItem(container.id)" />
     <Container
       :id="container.id"
       class="tw-relative tw-p-2 tw-border tw-border-thin tw-overflow-scroll tw-flex tw-flex-wrap tw-mx-auto"
@@ -23,27 +23,12 @@
 <script lang="ts" setup>
 import AddItemButton from './components/AddItemButton.vue'
 import { useDemo } from '@/composables/useDemo'
-import { depositFirstAvailableSlot } from '@/utils/container.utils'
 
-const { demoContainers, setDemoContainers, generateRandomItem } = useDemo()
+const { demoContainers, setDemoContainers, addRandomItem } = useDemo()
 
 const onChange = (updatedContainer) => {
   const updatedDemoContainers = demoContainers.value.map((container) => {
     return container.id === updatedContainer.id ? updatedContainer : container
-  })
-  setDemoContainers(updatedDemoContainers)
-}
-
-const onAddRandomItem = (containerId: number) => {
-  const updatedDemoContainers = demoContainers.value.map((demoContainer) => {
-    if (demoContainer.id === containerId) {
-      const item = generateRandomItem()
-      return {
-        ...demoContainer,
-        slots: depositFirstAvailableSlot(demoContainer.slots, item),
-      }
-    }
-    return demoContainer
   })
   setDemoContainers(updatedDemoContainers)
 }

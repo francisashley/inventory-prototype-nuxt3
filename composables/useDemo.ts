@@ -46,9 +46,24 @@ export function useDemo() {
     return getRandomItem(state.itemRegistry)
   }
 
+  const addRandomItem = (containerId: number) => {
+    const updatedDemoContainers = demoContainers.value.map((demoContainer) => {
+      if (demoContainer.id === containerId) {
+        const item = generateRandomItem()
+        return {
+          ...demoContainer,
+          slots: depositFirstAvailableSlot(demoContainer.slots, item),
+        }
+      }
+      return demoContainer
+    })
+    setDemoContainers(updatedDemoContainers)
+  }
+
   return {
     demoContainers,
     setDemoContainers,
     generateRandomItem,
+    addRandomItem,
   }
 }
