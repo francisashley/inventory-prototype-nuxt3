@@ -18,31 +18,24 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType } from 'vue'
 import { useInventory } from '../composables/useInventory'
 import { Cell } from '../interfaces/inventory'
 
 const emit = defineEmits(['change'])
 
-const props = defineProps({
-  id: {
-    type: Number,
-    required: true,
-  },
-  cells: {
-    type: Array as PropType<Cell[]>,
-    default: () => [],
-  },
-  size: {
-    type: Array,
-    default: () => [8, 2],
-    validator: (size) => typeof size[0] === 'number' && typeof size[1] === 'number',
-  },
-  color: {
-    type: String,
-    default: null,
-    validator: (value: any) => ['blue', 'red', 'white'].includes(value),
-  },
+type ContainerProps = {
+  id: number
+  name?: string
+  cells: Cell[]
+  size: [number, number]
+  color?: 'blue' | 'red' | 'white'
+}
+
+const props = withDefaults(defineProps<ContainerProps>(), {
+  name: null,
+  cells: () => [],
+  size: () => [8, 2],
+  color: null,
 })
 
 const { createContainer, updateContainer, move, swap, findCell, hand, pickup, clearHand, hoveredCell, setHoveredCell } =

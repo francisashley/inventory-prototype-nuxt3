@@ -33,12 +33,11 @@ import { useInventory } from '../composables/useInventory'
 
 const emit = defineEmits(['drag', 'hover', 'hoverLeave', 'change'])
 
-const props = defineProps({
-  path: {
-    type: Array,
-    default: () => [],
-  },
-})
+type ContainerSlotsProps = {
+  path: number[]
+}
+
+const props = defineProps<ContainerSlotsProps>()
 
 const { deposit, exchange, findCell, hand, pickup } = useInventory()
 
