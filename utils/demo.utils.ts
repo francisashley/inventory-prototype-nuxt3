@@ -46,3 +46,18 @@ export const generateSlots = (id: number, size: ContainerSize, currentSlots: Inp
 
   return slots
 }
+
+/**
+ *  Deposit the item in the first available slot
+ */
+export const depositFirstAvailableSlot = (slots: ContainerSlot[], item: Item): ContainerSlot[] => {
+  slots = [...slots]
+
+  const slot = slots.find((slot) => slot.item === null)
+
+  if (slot) {
+    slots[slot.id] = { ...slots[slot.id], item }
+  }
+
+  return slots
+}
