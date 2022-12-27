@@ -7,8 +7,6 @@
       :draggable="Boolean(cell.item)"
       @drag="onDrag(cell)"
       @drop="onDrop(cell.id)"
-      @hover="setHoveredCell(cell.item ? cell : null)"
-      @hoverLeave="setHoveredCell(null)"
     >
       <Item v-if="cell.item" :item="cell.item" />
     </ContainerSlot>
@@ -38,8 +36,7 @@ const props = withDefaults(defineProps<ContainerProps>(), {
   color: null,
 })
 
-const { createContainer, updateContainer, move, swap, findCell, hand, pickup, clearHand, hoveredCell, setHoveredCell } =
-  useInventory()
+const { createContainer, updateContainer, move, swap, findCell, hand, pickup, clearHand, hoveredCell } = useInventory()
 
 // initialise container
 const { container } = createContainer(props)

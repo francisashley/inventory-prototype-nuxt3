@@ -10,18 +10,14 @@ type Hand = {
 
 const state = reactive<{ containers: Container[]; hand: Hand | null; hoveredCell: Cell | null }>({
   containers: [],
-  hand: null,
   hoveredCell: null,
+  hand: null,
 })
 
 export function useInventory() {
-  const containers = computed(() => {
-    return state.containers
-  })
-
-  const hand = computed(() => state.hand)
-
+  const containers = computed(() => state.containers)
   const hoveredCell = computed(() => state.hoveredCell)
+  const hand = computed(() => state.hand)
 
   const setHoveredCell = (cell: Cell | null) => {
     state.hoveredCell = cell
@@ -133,12 +129,17 @@ export function useInventory() {
     state.hand = null
   }
 
+  const registerCell = (path: Path) => {
+    return computed(() => findCell(path))
+  }
+
   return {
     containers,
     createContainer,
     updateContainer,
     removeContainer,
     findContainer,
+    registerCell,
     move,
     swap,
     exchange,
