@@ -29,8 +29,6 @@ const props = defineProps({
 })
 
 const position = ref({ x: 0, y: 0 })
-const stagedCell = ref(props.cell)
-const closing = ref(false)
 
 onMounted(() => {
   window.addEventListener('mousemove', (event) => {
@@ -44,17 +42,4 @@ const style = computed(() => ({
 }))
 
 const canShow = computed(() => Boolean(props.item))
-
-watch(props, () => {
-  if (props.cell) {
-    stagedCell.value = props.cell
-  } else {
-    closing.value = true
-    const cellIdBeingClosed = stagedCell.value?.id
-    closing.value = false
-    if (!stagedCell.value || stagedCell.value.id === cellIdBeingClosed) {
-      stagedCell.value = null
-    }
-  }
-})
 </script>
