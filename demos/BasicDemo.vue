@@ -19,15 +19,14 @@ import containerFixtures from '@/assets/fixtures/containers.json'
 
 import { createContainer, depositFirstAvailableCell } from '@/utils/container.utils'
 import { parseItem } from '@/utils/item.utils'
+import { getRandomItem } from '@/utils/demo.utils'
 
 const items = itemFixtures.map(parseItem)
 const initialContainers = [...containerFixtures].map(createContainer)
 
 for (let i = 0; i < 12; i++) {
-  const randomAmount = Math.floor(Math.random() * 10) + 1
-  const randomItemIndex = Math.floor(Math.random() * items.length)
-  const item = items[randomItemIndex]
-  initialContainers[0].cells = depositFirstAvailableCell(initialContainers[0].cells, { ...item, amount: randomAmount })
+  const item = getRandomItem(items)
+  initialContainers[0].cells = depositFirstAvailableCell(initialContainers[0].cells, item)
 }
 
 const containers = ref(initialContainers)
@@ -45,9 +44,7 @@ const onChange = (updatedContainer) => {
 }
 
 const onAddRandomItem = (containerId: number) => {
-  const randomAmount = Math.floor(Math.random() * 10) + 1
-  const randomItemIndex = Math.floor(Math.random() * items.length)
-  const item = { ...items[randomItemIndex], amount: randomAmount }
+  const item = getRandomItem(items)
   const container = findContainer(containerId)
   container.cells = depositFirstAvailableCell(container.cells, item)
   replaceContainer(containerId, container)
