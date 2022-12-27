@@ -9,7 +9,7 @@ import { depositFirstAvailableSlot } from '@/utils/container.utils'
 
 type DemoContainer = {
   id: number
-  color: string
+  color: 'blue' | 'red'
   slots: ContainerSlot[]
   size: ContainerSize
 }
@@ -21,7 +21,7 @@ const state = reactive<{ itemRegistry: Item[]; demoContainers: DemoContainer[] }
 
 state.itemRegistry = itemFixtures.map(createItem)
 
-state.demoContainers = containerFixtures.map(({ color, size }: { color: string; size: ContainerSize }, i) => {
+state.demoContainers = containerFixtures.map(({ color, size }: { color: 'blue' | 'red'; size: ContainerSize }, i) => {
   const id = generateId()
   let slots = generateSlots(id, size, [])
 
