@@ -3,7 +3,7 @@ import { Container, Path, Item, ContainerSlot } from '../interfaces/inventory'
 import tool from '@/utils/tool.utils'
 
 type Hand = {
-  from: number[]
+  from: Path
   item: Item
   isDragging: boolean
 }
