@@ -19,21 +19,21 @@ type DemoContainer = {
 }
 
 interface DemoState {
-  itemRegistry: Item[]
+  items: Item[]
   demoContainers: DemoContainer[]
 }
 
 const state = reactive<DemoState>({
-  itemRegistry: [],
+  items: [],
   demoContainers: [],
 })
 
-state.itemRegistry = itemFixtures.map(createItem)
+state.items = itemFixtures.map(createItem)
 
 state.demoContainers = containerFixtures.map(createContainer).map((container, i) => {
   if (i === 0) {
     for (let i = 0; i < 12; i++) {
-      const item = getRandomItem(state.itemRegistry)
+      const item = getRandomItem(state.items)
       container = {
         ...container,
         slots: depositFirstAvailableSlot(container.slots, item),
@@ -49,7 +49,7 @@ state.demoContainers = containerFixtures.map(({ color, size }: { color: 'blue' |
 
   if (i === 0) {
     for (let i = 0; i < 12; i++) {
-      const item = getRandomItem(state.itemRegistry)
+      const item = getRandomItem(state.items)
       slots = depositFirstAvailableSlot(slots, item)
     }
   }
@@ -65,7 +65,7 @@ export function useDemo() {
   }
 
   const generateRandomItem = () => {
-    return getRandomItem(state.itemRegistry)
+    return getRandomItem(state.items)
   }
 
   const addRandomItem = (containerId: number) => {
