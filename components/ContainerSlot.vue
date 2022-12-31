@@ -17,9 +17,7 @@
         @drop="setIsHovering(false)"
       >
         <div draggable="true" @dragstart.stop="onDrag($event)">
-          <slot :path="slot.path" :item="slot.item ?? null">
-            <Item v-if="slot.item" :item="slot.item" />
-          </slot>
+          <slot :path="slot.path" :item="slot.item ?? null" />
         </div>
         <div
           v-if="isHovering"
