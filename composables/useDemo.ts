@@ -1,5 +1,5 @@
 import { reactive } from 'vue'
-import itemFixtures from '@/assets/fixtures/item-catalogue.json'
+import itemFixtures from '@/assets/fixtures/items.json'
 import { createItem } from '@/utils/item.utils'
 import { Item, ContainerSize, ContainerSlot } from '@/interfaces/inventory'
 import { getRandomItem, generateSlots, depositFirstAvailableSlot } from '@/utils/demo.utils'
