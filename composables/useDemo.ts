@@ -1,10 +1,10 @@
 import { reactive } from 'vue'
 import itemFixtures from '@/assets/fixtures/items.json'
+import containerFixtures from '@/assets/fixtures/containers.json'
 import { createItem } from '@/utils/item.utils'
 import { Item, ContainerSize, ContainerSlot } from '@/interfaces/inventory'
 import { getRandomItem, generateSlots, depositFirstAvailableSlot } from '@/utils/demo.utils'
 import { generateId } from '@/utils/id.utils'
-import containerFixtures from '@/assets/fixtures/containers.json'
 
 type DemoContainer = {
   id: number
