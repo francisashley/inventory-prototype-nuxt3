@@ -83,3 +83,12 @@ export const depositFirstAvailableSlot = (slots: ContainerSlot[], item: Item): C
 
   return slots
 }
+
+/**
+ * Return formatted container
+ */
+export const createContainer = ({ color, size }: { color: 'blue' | 'red'; size: ContainerSize }) => {
+  const id = generateId()
+  let slots = generateSlots(id, size, [])
+  return { id, color, slots, size }
+}

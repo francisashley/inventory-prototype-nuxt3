@@ -2,7 +2,13 @@ import { reactive } from 'vue'
 import itemFixtures from '@/assets/fixtures/items.json'
 import containerFixtures from '@/assets/fixtures/containers.json'
 import { Item, ContainerSize, ContainerSlot } from '@/interfaces/inventory'
-import { getRandomItem, generateSlots, depositFirstAvailableSlot, createItem } from '@/utils/demo.utils'
+import {
+  getRandomItem,
+  generateSlots,
+  depositFirstAvailableSlot,
+  createItem,
+  createContainer,
+} from '@/utils/demo.utils'
 import { generateId } from '@/utils/id.utils'
 
 type DemoContainer = {
@@ -23,6 +29,19 @@ const state = reactive<DemoState>({
 })
 
 state.itemRegistry = itemFixtures.map(createItem)
+
+state.demoContainers = containerFixtures.map(createContainer).map((container, i) => {
+  if (i === 0) {
+    for (let i = 0; i < 12; i++) {
+      const item = getRandomItem(state.itemRegistry)
+      container = {
+        ...container,
+        slots: depositFirstAvailableSlot(container.slots, item),
+      }
+    }
+  }
+  return container
+})
 
 state.demoContainers = containerFixtures.map(({ color, size }: { color: 'blue' | 'red'; size: ContainerSize }, i) => {
   const id = generateId()
