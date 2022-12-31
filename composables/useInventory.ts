@@ -1,4 +1,4 @@
-import { reactive, computed } from 'vue'
+import { reactive, computed, ComputedRef } from 'vue'
 import { Container, Path, Item, ContainerSlot } from '../interfaces/inventory'
 import tool from '@/utils/tool.utils'
 
@@ -27,10 +27,18 @@ export function useInventory() {
 
   const registerContainer = (container: Container) => {
     state.containers = [...state.containers, container]
-    return computed(() => tool.containers(state.containers).find(container.id))
+    return getComputedContainer(container.id)
   }
 
-  const registerSlot = ([containerId, slotId]: Path) => {
+  const registerSlot = () => {
+    // register slot
+  }
+
+  const getComputedContainer = (containerId: number): ComputedRef<Container> => {
+    return computed(() => tool.containers(state.containers).find(containerId))
+  }
+
+  const getComputedSlot = ([containerId, slotId]: Path): ComputedRef<ContainerSlot> => {
     return computed(() => findSlot([containerId, slotId]))
   }
 
@@ -110,6 +118,9 @@ export function useInventory() {
     containers,
     hand,
     hoveredSlot,
+    // get custom state
+    getComputedContainer,
+    getComputedSlot,
     // update
     updateContainer,
     move,
