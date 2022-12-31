@@ -2,7 +2,13 @@ import { reactive } from 'vue'
 import itemFixtures from '@/assets/fixtures/items.json'
 import containerFixtures from '@/assets/fixtures/containers.json'
 import { Item, ContainerSize, ContainerSlot } from '@/interfaces/inventory'
-import { getRandomItem, depositFirstAvailableSlot, createItem, createContainer } from '@/utils/demo.utils'
+import {
+  getRandomItem,
+  getRandomItems,
+  depositFirstAvailableSlot,
+  createItem,
+  createContainer,
+} from '@/utils/demo.utils'
 
 type DemoContainer = {
   id: number
@@ -23,15 +29,14 @@ const state = reactive<DemoState>({
 
 state.items = itemFixtures.map(createItem)
 
-state.demoContainers = containerFixtures.map(createContainer).map((container, i) => {
+state.demoContainers = containerFixtures.map(createContainer).map((container: DemoContainer, i: number) => {
   if (i === 0) {
-    for (let i = 0; i < 12; i++) {
-      const item = getRandomItem(state.items)
-      container = {
-        ...container,
-        slots: depositFirstAvailableSlot(container.slots, item),
-      }
+    const randomItems = getRandomItems(state.items, 12)
+    let slots = container.slots
+    for (const item of randomItems) {
+      slots = depositFirstAvailableSlot(slots, item)
     }
+    container = { ...container, slots }
   }
   return container
 })

@@ -31,6 +31,17 @@ export const getRandomItem = (items: Item[]) => {
 }
 
 /**
+ * Get a list of random items
+ */
+export const getRandomItems = (items: Item[], amount: number) => {
+  const randomItems = []
+  for (let i = 0; i < amount; i++) {
+    randomItems.push(getRandomItem(items))
+  }
+  return randomItems
+}
+
+/**
  * Generate container slots from input data
  */
 export const generateSlots = (id: number, size: ContainerSize, currentSlots: Input[]): ContainerSlot[] => {
