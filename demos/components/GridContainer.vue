@@ -1,11 +1,10 @@
 <template>
   <Container
     :id="props.id"
-    class="tw-relative tw-p-2 tw-border tw-border-thin tw-overflow-scroll tw-flex tw-flex-wrap tw-mx-auto"
-    :class="{
-      'tw-border-blue-400': props.color === 'blue',
-      'tw-border-red-400': props.color === 'red',
-    }"
+    :class="[
+      'tw-relative tw-p-2 tw-border tw-border-thin tw-overflow-scroll tw-flex tw-flex-wrap tw-mx-auto',
+      { 'tw-border-blue-400': props.color === 'blue', 'tw-border-red-400': props.color === 'red' },
+    ]"
     :style="gridContainerStyle"
     :value="props.value"
     @change="emit('change', $event)"
