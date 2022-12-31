@@ -8,7 +8,13 @@ type Hand = {
   isDragging: boolean
 }
 
-const state = reactive<{ containers: Container[]; hand: Hand | null; hoveredSlot: ContainerSlot | null }>({
+interface InventoryState {
+  containers: Container[]
+  hand: Hand | null
+  hoveredSlot: ContainerSlot | null
+}
+
+const state = reactive<InventoryState>({
   containers: [],
   hoveredSlot: null,
   hand: null,
