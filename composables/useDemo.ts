@@ -13,7 +13,12 @@ type DemoContainer = {
   size: ContainerSize
 }
 
-const state = reactive<{ itemRegistry: Item[]; demoContainers: DemoContainer[] }>({
+interface DemoState {
+  itemRegistry: Item[]
+  demoContainers: DemoContainer[]
+}
+
+const state = reactive<DemoState>({
   itemRegistry: [],
   demoContainers: [],
 })
