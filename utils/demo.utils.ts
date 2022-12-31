@@ -1,6 +1,28 @@
 import { ContainerSize, ContainerSlot, Item, Input } from '../interfaces/inventory'
+import { generateId } from './id.utils'
 import { generateArray, findLastIndex } from '@/utils/array.utils'
 
+/**
+ * Return formatted item
+ */
+type InputItem = {
+  id?: string | number
+  name?: string
+  image?: string
+  amount?: number
+}
+export const createItem = (item: InputItem): Item => {
+  return {
+    id: generateId(),
+    name: item.name || '',
+    image: item.image || null,
+    amount: item.amount || 0,
+  }
+}
+
+/**
+ * Get a random item and amount
+ */
 export const getRandomItem = (items: Item[]) => {
   const randomAmount = Math.floor(Math.random() * 10) + 1
   const randomItemIndex = Math.floor(Math.random() * items.length)
