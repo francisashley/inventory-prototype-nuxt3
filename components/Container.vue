@@ -1,7 +1,7 @@
 <template>
   <div>
     <slot />
-    <HeldItem :item="hand && !hand.isDragging ? hand.item : null" />
+    <HeldItem :item="hand.state.value && !hand.state.value.isDragging ? hand.state.value.item : null" />
     <SlotTooltip v-if="!hand" :item="hoveredSlot ? hoveredSlot.item : null" />
   </div>
 </template>

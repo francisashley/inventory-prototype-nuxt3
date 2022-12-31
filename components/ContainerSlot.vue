@@ -42,8 +42,7 @@ type ContainerSlotsProps = {
 
 const props = defineProps<ContainerSlotsProps>()
 
-const { getComputedSlot, deposit, exchange, findSlot, hand, pickup, setHoveredSlot, move, clearHand, swap } =
-  useInventory()
+const { getComputedSlot, findSlot, hand, setHoveredSlot, move, clearHand, swap } = useInventory()
 
 const slot = getComputedSlot(props.path)
 
@@ -52,15 +51,15 @@ const setIsHovering = (value: boolean) => (isHovering.value = value)
 
 const onLeftClick = () => {
   const slot = findSlot(props.path)
-  const hasEmptyHand = !hand.value?.item
+  const hasEmptyHand = !hand.state.value?.item
 
   if (hasEmptyHand) {
-    pickup(props.path, slot.item.amount)
-  } else if (!slot.item || hand.value.item.id === slot.item.id) {
-    deposit(props.path)
+    hand.pickup(props.path, slot.item.amount)
+  } else if (!slot.item || hand.state.value.item.id === slot.item.id) {
+    hand.deposit(props.path)
     emit('change', props.path)
   } else {
-    exchange(props.path)
+    hand.exchange(props.path)
     emit('change', props.path)
   }
 }
@@ -70,19 +69,19 @@ const onRightClick = (event) => {
 
   const slot = findSlot(props.path)
 
-  if (!hand.value?.item || hand.value.item.id === slot.item?.id) {
-    pickup(props.path, 1)
+  if (!hand.state.value?.item || hand.state.value.item.id === slot.item?.id) {
+    hand.pickup(props.path, 1)
   }
 }
 
 const onDrag = (event) => {
   event.dataTransfer.dropEffect = 'move'
   event.dataTransfer.effectAllowed = 'move'
-  pickup(slot.value.path, slot.value.item.amount, true)
+  hand.pickup(slot.value.path, slot.value.item.amount, true)
 }
 
 const onDrop = () => {
-  const from = hand.value.from
+  const from = hand.state.value.from
 
   const fromSlot = findSlot(from)
   const toSlot = findSlot(props.path)

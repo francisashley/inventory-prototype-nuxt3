@@ -2,7 +2,7 @@ import { reactive, computed, ComputedRef } from 'vue'
 import { Container, Path, Item, ContainerSlot } from '../interfaces/inventory'
 import tool from '@/utils/tool.utils'
 
-type Hand = {
+type HandState = {
   from: Path
   item: Item
   isDragging: boolean
@@ -10,20 +10,20 @@ type Hand = {
 
 interface InventoryState {
   containers: Container[]
-  hand: Hand | null
+  handState: HandState | null
   hoveredSlot: ContainerSlot | null
 }
 
 const state = reactive<InventoryState>({
   containers: [],
   hoveredSlot: null,
-  hand: null,
+  handState: null,
 })
 
 export function useInventory() {
   const containers = computed(() => state.containers)
   const hoveredSlot = computed(() => state.hoveredSlot)
-  const hand = computed(() => state.hand)
+  const handState = computed(() => state.handState)
 
   const saveContainer = (containerId: number, container: Container) => {
     const exists = Boolean(tool.containers(state.containers).find(containerId))
@@ -64,7 +64,7 @@ export function useInventory() {
     const fromItem = tool.containers(state.containers).findSlot(from[0], from[1]).item
     const toItem = tool.containers(state.containers).findSlot(to[0], to[1]).item
 
-    state.hand = { ...state.hand, item: toItem }
+    state.handState = { ...state.handState, item: toItem }
 
     let updatedContainers = tool.containers(state.containers).clearSlot(to[0], to[1])
     updatedContainers = tool.containers(updatedContainers).depositSlot(to[0], to[1], fromItem)
@@ -76,11 +76,11 @@ export function useInventory() {
   }
 
   const pickup = (from: Path, amount: number, isDragging = false) => {
-    const hand = state.hand
+    const handState = state.handState
 
-    state.hand = {
+    state.handState = {
       from,
-      item: { ...findSlot(from).item, amount: hand ? hand.item.amount + amount : amount },
+      item: { ...findSlot(from).item, amount: handState ? handState.item.amount + amount : amount },
       isDragging,
     }
 
@@ -93,21 +93,21 @@ export function useInventory() {
 
   const exchange = (to: Path) => {
     const toSlot = tool.containers(state.containers).findSlot(to[0], to[1])
-    const heldItem = state.hand.item
-    state.hand = { ...state.hand, item: toSlot.item }
+    const heldItem = state.handState.item
+    state.handState = { ...state.handState, item: toSlot.item }
     state.containers = tool.containers(state.containers).depositSlot(to[0], to[1], heldItem)
   }
 
   const deposit = (to: Path, amount?: number) => {
-    const heldItem = state.hand.item
+    const heldItem = state.handState.item
     amount = amount ?? heldItem.amount
     const leftInHand = heldItem.amount - amount
-    state.hand = leftInHand > 0 ? { ...state.hand, item: { ...heldItem, amount: leftInHand } } : null
+    state.handState = leftInHand > 0 ? { ...state.handState, item: { ...heldItem, amount: leftInHand } } : null
     state.containers = tool.containers(state.containers).depositSlot(to[0], to[1], heldItem)
   }
 
   const clearHand = () => {
-    state.hand = null
+    state.handState = null
   }
 
   return {
@@ -116,7 +116,6 @@ export function useInventory() {
     registerSlot,
     // state
     containers,
-    hand,
     hoveredSlot,
     // get custom state
     getComputedContainer,
@@ -124,11 +123,15 @@ export function useInventory() {
     // update
     move,
     swap,
-    exchange,
-    deposit,
     findSlot,
-    pickup,
     clearHand,
     setHoveredSlot,
+    hand: {
+      state: handState,
+      pickup,
+      // release,
+      exchange,
+      deposit,
+    },
   }
 }
