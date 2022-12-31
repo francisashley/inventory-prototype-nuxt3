@@ -6,19 +6,26 @@
       :color="container.color"
       :size="container.size"
       :value="container.slots"
+      class="tw-min-h-45 tw-w-min"
       @change="onChange"
     >
-      <ContainerSlot v-for="slot in container.slots" :key="slot.id" :path="slot.path" />
+      <div v-for="(slotRow, j) in getRows(container.slots)" :key="j" class="tw-w-full tw-flex">
+        <ContainerSlot v-for="(slot, k) in slotRow" :key="k" :path="slot.path" />
+      </div>
     </GridContainer>
   </div>
 </template>
 
 <script lang="ts" setup>
+import chunk from 'lodash/chunk'
 import AddItemButton from './components/AddItemButton.vue'
 import GridContainer from './components/GridContainer.vue'
 import { useDemo } from '@/composables/useDemo'
-
 const { demoContainers, setDemoContainers, addRandomItem } = useDemo()
+
+const getRows = (slots) => {
+  return chunk(slots, 8)
+}
 
 const onChange = (updatedContainer) => {
   const updatedDemoContainers = demoContainers.value.map((container) => {

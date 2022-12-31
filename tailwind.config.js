@@ -16,6 +16,9 @@ export default {
       spacing: {
         18: '4.5rem',
       },
+      minHeight: {
+        45: '11.25rem',
+      },
     },
   },
   variants: {
