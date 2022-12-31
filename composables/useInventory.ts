@@ -25,9 +25,13 @@ export function useInventory() {
   const hoveredSlot = computed(() => state.hoveredSlot)
   const hand = computed(() => state.hand)
 
-  const registerContainer = (container: Container) => {
-    state.containers = [...state.containers, container]
-    return getComputedContainer(container.id)
+  const saveContainer = (containerId: number, container: Container) => {
+    const exists = Boolean(tool.containers(state.containers).find(containerId))
+    if (exists) {
+      state.containers = tool.containers(state.containers).update(containerId, container)
+    } else {
+      state.containers = [...state.containers, container]
+    }
   }
 
   const registerSlot = () => {
@@ -44,10 +48,6 @@ export function useInventory() {
 
   const setHoveredSlot = (slot: ContainerSlot | null) => {
     state.hoveredSlot = slot
-  }
-
-  const updateContainer = (containerId: number, updatedContainer: Container) => {
-    state.containers = tool.containers(state.containers).update(containerId, updatedContainer)
   }
 
   const findSlot = ([containerId, slotId]: Path) => {
@@ -112,7 +112,7 @@ export function useInventory() {
 
   return {
     // register
-    registerContainer,
+    saveContainer,
     registerSlot,
     // state
     containers,
@@ -122,7 +122,6 @@ export function useInventory() {
     getComputedContainer,
     getComputedSlot,
     // update
-    updateContainer,
     move,
     swap,
     exchange,
