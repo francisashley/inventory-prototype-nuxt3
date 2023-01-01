@@ -1,6 +1,32 @@
-import { ContainerSize, ContainerSlot, Item, Input } from '../interfaces/inventory'
+import { ContainerSlot, Item, Input } from '../interfaces/inventory'
 import { generateId } from './id.utils'
 import { generateArray, findLastIndex } from '@/utils/array.utils'
+
+type ContainerSize = [number, number]
+
+/**
+ * Return formatted container
+ */
+type InputContainer = {
+  color: 'blue' | 'red'
+  size: ContainerSize
+}
+export const createContainer = ({ color, size }: InputContainer) => {
+  const id = generateId()
+  let slots = generateSlots(id, size)
+  return { id, color, slots, size }
+}
+
+/**
+ * Return formatted slot
+ */
+export const createSlot = (containerId: number, slotId: number) => {
+  return {
+    id: slotId,
+    path: [containerId, slotId],
+    item: null,
+  }
+}
 
 /**
  * Return formatted item
@@ -44,40 +70,36 @@ export const getRandomItems = (items: Item[], amount: number) => {
 /**
  * Generate container slots from input data
  */
-export const generateSlots = (id: number, size: ContainerSize, currentSlots: Input[]): ContainerSlot[] => {
-  const calculateTotalSlots = (containerSize: ContainerSize, currentSlots: Input[]) => {
-    const containerCols = containerSize[0]
-    const containerRows = containerSize[1]
+export const generateSlots = (id: number, size: ContainerSize): ContainerSlot[] => {
+  const totalSlots = size[0] * size[1]
+  return generateArray(totalSlots).map((_, slotId) => createSlot(id, slotId))
+}
 
-    const lastFilledIndex = findLastIndex(currentSlots, (slot) => slot.item !== null)
-    const lastFilledRow = lastFilledIndex === -1 ? 0 : Math.floor(lastFilledIndex / containerSize[0])
+/**
+ * Calculate the total amount of slots needed for the container
+ */
+export const calculateTotalNeededSlots = (containerSize: ContainerSize, currentSlots: Input[]) => {
+  const containerCols = containerSize[0]
+  const containerRows = containerSize[1]
 
-    const currentNeededSlots = (lastFilledRow + 1) * containerCols
+  const lastFilledIndex = findLastIndex(currentSlots, (slot) => slot.item !== null)
+  const lastFilledRow = lastFilledIndex === -1 ? 0 : Math.floor(lastFilledIndex / containerSize[0])
 
-    const minimumSlots = containerCols * containerRows
+  const currentNeededSlots = (lastFilledRow + 1) * containerCols
 
-    if (currentNeededSlots < minimumSlots) {
-      return minimumSlots
-    }
+  const minimumSlots = containerCols * containerRows
 
-    const currentFilledSlotsAmount = currentSlots.filter((slot) => slot.item !== null).length
-
-    if (currentFilledSlotsAmount >= currentNeededSlots - 1) {
-      return currentNeededSlots + containerCols
-    }
-
-    return currentNeededSlots
+  if (currentNeededSlots < minimumSlots) {
+    return minimumSlots
   }
 
-  const totalSlots = calculateTotalSlots(size, currentSlots)
+  const currentFilledSlotsAmount = currentSlots.filter((slot) => slot.item !== null).length
 
-  const slots = generateArray(totalSlots).map((_, slotId) => ({
-    id: slotId,
-    path: [id, slotId],
-    item: currentSlots?.[slotId]?.item || null,
-  }))
+  if (currentFilledSlotsAmount >= currentNeededSlots - 1) {
+    return currentNeededSlots + containerCols
+  }
 
-  return slots
+  return currentNeededSlots
 }
 
 /**
@@ -93,17 +115,4 @@ export const depositFirstAvailableSlot = (slots: ContainerSlot[], item: Item): C
   }
 
   return slots
-}
-
-/**
- * Return formatted container
- */
-type InputContainer = {
-  color: 'blue' | 'red'
-  size: ContainerSize
-}
-export const createContainer = ({ color, size }: InputContainer) => {
-  const id = generateId()
-  let slots = generateSlots(id, size, [])
-  return { id, color, slots, size }
 }
