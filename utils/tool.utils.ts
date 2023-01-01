@@ -16,6 +16,26 @@ export default {
         const container = containers.find((container) => container.id === containerId)
         return container.slots.find((slot) => slot.id === slotId)
       },
+      addSlot: (containerId, slot) => {
+        return containers.map((container) => {
+          if (container.id === containerId) {
+            return {
+              ...container,
+              slots: [...container.slots, slot],
+            }
+          }
+          return container
+        })
+      },
+      updateSlot: (containerId, slotId, slot) => {
+        return containers.map((container) => {
+          if (container.id === containerId) {
+            const slots = container.slots.map((_slot) => (_slot.id === slotId ? slot : _slot))
+            return { ...container, slots }
+          }
+          return container
+        })
+      },
       depositSlot: (containerId, slotId, item) => {
         return containers.map((container) => {
           if (container.id === containerId) {
