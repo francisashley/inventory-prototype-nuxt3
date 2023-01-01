@@ -33,7 +33,7 @@ const getRows = (slots) => {
 
 const onChange = (updatedContainer) => {
   const updatedDemoContainers = demoContainers.value.map((container) => {
-    return container.id === updatedContainer.id ? updatedContainer : container
+    return container.id === updatedContainer.id ? { ...container, ...updatedContainer } : container
   })
   setDemoContainers(updatedDemoContainers)
 }
