@@ -14,7 +14,7 @@ type InputContainer = {
 export const createContainer = ({ color, size }: InputContainer) => {
   const id = generateId()
   let slots = generateSlots(id, size)
-  return { id, color, slots, size }
+  return { id, color, slots }
 }
 
 /**
