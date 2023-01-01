@@ -1,11 +1,13 @@
 <template>
   <div v-for="(container, i) in demoContainers" :key="i" class="tw-mx-auto tw-mt-8">
     <AddItemButton @click="addRandomItem(container.id)" />
-    <GridContainer
+    <Container
       :id="container.id"
-      :color="container.color"
+      :class="[
+        'tw-relative tw-p-2 tw-border tw-border-thin tw-overflow-scroll tw-flex tw-flex-wrap tw-mx-auto tw-min-h-45 tw-w-min',
+        { 'tw-border-blue-400': container.color === 'blue', 'tw-border-red-400': container.color === 'red' },
+      ]"
       :value="container.slots"
-      class="tw-min-h-45 tw-w-min"
       @change="onChange"
     >
       <div v-for="(slotRow, j) in getRows(container.slots)" :key="j" class="tw-w-full tw-flex">
@@ -15,14 +17,13 @@
           </template>
         </ContainerSlot>
       </div>
-    </GridContainer>
+    </Container>
   </div>
 </template>
 
 <script lang="ts" setup>
 import chunk from 'lodash/chunk'
 import AddItemButton from './components/AddItemButton.vue'
-import GridContainer from './components/GridContainer.vue'
 import { useDemo } from '@/composables/useDemo'
 const { demoContainers, setDemoContainers, addRandomItem } = useDemo()
 
