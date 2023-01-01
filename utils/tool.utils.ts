@@ -9,6 +9,9 @@ export default {
           return container.id === containerId ? updatedContainer : container
         })
       },
+      add: (container) => {
+        return [...containers, container]
+      },
       findSlot: (containerId, slotId) => {
         const container = containers.find((container) => container.id === containerId)
         return container.slots.find((slot) => slot.id === slotId)

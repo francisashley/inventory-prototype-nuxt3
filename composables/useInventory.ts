@@ -30,7 +30,7 @@ export function useInventory() {
     if (exists) {
       state.containers = tool.containers(state.containers).update(containerId, container)
     } else {
-      state.containers = [...state.containers, container]
+      state.containers = tool.containers(state.containers).add(container)
     }
   }
 
