@@ -1,7 +1,7 @@
 import { reactive } from 'vue'
 import itemFixtures from '@/assets/fixtures/items.json'
 import containerFixtures from '@/assets/fixtures/containers.json'
-import { Item, ContainerSize, ContainerSlot } from '@/interfaces/inventory'
+import { Item, ContainerSlot } from '@/interfaces/inventory'
 import {
   getRandomItem,
   getRandomItems,
@@ -14,7 +14,6 @@ type DemoContainer = {
   id: number
   color: 'blue' | 'red'
   slots: ContainerSlot[]
-  size: ContainerSize
 }
 
 interface DemoState {

@@ -22,5 +22,3 @@ export interface ContainerSlot {
 }
 
 export type Path = number[]
-
-export type ContainerSize = [number, number]

@@ -4,7 +4,6 @@
     <GridContainer
       :id="container.id"
       :color="container.color"
-      :size="container.size"
       :value="container.slots"
       class="tw-min-h-45 tw-w-min"
       @change="onChange"

@@ -13,14 +13,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ContainerSize, ContainerSlot } from '@/interfaces/inventory'
+import { ContainerSlot } from '@/interfaces/inventory'
 
 const emit = defineEmits(['change'])
 
 type GridContainerProps = {
   id: number
   color: 'blue' | 'red'
-  size: ContainerSize
   value: ContainerSlot[]
 }
 
