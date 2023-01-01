@@ -63,9 +63,11 @@ const onLeftClick = () => {
 }
 
 const onRightClick = (event) => {
-  event.preventDefault()
-
   const slot = findSlot(props.path)
+
+  if (!slot.item) return
+
+  event.preventDefault()
 
   if (!hand.state.value?.item || hand.state.value.item.id === slot.item?.id) {
     hand.pickup(props.path, 1)
