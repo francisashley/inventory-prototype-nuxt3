@@ -1,21 +1,20 @@
 <template>
   <div
-    v-if="props.item"
-    class="tw-pointer-events-none tw-fixed tw-flex tw-text-white tw-text-xs tw-flex tw-text-white tw-text-xs tw-p-2 tw-h-12 tw-w-12 tw-bg-black -tw-top-4 -tw-left-4 tw-z-10"
-    :class="{ hidden: !canShow, block: canShow }"
+    class="tw-pointer-events-none tw-fixed tw-flex tw-text-white tw-text-xs tw-flex tw-text-white tw-text-xs tw-p-2 tw-h-12 tw-w-12 tw-bg-black -tw-top-4 -tw-left-4 tw-z-10 tw-hidden"
+    :class="{ '!tw-block': canShow }"
     :style="style"
   >
     <div class="tw-absolute tw-bottom-0.5 tw-left-0 tw-text-white tw-px-0.5 tw-leading-none tw-text-shadow">
-      {{ props.item.amount }}
+      {{ props.item?.amount }}
     </div>
     <img
-      v-if="props.item.image"
+      v-if="props.item?.image"
       class="tw-w-full tw-h-full tw-object-cover tw-rounded tw-rounded-full tw-pointer-events-none"
-      :src="props.item.image"
-      :alt="props.item.name"
+      :src="props.item?.image"
+      :alt="props.item?.name"
     />
     <template v-else>
-      {{ props.item.name }}
+      {{ props.item?.name }}
     </template>
   </div>
 </template>
