@@ -1,6 +1,6 @@
 <template>
   <div v-for="(container, i) in demoContainers" :key="i" class="tw-mx-auto tw-mt-8">
-    <AddItemButton @click="addRandomItem(container.id)" />
+    <Button text="Add random item" @click="addRandomItem(container.id)" />
     <Container
       :id="container.id"
       :class="[
@@ -23,7 +23,7 @@
 
 <script lang="ts" setup>
 import chunk from 'lodash/chunk'
-import AddItemButton from './components/AddItemButton.vue'
+import Button from './components/Button.vue'
 import { useDemo } from '@/composables/useDemo'
 const { demoContainers, setDemoContainers, addRandomItem } = useDemo()
 
