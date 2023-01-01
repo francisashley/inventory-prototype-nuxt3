@@ -36,7 +36,7 @@ export function useInventory() {
 
   const saveSlot = (containerId: number, slotId: number, slot: ContainerSlot) => {
     const exists = Boolean(tool.containers(state.containers).findSlot(containerId, slotId))
-    if (exists) {
+    if (!exists) {
       state.containers = tool.containers(state.containers).addSlot(containerId, slot)
     }
   }
