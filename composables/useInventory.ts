@@ -34,8 +34,11 @@ export function useInventory() {
     }
   }
 
-  const registerSlot = () => {
-    // register slot
+  const saveSlot = (containerId: number, slotId: number, slot: ContainerSlot) => {
+    const exists = Boolean(tool.containers(state.containers).findSlot(containerId, slotId))
+    if (exists) {
+      state.containers = tool.containers(state.containers).addSlot(containerId, slot)
+    }
   }
 
   const getComputedContainer = (containerId: number): ComputedRef<Container> => {
@@ -113,7 +116,7 @@ export function useInventory() {
   return {
     // register
     saveContainer,
-    registerSlot,
+    saveSlot,
     // state
     containers,
     hoveredSlot,

@@ -40,8 +40,9 @@ type ContainerSlotsProps = {
 
 const props = defineProps<ContainerSlotsProps>()
 
-const { getComputedSlot, findSlot, hand, setHoveredSlot, move, clearHand, swap } = useInventory()
+const { saveSlot, getComputedSlot, findSlot, hand, setHoveredSlot, move, clearHand, swap } = useInventory()
 
+saveSlot(props.path[0], props.path[1], { id: props.path[0], path: props.path, item: null })
 const slot = getComputedSlot(props.path)
 
 const isHovering = ref(false)
