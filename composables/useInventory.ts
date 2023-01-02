@@ -23,7 +23,7 @@ export function useInventory() {
 
   const move = (from: Path, to: Path) => {
     const amount = tool.containers(containers.value).findSlot(from[0], from[1]).item.amount
-    let [pickedUpItem, updatedContainers] = tool.containers(containers.value).pickUpSlot(from[0], from[1], amount)
+    let [pickedUpItem, updatedContainers] = tool.containers(containers.value).pickupSlot(from[0], from[1], amount)
     updatedContainers = tool.containers(updatedContainers).depositSlot(to[0], to[1], pickedUpItem)
     setContainers(updatedContainers)
   }

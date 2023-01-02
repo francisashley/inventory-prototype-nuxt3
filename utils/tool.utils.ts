@@ -57,19 +57,19 @@ export default {
       setSlot: (containerId: ID, slotId: ID, slot: ContainerSlot): Map<ID, Container> => {
         return setSlot(containers, containerId, slotId, slot)
       },
-      depositSlot: (containerId: ID, slotId: ID, item: Item): Map<ID, Container> => {
-        const slot = findSlot(containers, containerId, slotId)
-        const isDepositingSameItem = slot.item && slot.item.id === item.id
-        const updatedItem = isDepositingSameItem ? { ...item, amount: item.amount + slot.item.amount } : item
-        return setSlotItem(containers, containerId, slotId, updatedItem)
-      },
-      pickUpSlot: (containerId: ID, slotId: ID, amount: number): [Item, Map<ID, Container>] => {
+      pickupSlot: (containerId: ID, slotId: ID, amount: number): [Item, Map<ID, Container>] => {
         const slot = findSlot(containers, containerId, slotId)
         const pickedUpItem = { ...slot.item, amount }
         const updatedSlotAmount = slot.item.amount - amount
         const updatedSlotItem = updatedSlotAmount > 0 ? { ...slot.item, amount: updatedSlotAmount } : null
         const updatedContainers = setSlotItem(containers, containerId, slotId, updatedSlotItem)
         return [pickedUpItem, updatedContainers]
+      },
+      depositSlot: (containerId: ID, slotId: ID, item: Item): Map<ID, Container> => {
+        const slot = findSlot(containers, containerId, slotId)
+        const isDepositingSameItem = slot.item && slot.item.id === item.id
+        const updatedItem = isDepositingSameItem ? { ...item, amount: item.amount + slot.item.amount } : item
+        return setSlotItem(containers, containerId, slotId, updatedItem)
       },
       clearSlot: (containerId: ID, slotId: ID): Map<ID, Container> => {
         const clearedSlot = { ...findSlot(containers, containerId, slotId), item: null }
