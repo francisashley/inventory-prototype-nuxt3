@@ -1,22 +1,24 @@
+import { Container, ContainerSlot, ID, Item } from '../interfaces/inventory'
+
 export default {
-  containers: (containers) => {
+  containers: (containers: Container[]) => {
     return {
-      find: (containerId) => {
+      find: (containerId: ID) => {
         return containers.find((container) => container.id === containerId)
       },
-      update: (containerId, updatedContainer) => {
+      update: (containerId: ID, updatedContainer: Container) => {
         return containers.map((container) => {
           return container.id === containerId ? updatedContainer : container
         })
       },
-      add: (container) => {
+      add: (container: Container) => {
         return [...containers, container]
       },
-      findSlot: (containerId, slotId) => {
+      findSlot: (containerId: ID, slotId: ID) => {
         const container = containers.find((container) => container.id === containerId)
         return container.slots.find((slot) => slot.id === slotId)
       },
-      addSlot: (containerId, slot) => {
+      addSlot: (containerId: ID, slot: ContainerSlot) => {
         return containers.map((container) => {
           if (container.id === containerId) {
             return {
@@ -27,7 +29,7 @@ export default {
           return container
         })
       },
-      updateSlot: (containerId, slotId, slot) => {
+      updateSlot: (containerId: ID, slotId: ID, slot: ContainerSlot) => {
         return containers.map((container) => {
           if (container.id === containerId) {
             const slots = container.slots.map((_slot) => (_slot.id === slotId ? slot : _slot))
@@ -36,7 +38,7 @@ export default {
           return container
         })
       },
-      depositSlot: (containerId, slotId, item) => {
+      depositSlot: (containerId: ID, slotId: ID, item: Item) => {
         return containers.map((container) => {
           if (container.id === containerId) {
             return {
@@ -56,7 +58,7 @@ export default {
           return container
         })
       },
-      pickupSlot: (containerId, slotId, amount = null) => {
+      pickupSlot: (containerId: ID, slotId: ID, amount = null) => {
         let pickedUpItem = null
         const updatedContainers = containers.map((container) => {
           if (container.id === containerId) {
@@ -79,7 +81,7 @@ export default {
         })
         return [pickedUpItem, updatedContainers]
       },
-      clearSlot: (containerId, slotId) => {
+      clearSlot: (containerId: ID, slotId: ID) => {
         return containers.map((container) => {
           if (container.id === containerId) {
             return {
