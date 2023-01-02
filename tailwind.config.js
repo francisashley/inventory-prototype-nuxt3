@@ -7,6 +7,7 @@ export default {
     './layouts/**/*.vue',
     './app.vue',
     './pages/**/*.vue',
+    './demos/**/*.vue',
     './plugins/**/*.{js,ts}',
     // './nuxt.config.{js,ts}',
   ],
@@ -14,6 +15,9 @@ export default {
     extend: {
       spacing: {
         18: '4.5rem',
+      },
+      minHeight: {
+        45: '11.25rem',
       },
     },
   },

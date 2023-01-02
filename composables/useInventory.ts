@@ -1,153 +1,140 @@
-import { reactive, computed } from 'vue'
-import { Container, Path, Item, Cell } from '../interfaces/inventory'
-import containerTools from '@/utils/container.utils'
+import { reactive, computed, ComputedRef } from 'vue'
+import { Container, Path, Item, ContainerSlot } from '../interfaces/inventory'
+import tool from '@/utils/tool.utils'
 
-type Hand = {
-  from: number[]
+type HandState = {
+  from: Path
   item: Item
   isDragging: boolean
 }
 
-const state = reactive<{ containers: Container[]; hand: Hand | null; hoveredCell: Cell | null }>({
+interface InventoryState {
+  containers: Container[]
+  handState: HandState | null
+  hoveredSlot: ContainerSlot | null
+}
+
+const state = reactive<InventoryState>({
   containers: [],
-  hand: null,
-  hoveredCell: null,
+  hoveredSlot: null,
+  handState: null,
 })
 
 export function useInventory() {
-  const containers = computed(() => {
-    return state.containers
-  })
+  const containers = computed(() => state.containers)
+  const hoveredSlot = computed(() => state.hoveredSlot)
+  const handState = computed(() => state.handState)
 
-  const hand = computed(() => state.hand)
-
-  const hoveredCell = computed(() => state.hoveredCell)
-
-  const setHoveredCell = (cell: Cell | null) => {
-    state.hoveredCell = cell
-  }
-
-  const createContainer = (container: Container) => {
-    state.containers = [...state.containers, container]
-
-    return {
-      container: computed(() => containers.value.find((c) => c.id === container.id)),
+  const saveContainer = (containerId: number, container: Container) => {
+    const exists = Boolean(tool.containers(state.containers).find(containerId))
+    if (exists) {
+      state.containers = tool.containers(state.containers).update(containerId, container)
+    } else {
+      state.containers = tool.containers(state.containers).add(container)
     }
   }
 
-  const updateContainer = (id: number, updatedContainer: Container) => {
-    state.containers = state.containers.map((container) => {
-      return container.id === id ? updatedContainer : container
-    })
+  const saveSlot = (containerId: number, slotId: number, slot: ContainerSlot) => {
+    const exists = Boolean(tool.containers(state.containers).findSlot(containerId, slotId))
+    if (!exists) {
+      state.containers = tool.containers(state.containers).addSlot(containerId, slot)
+    }
   }
 
-  const removeContainer = (id: number) => {
-    state.containers = state.containers.filter((container) => container.id !== id)
+  const getComputedContainer = (containerId: number): ComputedRef<Container> => {
+    return computed(() => tool.containers(state.containers).find(containerId))
   }
 
-  const findContainer = (id: number) => {
-    return state.containers.find((container) => container.id === id)
+  const getComputedSlot = ([containerId, slotId]: Path): ComputedRef<ContainerSlot> => {
+    return computed(() => findSlot([containerId, slotId]))
   }
 
-  const findCell = (path: Path) => {
-    return containerTools.findCell(findContainer(path[0]), path[1])
+  const setHoveredSlot = (slot: ContainerSlot | null) => {
+    state.hoveredSlot = slot
   }
 
-  const clearCell = (path: Path) => {
-    return containerTools.clearCell(findContainer(path[0]), path[1])
-  }
-
-  const depositCell = (path: Path, item: Item) => {
-    return containerTools.depositCell(findContainer(path[0]), path[1], item)
-  }
-
-  const setCell = (path: Path, item: Item) => {
-    return containerTools.setCell(findContainer(path[0]), path[1], item)
+  const findSlot = ([containerId, slotId]: Path) => {
+    return tool.containers(state.containers).findSlot(containerId, slotId)
   }
 
   const move = (from: Path, to: Path) => {
-    const fromCell = findCell(from)
-    updateContainer(findContainer(from[0]).id, clearCell(from))
-    updateContainer(findContainer(to[0]).id, depositCell(to, fromCell.item))
+    let [pickedUpItem, updatedContainers] = tool.containers(state.containers).pickupSlot(from[0], from[1])
+    updatedContainers = tool.containers(updatedContainers).depositSlot(to[0], to[1], pickedUpItem)
+    state.containers = updatedContainers
   }
 
   const swap = (from: Path, to: Path) => {
-    const fromCell = findCell(from)
-    const toCell = findCell(to)
-    state.hand = { ...state.hand, item: toCell.item }
+    const fromItem = tool.containers(state.containers).findSlot(from[0], from[1]).item
+    const toItem = tool.containers(state.containers).findSlot(to[0], to[1]).item
 
-    updateContainer(findContainer(to[0]).id, clearCell(to))
-    updateContainer(findContainer(to[0]).id, depositCell(to, fromCell.item))
+    state.handState = { ...state.handState, item: toItem }
 
-    updateContainer(findContainer(from[0]).id, clearCell(from))
-    updateContainer(findContainer(from[0]).id, depositCell(from, toCell.item))
+    let updatedContainers = tool.containers(state.containers).clearSlot(to[0], to[1])
+    updatedContainers = tool.containers(updatedContainers).depositSlot(to[0], to[1], fromItem)
+
+    updatedContainers = tool.containers(updatedContainers).clearSlot(from[0], from[1])
+    updatedContainers = tool.containers(updatedContainers).depositSlot(from[0], from[1], toItem)
+
+    state.containers = updatedContainers
   }
 
   const pickup = (from: Path, amount: number, isDragging = false) => {
-    if (state.hand) {
-      const updatedItem = { ...state.hand.item, amount: state.hand.item.amount + amount }
-      state.hand = { ...state.hand, item: updatedItem, isDragging }
-    } else {
-      state.hand = { from, item: { ...findCell(from).item, amount }, isDragging }
+    const handState = state.handState
+
+    state.handState = {
+      from,
+      item: { ...findSlot(from).item, amount: handState ? handState.item.amount + amount : amount },
+      isDragging,
     }
 
     if (isDragging) {
       return
     }
 
-    const fromCell = findCell(from)
-    if (fromCell.item.amount - amount > 0) {
-      updateContainer(
-        findContainer(from[0]).id,
-        setCell(from, { ...fromCell.item, amount: fromCell.item.amount - amount })
-      )
-    } else {
-      updateContainer(findContainer(from[0]).id, clearCell(from))
-    }
+    state.containers = tool.containers(state.containers).pickupSlot(from[0], from[1], amount)[1]
   }
 
   const exchange = (to: Path) => {
-    const toCell = findCell(to)
-    const hand = state.hand
-    state.hand = { ...state.hand, item: toCell.item }
-    updateContainer(findContainer(to[0]).id, clearCell(to))
-    updateContainer(findContainer(to[0]).id, depositCell(to, hand.item))
+    const toSlot = tool.containers(state.containers).findSlot(to[0], to[1])
+    const heldItem = state.handState.item
+    state.handState = { ...state.handState, item: toSlot.item }
+    state.containers = tool.containers(state.containers).depositSlot(to[0], to[1], heldItem)
   }
 
   const deposit = (to: Path, amount?: number) => {
-    const hand = state.hand
-    amount = amount ?? hand.item.amount
-
-    if (hand.item.amount - amount > 0) {
-      state.hand = { ...hand, item: { ...hand.item, amount: hand.item.amount - amount } }
-    } else {
-      state.hand = null
-    }
-
-    const item = hand.item
-
-    updateContainer(findContainer(to[0]).id, depositCell(to, item))
+    const heldItem = state.handState.item
+    amount = amount ?? heldItem.amount
+    const leftInHand = heldItem.amount - amount
+    state.handState = leftInHand > 0 ? { ...state.handState, item: { ...heldItem, amount: leftInHand } } : null
+    state.containers = tool.containers(state.containers).depositSlot(to[0], to[1], heldItem)
   }
 
   const clearHand = () => {
-    state.hand = null
+    state.handState = null
   }
 
   return {
+    // register
+    saveContainer,
+    saveSlot,
+    // state
     containers,
-    createContainer,
-    updateContainer,
-    removeContainer,
-    findContainer,
+    hoveredSlot,
+    // get custom state
+    getComputedContainer,
+    getComputedSlot,
+    // update
     move,
     swap,
-    exchange,
-    deposit,
-    findCell,
-    pickup,
+    findSlot,
     clearHand,
-    hand,
-    hoveredCell,
-    setHoveredCell,
+    setHoveredSlot,
+    hand: {
+      state: handState,
+      pickup,
+      // release,
+      exchange,
+      deposit,
+    },
   }
 }

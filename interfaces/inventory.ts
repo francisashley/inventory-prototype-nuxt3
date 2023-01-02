@@ -1,14 +1,11 @@
-export interface InputItem {
-  cell: number
+export interface Input {
+  slot: number
   item: Item
 }
 
 export interface Container {
   id: number
-  name: string
-  color: 'white' | 'red' | 'blue'
-  cells: Cell[]
-  size: ContainerSize
+  slots: ContainerSlot[]
 }
 
 export interface Item {
@@ -18,12 +15,10 @@ export interface Item {
   amount: number
 }
 
-export interface Cell {
+export interface ContainerSlot {
   id: number
   path: Path
   item: Item | null
 }
 
 export type Path = number[]
-
-export type ContainerSize = [number, number]

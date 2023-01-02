@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="stagedCell"
+    v-if="stagedItem"
     class="tw-pointer-events-none tw-fixed tw-flex tw-text-white tw-text-xs tw-p-2 tw-bg-black"
     :style="style"
     :class="{
@@ -9,20 +9,20 @@
       'tw-opacity-100': !closing,
     }"
   >
-    {{ stagedCell.item.amount }} x {{ stagedCell.item.name }}
+    {{ stagedItem.amount }} x {{ stagedItem.name }}
   </div>
 </template>
 
 <script lang="ts" setup>
 const props = defineProps({
-  cell: {
+  item: {
     type: Object,
     default: null,
   },
 })
 
 const position = ref({ x: 0, y: 0 })
-const stagedCell = ref(props.cell)
+const stagedItem = ref(props.item)
 const closing = ref(false)
 
 onMounted(() => {
@@ -37,15 +37,15 @@ const style = computed(() => ({
 }))
 
 watch(props, () => {
-  if (props.cell) {
-    stagedCell.value = props.cell
+  if (props.item) {
+    stagedItem.value = props.item
   } else {
     closing.value = true
-    const cellIdBeingClosed = stagedCell.value?.id
+    const slotIdBeingClosed = stagedItem.value?.id
     setTimeout(() => {
       closing.value = false
-      if (!stagedCell.value || stagedCell.value.id === cellIdBeingClosed) {
-        stagedCell.value = null
+      if (!stagedItem.value || stagedItem.value.id === slotIdBeingClosed) {
+        stagedItem.value = null
       }
     }, 300)
   }

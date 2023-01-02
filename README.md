@@ -9,13 +9,13 @@ A dependency-free inventory system built in Vue (Nuxt) 3.
 
 ## IMPORTANT NOTE
 
-This repo has diverged from drag-n-drop-prototype-nuxt3 in the direction of building a mechanic which can support fine tuning the amount of items that are picked up. It is not possible to fine tune the amount of items that are picked up with dragging and dropping. Thinking about updating to something similar to Stardew Valley / Terraria. Arma 3 is also an inspiration for how the items are designed in the containers (potentially spanning multiple cells). 
+This repo has diverged from drag-n-drop-prototype-nuxt3 in the direction of building a mechanic which can support fine tuning the amount of items that are picked up. It is not possible to fine tune the amount of items that are picked up with dragging and dropping. Thinking about updating to something similar to Stardew Valley / Terraria. Arma 3 is also an inspiration for how the items are designed in the containers (potentially spanning multiple slots). 
 
 Just a thought.. possibly continue with drag and drop but holding shift while dragging only drags one
 
 Another though..
 
-- dragging drags the entire cell
+- dragging drags the entire slot
 - clicking collects the item in hand
 - shift clicking picks up just one item
 - holding shift while clicking, picks up multiple
@@ -48,7 +48,7 @@ This is a prototype and cannot be installed. Copy this code into another project
 | name  | type                     | default   | description                                      |
 | ----- | ------------------------ | --------- | ------------------------------------------------ |
 | id    | `number`                 | required  | Used to identify which container the item is in. |
-| items | `(item\|null)[]`         | []        | The items in the cells.                          |
+| items | `(item\|null)[]`         | []        | The items in the slots.                          |
 | rows  | `number`                 | 2         | The amount of rows to show in the container.     |
 | cols  | `number`                 | 2         | The amount of columns to show in the container.  |
 | color | `"blue"\|"red"\|"white"` | `"white"` | The container border colour.                     |
@@ -57,7 +57,7 @@ This is a prototype and cannot be installed. Copy this code into another project
 
 | name  | props       | description                                                              |
 | ----- | ----------- | ------------------------------------------------------------------------ |
-| @move | `MoveEvent` | This event fires after having dragged and dropped the item in a new cell |
+| @move | `MoveEvent` | This event fires after having dragged and dropped the item in a new slot |
 
 ## Types
 
@@ -91,15 +91,15 @@ interface MoveEvent {
 
 ```typescript
 tools.container(container).create(): Container                                  // create a container
-tools.container(container).findCell(1): Cell                                    // find a cell in a container
-tools.container(container).clearCell(1): Container                              // clear a cell in a container
-tools.container(container).depositCell(1, item, amount)                         // deposit an item in a cell
-tools.container(container).depositFirstAvailableCell(item, amount): Container   // deposit an item in the first available cell
-tools.containers(containers).findCell(path): Container                          // find a cell in a container
-tools.containers(containers).clearCell(path): Container                         // clear a cell in a container
-tools.containers(containers).depositCell(path, item, amount): Container         // deposit an item in a cell
-tools.containers(containers).switchCells(pathA, pathB): Container               // switch two cells
-tools.containers(containers).moveCell(fromPath, toPath): Container              // move a cell
+tools.container(container).findSlot(1): Slot                                    // find a slot in a container
+tools.container(container).clearSlot(1): Container                              // clear a slot in a container
+tools.container(container).depositSlot(1, item, amount)                         // deposit an item in a slot
+tools.container(container).depositFirstAvailableSlot(item, amount): Container   // deposit an item in the first available slot
+tools.containers(containers).findSlot(path): Container                          // find a slot in a container
+tools.containers(containers).clearSlot(path): Container                         // clear a slot in a container
+tools.containers(containers).depositSlot(path, item, amount): Container         // deposit an item in a slot
+tools.containers(containers).switchSlots(pathA, pathB): Container               // switch two slots
+tools.containers(containers).moveSlot(fromPath, toPath): Container              // move a slot
 tools.catalogue.createItem(item): Item                                          // Create an item
 tools.catalogue.findItemById(items, id): Item                                   // Find an item by id
 ```

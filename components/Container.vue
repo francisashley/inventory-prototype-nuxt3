@@ -1,81 +1,36 @@
 <template>
-  <ContainerOutline :size="props.size" :color="props.color">
-    <ContainerCell
-      v-for="cell in container.cells"
-      :key="cell.id"
-      :path="cell.path"
-      :draggable="Boolean(cell.item)"
-      @drag="onDrag(cell)"
-      @drop="onDrop(cell.id)"
-      @hover="setHoveredCell(cell.item ? cell : null)"
-      @hoverLeave="setHoveredCell(null)"
-    >
-      <Item v-if="cell.item" :item="cell.item" />
-    </ContainerCell>
-    <HeldItem :item="hand && !hand.isDragging ? hand.item : null" />
-    <CellTooltip v-if="!hand" :cell="hoveredCell" />
-  </ContainerOutline>
+  <div>
+    <slot />
+    <HeldItem :item="hand.state.value && !hand.state.value.isDragging ? hand.state.value.item : null" />
+    <SlotTooltip v-if="!hand" :item="hoveredSlot ? hoveredSlot.item : null" />
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { PropType } from 'vue'
 import { useInventory } from '../composables/useInventory'
-import { Cell } from '../interfaces/inventory'
+import { ContainerSlot } from '../interfaces/inventory'
 
 const emit = defineEmits(['change'])
 
-const props = defineProps({
-  id: {
-    type: Number,
-    required: true,
-  },
-  cells: {
-    type: Array as PropType<Cell[]>,
-    default: () => [],
-  },
-  size: {
-    type: Array,
-    default: () => [8, 2],
-    validator: (size) => typeof size[0] === 'number' && typeof size[1] === 'number',
-  },
-  color: {
-    type: String,
-    default: null,
-    validator: (value: any) => ['blue', 'red', 'white'].includes(value),
-  },
+type ContainerProps = {
+  id: number
+  value: ContainerSlot[]
+}
+
+const props = withDefaults(defineProps<ContainerProps>(), {
+  name: null,
+  value: () => [],
 })
 
-const { createContainer, updateContainer, move, swap, findCell, hand, pickup, clearHand, hoveredCell, setHoveredCell } =
-  useInventory()
+const { saveContainer, getComputedContainer, hand, hoveredSlot } = useInventory()
 
 // initialise container
-const { container } = createContainer(props)
+saveContainer(props.id, { id: props.id, slots: props.value })
+const container = getComputedContainer(props.id)
 
-// callbacks
-const onDrag = (cell) => {
-  pickup(cell.path, cell.item.amount, true)
-}
-
-const onDrop = (cellId) => {
-  const from = hand.value.from
-  const to = [props.id, cellId]
-
-  const fromCell = findCell(from)
-  const toCell = findCell(to)
-
-  if (
-    typeof fromCell.item !== 'undefined' &&
-    typeof toCell.item !== 'undefined' &&
-    fromCell.item?.id === toCell.item?.id
-  ) {
-    move(from, to)
-  } else {
-    swap(from, to)
-  }
-
-  clearHand()
-  emit('change', container.value)
-}
 // update container when props change
-watch(props, () => updateContainer(props.id, props))
+watch(props, () => saveContainer(props.id, { id: props.id, slots: props.value }))
+
+// update container when props change
+watch(container, () => emit('change', container.value))
 </script>
