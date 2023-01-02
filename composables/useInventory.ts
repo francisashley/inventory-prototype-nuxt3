@@ -125,7 +125,6 @@ export function useInventory() {
     getComputedSlot,
     // update
     move,
-    swap,
     findSlot,
     setHoveredSlot,
     hand: {
@@ -134,6 +133,7 @@ export function useInventory() {
       // release,
       exchange,
       deposit,
+      swap,
       clear: clearHand,
     },
   }

@@ -40,7 +40,7 @@ type ContainerSlotsProps = {
 
 const props = defineProps<ContainerSlotsProps>()
 
-const { saveSlot, getComputedSlot, findSlot, hand, setHoveredSlot, move, swap } = useInventory()
+const { saveSlot, getComputedSlot, findSlot, hand, setHoveredSlot, move } = useInventory()
 
 saveSlot(props.path[0], props.path[1], { id: props.path[1], path: props.path, item: null })
 const slot = getComputedSlot(props.path)
@@ -94,7 +94,7 @@ const onDrop = () => {
   ) {
     move(from, props.path)
   } else {
-    swap(from, props.path)
+    hand.swap(from, props.path)
   }
 
   hand.clear()
