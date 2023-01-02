@@ -11,7 +11,7 @@
       @change="onChange"
     >
       <div v-for="(slotRow, j) in getRows(container.slots)" :key="j" class="tw-w-full tw-flex">
-        <ContainerSlot v-for="(slot, k) in slotRow" :key="k" :path="slot.path">
+        <ContainerSlot v-for="(slot, k) in slotRow" :id="slot.path[1]" :key="k" :container-id="slot.path[0]">
           <template #default="{ item }">
             <Item v-if="item" :item="item" />
           </template>
