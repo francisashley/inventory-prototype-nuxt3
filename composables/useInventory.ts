@@ -3,13 +3,13 @@ import { useState } from './useState'
 import tool from '@/utils/tool.utils'
 
 export function useInventory() {
-  const { containers, getContainer, addContainer, setContainer, setContainers, addSlot, getSlot } = useState()
+  const { containers, getContainer, setContainer, setContainers, setSlot, getSlot } = useState()
 
   const saveContainer = (containerId: ID, container: Container) => {
     if (getContainer(containerId).value) {
       setContainer(containerId, container)
     } else {
-      addContainer(container)
+      setContainer(container.id, container)
     }
   }
 
@@ -17,7 +17,7 @@ export function useInventory() {
     if (getSlot([containerId, slotId]).value) {
       // set slot
     } else {
-      addSlot(containerId, slot)
+      setSlot(containerId, slot.id, slot)
     }
   }
 

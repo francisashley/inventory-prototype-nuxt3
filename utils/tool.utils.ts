@@ -1,102 +1,70 @@
 import { Container, ContainerSlot, ID, Item } from '../interfaces/inventory'
 
+export const findContainer = (containers: Map<ID, Container>, containerId: ID): Container => {
+  return containers.get(containerId)
+}
+
+export const setContainer = (
+  containers: Map<ID, Container>,
+  containerId: ID,
+  container: Container
+): Map<ID, Container> => {
+  return containers.set(containerId, container)
+}
+
+export const findSlot = (containers: Map<ID, Container>, containerId: ID, slotId: ID): ContainerSlot => {
+  return containers.get(containerId).slots.get(slotId)
+}
+
+export const setSlot = (
+  containers: Map<ID, Container>,
+  containerId: ID,
+  slotId: ID,
+  slot: ContainerSlot
+): Map<ID, Container> => {
+  return containers.set(containerId, {
+    ...containers.get(containerId),
+    slots: containers.get(containerId).slots.set(slotId, slot),
+  })
+}
+
 export default {
-  containers: (containers: Container[]) => {
+  containers: (containers: Map<ID, Container>) => {
     return {
-      find: (containerId: ID) => {
-        return containers.find((container) => container.id === containerId)
+      find: (containerId: ID): Container => {
+        return findContainer(containers, containerId)
       },
-      update: (containerId: ID, updatedContainer: Container) => {
-        return containers.map((container) => {
-          return container.id === containerId ? updatedContainer : container
+      set: (containerId: ID, container: Container): Map<ID, Container> => {
+        return setContainer(containers, containerId, container)
+      },
+      findSlot: (containerId: ID, slotId: ID): ContainerSlot => {
+        return findSlot(containers, containerId, slotId)
+      },
+      setSlot: (containerId: ID, slotId: ID, slot: ContainerSlot): Map<ID, Container> => {
+        return setSlot(containers, containerId, slotId, slot)
+      },
+      depositSlot: (containerId: ID, slotId: ID, item: Item): Map<ID, Container> => {
+        const slot = findSlot(containers, containerId, slotId)
+        const isDepositingSameItem = slot.item && slot.item.id === item.id
+        return setSlot(containers, containerId, slotId, {
+          ...slot,
+          item: isDepositingSameItem ? { ...slot.item, amount: slot.item.amount + item.amount } : item,
         })
       },
-      add: (container: Container) => {
-        return [...containers, container]
-      },
-      findSlot: (containerId: ID, slotId: ID) => {
-        const container = containers.find((container) => container.id === containerId)
-        return container.slots.find((slot) => slot.id === slotId)
-      },
-      addSlot: (containerId: ID, slot: ContainerSlot) => {
-        return containers.map((container) => {
-          if (container.id === containerId) {
-            return {
-              ...container,
-              slots: [...container.slots, slot],
-            }
-          }
-          return container
-        })
-      },
-      updateSlot: (containerId: ID, slotId: ID, slot: ContainerSlot) => {
-        return containers.map((container) => {
-          if (container.id === containerId) {
-            const slots = container.slots.map((_slot) => (_slot.id === slotId ? slot : _slot))
-            return { ...container, slots }
-          }
-          return container
-        })
-      },
-      depositSlot: (containerId: ID, slotId: ID, item: Item) => {
-        return containers.map((container) => {
-          if (container.id === containerId) {
-            return {
-              ...container,
-              slots: container.slots.map((slot) => {
-                if (slot.id === slotId) {
-                  const shouldStack = slot.item && slot.item.id === item.id
-                  const updatedItem = shouldStack ? { ...slot.item, amount: slot.item.amount + item.amount } : item
-                  const updatedSlot = { ...slot, item: updatedItem }
-                  return updatedSlot
-                } else {
-                  return slot
-                }
-              }),
-            }
-          }
-          return container
-        })
-      },
-      pickupSlot: (containerId: ID, slotId: ID, amount = null) => {
-        let pickedUpItem = null
-        const updatedContainers = containers.map((container) => {
-          if (container.id === containerId) {
-            return {
-              ...container,
-              slots: container.slots.map((slot) => {
-                if (slot.id === slotId && slot.item) {
-                  let pickedUpAmount = amount ?? slot.item.amount
-                  pickedUpAmount = pickedUpAmount > slot.item.amount ? slot.item.amount : pickedUpAmount
-                  pickedUpItem = { ...slot.item, amount: pickedUpAmount }
-                  const updatedItem = { ...slot.item, amount: slot.item.amount - pickedUpAmount }
-                  return { ...slot, item: updatedItem.amount > 0 ? updatedItem : null }
-                } else {
-                  return slot
-                }
-              }),
-            }
-          }
-          return container
-        })
+      pickupSlot: (containerId: ID, slotId: ID, amount = null): [Item, Map<ID, Container>] => {
+        const slot = findSlot(containers, containerId, slotId)
+        amount = amount ?? slot.item.amount
+        amount = amount > slot.item.amount ? slot.item.amount : amount
+        const pickedUpItem = { ...slot.item, amount }
+        const updatedSlotAmount = slot.item.amount - amount
+        const updatedSlotItem = updatedSlotAmount > 0 ? { ...slot.item, amount: updatedSlotAmount } : null
+        const updatedSlot = { ...slot, item: updatedSlotItem }
+        const updatedContainers = setSlot(containers, containerId, slotId, updatedSlot)
         return [pickedUpItem, updatedContainers]
       },
-      clearSlot: (containerId: ID, slotId: ID) => {
-        return containers.map((container) => {
-          if (container.id === containerId) {
-            return {
-              ...container,
-              slots: container.slots.map((slot) => {
-                if (slot.id === slotId) {
-                  return { ...slot, item: null }
-                } else {
-                  return slot
-                }
-              }),
-            }
-          }
-          return container
-        })
+      clearSlot: (containerId: ID, slotId: ID): Map<ID, Container> => {
+        const clearedSlot = { ...findSlot(containers, containerId, slotId), item: null }
+        return setSlot(containers, containerId, slotId, clearedSlot)
       },
     }
   },

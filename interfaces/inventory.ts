@@ -8,7 +8,7 @@ export interface Input {
 
 export interface Container {
   id: ID
-  slots: ContainerSlot[]
+  slots: Map<ID, ContainerSlot>
 }
 
 export interface Item {

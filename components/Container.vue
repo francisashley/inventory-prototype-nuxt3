@@ -10,7 +10,7 @@
 import { useInventory } from '../composables/useInventory'
 import { useState } from '../composables/useState'
 import { useHand } from '../composables/useHand'
-import { ContainerSlot } from '../interfaces/inventory'
+import { ContainerSlot, ID } from '../interfaces/inventory'
 
 const emit = defineEmits(['change'])
 
@@ -28,13 +28,22 @@ const { getContainer, hoveredSlot } = useState()
 const { saveContainer } = useInventory()
 const hand = useHand()
 
+const convertSlotsToMap = (slots: ContainerSlot[]) => {
+  return slots.reduce((acc,slot) => {
+    return acc.set(slot.id,slot)
+  }, new Map<ID, ContainerSlot>)
+}
+
 // initialise container
-saveContainer(props.id, { id: props.id, slots: props.value })
+saveContainer(props.id, { id: props.id, slots: convertSlotsToMap(props.value) })
 const container = getContainer(props.id)
 
 // update container when props change
-watch(props, () => saveContainer(props.id, { id: props.id, slots: props.value }))
+watch(props, () => saveContainer(props.id, { id: props.id, slots: convertSlotsToMap(props.value) }))
 
 // update container when props change
-watch(container, () => emit('change', container.value))
+watch(container, () => {
+  const slots = Array.from(container.value.slots.values())
+  emit('change', {...container, slots})
+})
 </script>
