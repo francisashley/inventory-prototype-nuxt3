@@ -24,7 +24,7 @@ export function useHand() {
     state.isDragging = isDragging
 
     if (!isDragging) {
-      setContainers(tool.containers(containers.value).pickupSlot(from[0], from[1], amount)[1])
+      setContainers(tool.containers(containers.value).pickUpSlot(from[0], from[1], amount)[1])
     }
   }
 

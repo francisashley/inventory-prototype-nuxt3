@@ -51,7 +51,7 @@ export default {
           item: isDepositingSameItem ? { ...slot.item, amount: slot.item.amount + item.amount } : item,
         })
       },
-      pickupSlot: (containerId: ID, slotId: ID, amount = null): [Item, Map<ID, Container>] => {
+      pickUpSlot: (containerId: ID, slotId: ID, amount = null): [Item, Map<ID, Container>] => {
         const slot = findSlot(containers, containerId, slotId)
         amount = amount ?? slot.item.amount
         amount = amount > slot.item.amount ? slot.item.amount : amount

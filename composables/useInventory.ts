@@ -22,7 +22,7 @@ export function useInventory() {
   }
 
   const move = (from: Path, to: Path) => {
-    let [pickedUpItem, updatedContainers] = tool.containers(containers.value).pickupSlot(from[0], from[1])
+    let [pickedUpItem, updatedContainers] = tool.containers(containers.value).pickUpSlot(from[0], from[1])
     updatedContainers = tool.containers(updatedContainers).depositSlot(to[0], to[1], pickedUpItem)
     setContainers(updatedContainers)
   }
