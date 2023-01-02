@@ -1,6 +1,6 @@
 <template>
   <div
-    class="tw-pointer-events-none tw-fixed tw-flex tw-text-white tw-text-xs tw-flex tw-text-white tw-text-xs tw-p-2 tw-h-12 tw-w-12 tw-bg-black -tw-top-4 -tw-left-4 tw-z-10 tw-hidden"
+    class="tw-pointer-events-none tw-fixed tw-flex tw-text-white tw-text-xs tw-flex tw-text-white tw-text-xs tw-p-2 tw-h-12 tw-w-12 tw-bg-black -tw-top-4 -tw-left-4 tw-z-10"
     :class="{ '!tw-block': canShow }"
     :style="style"
   >

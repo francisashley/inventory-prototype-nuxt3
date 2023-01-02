@@ -30,6 +30,7 @@ export function useHand() {
       ...getSlot(containerId, slotId).value.item,
       amount: state.item ? state.item.amount + amount : amount,
     }
+
     state.isDragging = isDragging
 
     if (!isDragging) {
@@ -50,6 +51,13 @@ export function useHand() {
     const leftInHand = heldItem.amount - amount
     state.item = leftInHand > 0 ? { ...state.item, amount: leftInHand } : null
     setContainers(tool.containers(containers.value).depositSlot(containerId, slotId, heldItem))
+
+    if (state.isDragging) {
+      setContainers(tool.containers(containers.value).clearSlot(state.fromContainerId, state.fromSlotId))
+    }
+    if (leftInHand === 0) {
+      clear()
+    }
   }
 
   const swap = (from: Path, to: Path) => {
@@ -65,6 +73,7 @@ export function useHand() {
     updatedContainers = tool.containers(updatedContainers).depositSlot(from[0], from[1], toItem)
 
     setContainers(updatedContainers)
+    state.item = null
   }
 
   const clear = () => {

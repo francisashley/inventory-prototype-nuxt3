@@ -42,7 +42,7 @@ type ContainerSlotsProps = {
 
 const props = defineProps<ContainerSlotsProps>()
 
-const { saveSlot, move } = useInventory()
+const { saveSlot } = useInventory()
 const { setHoveredSlot, getSlot } = useState()
 const hand = useHand()
 
@@ -92,17 +92,17 @@ const onDrop = () => {
   const fromSlot = getSlot(fromContainerId, fromSlotId).value
   const toSlot = getSlot(props.path[0], props.path[1]).value
 
-  if (
-    typeof fromSlot.item !== 'undefined' &&
-    typeof toSlot.item !== 'undefined' &&
-    fromSlot.item?.id === toSlot.item?.id
-  ) {
-    move([fromContainerId, fromSlotId], props.path)
+  const isHoveringSameSlot = fromContainerId === props.path[0] && fromSlotId === props.path[1]
+  const isHoveringEmptySlot = !toSlot.item
+
+  if (isHoveringSameSlot) {
+    hand.clear()
+  } else if (fromSlot.item?.id === toSlot.item?.id || isHoveringEmptySlot) {
+    hand.deposit(props.path[0], props.path[1])
   } else {
     hand.swap([fromContainerId, fromSlotId], props.path)
   }
 
-  hand.clear()
   emit('change', props.path)
 }
 </script>
