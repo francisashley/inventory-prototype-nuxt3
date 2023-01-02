@@ -32,6 +32,7 @@
 <script lang="ts" setup>
 import { useState } from '../composables/useState'
 import { useInventory } from '../composables/useInventory'
+import { useHand } from '../composables/useHand'
 
 const emit = defineEmits(['drag', 'hover', 'hoverLeave', 'change'])
 
@@ -41,8 +42,9 @@ type ContainerSlotsProps = {
 
 const props = defineProps<ContainerSlotsProps>()
 
-const { saveSlot, hand, move } = useInventory()
+const { saveSlot, move } = useInventory()
 const { setHoveredSlot, getSlot } = useState()
+const hand = useHand()
 
 saveSlot(props.path[0], props.path[1], { id: props.path[1], path: props.path, item: null })
 const slot = getSlot(props.path)
@@ -52,11 +54,11 @@ const setIsHovering = (value: boolean) => (isHovering.value = value)
 
 const onLeftClick = () => {
   const slot = getSlot(props.path).value
-  const hasEmptyHand = !hand.state.value?.item
+  const hasEmptyHand = !hand.state?.item
 
   if (hasEmptyHand) {
     hand.pickup(props.path, slot.item.amount)
-  } else if (!slot.item || hand.state.value.item.id === slot.item.id) {
+  } else if (!slot.item || hand.state.item.id === slot.item.id) {
     hand.deposit(props.path)
     emit('change', props.path)
   } else {
@@ -72,7 +74,7 @@ const onRightClick = (event) => {
 
   event.preventDefault()
 
-  if (!hand.state.value?.item || hand.state.value.item.id === slot.item?.id) {
+  if (!hand.state?.item || hand.state.item.id === slot.item?.id) {
     hand.pickup(props.path, 1)
   }
 }
@@ -84,7 +86,7 @@ const onDrag = (event) => {
 }
 
 const onDrop = () => {
-  const from = hand.state.value.from
+  const from = hand.state.from
 
   const fromSlot = getSlot(from).value
   const toSlot = getSlot(props.path).value
