@@ -28,6 +28,20 @@ export const setSlot = (
   })
 }
 
+export const findSlotItem = (containers: Map<ID, Container>, containerId: ID, slotId: ID): Item => {
+  return findSlot(containers, containerId, slotId).item
+}
+
+export const setSlotItem = (
+  containers: Map<ID, Container>,
+  containerId: ID,
+  slotId: ID,
+  item: Item | null
+): Map<ID, Container> => {
+  const slot = findSlot(containers, containerId, slotId)
+  return setSlot(containers, containerId, slotId, { ...slot, item })
+}
+
 export default {
   containers: (containers: Map<ID, Container>) => {
     return {
@@ -46,20 +60,15 @@ export default {
       depositSlot: (containerId: ID, slotId: ID, item: Item): Map<ID, Container> => {
         const slot = findSlot(containers, containerId, slotId)
         const isDepositingSameItem = slot.item && slot.item.id === item.id
-        return setSlot(containers, containerId, slotId, {
-          ...slot,
-          item: isDepositingSameItem ? { ...slot.item, amount: slot.item.amount + item.amount } : item,
-        })
+        const updatedItem = isDepositingSameItem ? { ...item, amount: item.amount + slot.item.amount } : item
+        return setSlotItem(containers, containerId, slotId, updatedItem)
       },
-      pickUpSlot: (containerId: ID, slotId: ID, amount = null): [Item, Map<ID, Container>] => {
+      pickUpSlot: (containerId: ID, slotId: ID, amount: number): [Item, Map<ID, Container>] => {
         const slot = findSlot(containers, containerId, slotId)
-        amount = amount ?? slot.item.amount
-        amount = amount > slot.item.amount ? slot.item.amount : amount
         const pickedUpItem = { ...slot.item, amount }
         const updatedSlotAmount = slot.item.amount - amount
         const updatedSlotItem = updatedSlotAmount > 0 ? { ...slot.item, amount: updatedSlotAmount } : null
-        const updatedSlot = { ...slot, item: updatedSlotItem }
-        const updatedContainers = setSlot(containers, containerId, slotId, updatedSlot)
+        const updatedContainers = setSlotItem(containers, containerId, slotId, updatedSlotItem)
         return [pickedUpItem, updatedContainers]
       },
       clearSlot: (containerId: ID, slotId: ID): Map<ID, Container> => {
