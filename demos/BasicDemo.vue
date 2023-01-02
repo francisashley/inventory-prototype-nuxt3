@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import chunk from 'lodash/chunk'
+import chunk from 'lodash-es/chunk'
 import Button from './components/Button.vue'
 import { useDemo } from '@/composables/useDemo'
 const { demoContainers, setDemoContainers, addRandomItem } = useDemo()
