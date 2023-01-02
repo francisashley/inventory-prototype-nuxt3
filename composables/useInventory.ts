@@ -127,7 +127,6 @@ export function useInventory() {
     move,
     swap,
     findSlot,
-    clearHand,
     setHoveredSlot,
     hand: {
       state: handState,
@@ -135,6 +134,7 @@ export function useInventory() {
       // release,
       exchange,
       deposit,
+      clear: clearHand,
     },
   }
 }
