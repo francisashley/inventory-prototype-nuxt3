@@ -7,7 +7,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useInventory } from '../composables/useInventory'
 import { useState } from '../composables/useState'
 import { useHand } from '../composables/useHand'
 import { ContainerSlot, ID } from '../interfaces/inventory'
@@ -24,8 +23,7 @@ const props = withDefaults(defineProps<ContainerProps>(), {
   value: () => [],
 })
 
-const { getContainer, hoveredSlot } = useState()
-const { saveContainer } = useInventory()
+const { getContainer, hoveredSlot, setContainer } = useState()
 const hand = useHand()
 
 const convertSlotsToMap = (slots: ContainerSlot[]) => {
@@ -35,11 +33,11 @@ const convertSlotsToMap = (slots: ContainerSlot[]) => {
 }
 
 // initialise container
-saveContainer(props.id, { id: props.id, slots: convertSlotsToMap(props.value) })
+setContainer(props.id, { id: props.id, slots: convertSlotsToMap(props.value) })
 const container = getContainer(props.id)
 
 // update container when props change
-watch(props, () => saveContainer(props.id, { id: props.id, slots: convertSlotsToMap(props.value) }))
+watch(props, () => setContainer(props.id, { id: props.id, slots: convertSlotsToMap(props.value) }))
 
 // update container when props change
 watch(container, () => {

@@ -31,7 +31,7 @@
 
 <script lang="ts" setup>
 import { useState } from '../composables/useState'
-import { useInventory } from '../composables/useInventory'
+
 import { useHand } from '../composables/useHand'
 import { ID } from '../interfaces/inventory'
 
@@ -44,11 +44,10 @@ type ContainerSlotsProps = {
 
 const props = defineProps<ContainerSlotsProps>()
 
-const { saveSlot } = useInventory()
-const { setHoveredSlot, getSlot } = useState()
+const { setHoveredSlot, getSlot, setSlot } = useState()
 const hand = useHand()
 
-saveSlot(props.containerId, props.id, { id: props.id, path: [props.containerId, props.id], item: null })
+// setSlot(props.containerId, props.id, { id: props.id, path: [props.containerId, props.id], item: null })
 const slot = getSlot(props.containerId, props.id)
 
 const isHovering = ref(false)
