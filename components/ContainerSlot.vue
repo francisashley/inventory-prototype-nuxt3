@@ -30,6 +30,7 @@
 </template>
 
 <script lang="ts" setup>
+import { useState } from '../composables/useState'
 import { useInventory } from '../composables/useInventory'
 
 const emit = defineEmits(['drag', 'hover', 'hoverLeave', 'change'])
@@ -40,16 +41,17 @@ type ContainerSlotsProps = {
 
 const props = defineProps<ContainerSlotsProps>()
 
-const { saveSlot, getComputedSlot, findSlot, hand, setHoveredSlot, move } = useInventory()
+const { saveSlot, hand, move } = useInventory()
+const { setHoveredSlot, getSlot } = useState()
 
 saveSlot(props.path[0], props.path[1], { id: props.path[1], path: props.path, item: null })
-const slot = getComputedSlot(props.path)
+const slot = getSlot(props.path)
 
 const isHovering = ref(false)
 const setIsHovering = (value: boolean) => (isHovering.value = value)
 
 const onLeftClick = () => {
-  const slot = findSlot(props.path)
+  const slot = getSlot(props.path).value
   const hasEmptyHand = !hand.state.value?.item
 
   if (hasEmptyHand) {
@@ -64,7 +66,7 @@ const onLeftClick = () => {
 }
 
 const onRightClick = (event) => {
-  const slot = findSlot(props.path)
+  const slot = getSlot(props.path).value
 
   if (!slot.item) return
 
@@ -84,8 +86,8 @@ const onDrag = (event) => {
 const onDrop = () => {
   const from = hand.state.value.from
 
-  const fromSlot = findSlot(from)
-  const toSlot = findSlot(props.path)
+  const fromSlot = getSlot(from).value
+  const toSlot = getSlot(props.path).value
 
   if (
     typeof fromSlot.item !== 'undefined' &&

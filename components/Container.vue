@@ -8,6 +8,7 @@
 
 <script lang="ts" setup>
 import { useInventory } from '../composables/useInventory'
+import { useState } from '../composables/useState'
 import { ContainerSlot } from '../interfaces/inventory'
 
 const emit = defineEmits(['change'])
@@ -22,11 +23,12 @@ const props = withDefaults(defineProps<ContainerProps>(), {
   value: () => [],
 })
 
-const { saveContainer, getComputedContainer, hand, hoveredSlot } = useInventory()
+const { saveContainer, hand } = useInventory()
+const { getContainer, hoveredSlot } = useState()
 
 // initialise container
 saveContainer(props.id, { id: props.id, slots: props.value })
-const container = getComputedContainer(props.id)
+const container = getContainer(props.id)
 
 // update container when props change
 watch(props, () => saveContainer(props.id, { id: props.id, slots: props.value }))
