@@ -47,19 +47,19 @@ const { setHoveredSlot, getSlot } = useState()
 const hand = useHand()
 
 saveSlot(props.path[0], props.path[1], { id: props.path[1], path: props.path, item: null })
-const slot = getSlot(props.path)
+const slot = getSlot(props.path[0], props.path[1])
 
 const isHovering = ref(false)
 const setIsHovering = (value: boolean) => (isHovering.value = value)
 
 const onLeftClick = () => {
-  const slot = getSlot(props.path).value
+  const slot = getSlot(props.path[0], props.path[1]).value
   const hasEmptyHand = !hand.state?.item
 
   if (hasEmptyHand) {
-    hand.pickup(props.path, slot.item.amount)
+    hand.pickup(props.path[0], props.path[1], slot.item.amount)
   } else if (!slot.item || hand.state.item.id === slot.item.id) {
-    hand.deposit(props.path)
+    hand.deposit(props.path[0], props.path[1])
     emit('change', props.path)
   } else {
     hand.exchange(props.path)
@@ -68,37 +68,38 @@ const onLeftClick = () => {
 }
 
 const onRightClick = (event) => {
-  const slot = getSlot(props.path).value
+  const slot = getSlot(props.path[0], props.path[1]).value
 
   if (!slot.item) return
 
   event.preventDefault()
 
   if (!hand.state?.item || hand.state.item.id === slot.item?.id) {
-    hand.pickup(props.path, 1)
+    hand.pickup(props.path[0], props.path[1], 1)
   }
 }
 
 const onDrag = (event) => {
   event.dataTransfer.dropEffect = 'move'
   event.dataTransfer.effectAllowed = 'move'
-  hand.pickup(slot.value.path, slot.value.item.amount, true)
+  hand.pickup(slot.value.path[0], slot.value.path[1], slot.value.item.amount, true)
 }
 
 const onDrop = () => {
-  const from = hand.state.from
+  const fromContainerId = hand.state.fromContainerId
+  const fromSlotId = hand.state.fromSlotId
 
-  const fromSlot = getSlot(from).value
-  const toSlot = getSlot(props.path).value
+  const fromSlot = getSlot(fromContainerId, fromSlotId).value
+  const toSlot = getSlot(props.path[0], props.path[1]).value
 
   if (
     typeof fromSlot.item !== 'undefined' &&
     typeof toSlot.item !== 'undefined' &&
     fromSlot.item?.id === toSlot.item?.id
   ) {
-    move(from, props.path)
+    move([fromContainerId, fromSlotId], props.path)
   } else {
-    hand.swap(from, props.path)
+    hand.swap([fromContainerId, fromSlotId], props.path)
   }
 
   hand.clear()

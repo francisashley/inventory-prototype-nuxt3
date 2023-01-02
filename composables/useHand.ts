@@ -1,30 +1,39 @@
 import { reactive } from 'vue'
-import { Path, Item } from '../interfaces/inventory'
+import cloneDeep from 'lodash-es/cloneDeep'
+import { Path, Item, ID } from '../interfaces/inventory'
 import { useState } from './useState'
 import tool from '@/utils/tool.utils'
 
 type HandState = {
-  from: Path | null
+  fromContainerId: ID | null
+  fromSlotId: ID | null
   item: Item | null
   isDragging: boolean
 }
 
-const state = reactive<HandState>({
-  from: null,
+const initialState = cloneDeep({
+  fromContainerId: null,
+  fromSlotId: null,
   item: null,
   isDragging: false,
 })
 
+const state = reactive<HandState>(initialState)
+
 export function useHand() {
   const { containers, setContainers, getSlot } = useState()
 
-  const pickup = (from: Path, amount: number, isDragging = false) => {
-    state.from = from
-    state.item = { ...getSlot(from).value.item, amount: state.item ? state.item.amount + amount : amount }
+  const pickup = (containerId: ID, slotId: ID, amount: number, isDragging = false) => {
+    state.fromContainerId = containerId
+    state.fromSlotId = slotId
+    state.item = {
+      ...getSlot(containerId, slotId).value.item,
+      amount: state.item ? state.item.amount + amount : amount,
+    }
     state.isDragging = isDragging
 
     if (!isDragging) {
-      setContainers(tool.containers(containers.value).pickupSlot(from[0], from[1], amount)[1])
+      setContainers(tool.containers(containers.value).pickupSlot(containerId, slotId, amount)[1])
     }
   }
 
@@ -35,12 +44,12 @@ export function useHand() {
     setContainers(tool.containers(containers.value).depositSlot(to[0], to[1], heldItem))
   }
 
-  const deposit = (to: Path, amount?: number) => {
+  const deposit = (containerId: ID, slotId: ID, amount?: number) => {
     const heldItem = state.item
     amount = amount ?? heldItem.amount
     const leftInHand = heldItem.amount - amount
     state.item = leftInHand > 0 ? { ...state.item, amount: leftInHand } : null
-    setContainers(tool.containers(containers.value).depositSlot(to[0], to[1], heldItem))
+    setContainers(tool.containers(containers.value).depositSlot(containerId, slotId, heldItem))
   }
 
   const swap = (from: Path, to: Path) => {
@@ -59,9 +68,10 @@ export function useHand() {
   }
 
   const clear = () => {
-    state.from = null
-    state.item = null
-    state.isDragging = false
+    state.fromContainerId = initialState.fromContainerId
+    state.fromSlotId = initialState.fromSlotId
+    state.item = initialState.item
+    state.isDragging = initialState.isDragging
   }
 
   return {

@@ -14,7 +14,7 @@ export function useInventory() {
   }
 
   const saveSlot = (containerId: ID, slotId: ID, slot: ContainerSlot) => {
-    if (getSlot([containerId, slotId]).value) {
+    if (getSlot(containerId, slotId).value) {
       // set slot
     } else {
       setSlot(containerId, slot.id, slot)

@@ -1,5 +1,5 @@
 import { reactive, computed, ComputedRef } from 'vue'
-import { Container, Path, ContainerSlot, ID } from '../interfaces/inventory'
+import { Container, ContainerSlot, ID } from '../interfaces/inventory'
 import tool from '@/utils/tool.utils'
 
 interface InventoryState {
@@ -29,7 +29,7 @@ export function useState() {
     state.containers = tool.containers(state.containers).setSlot(containerId, slotId, slot)
   }
 
-  const getSlot = ([containerId, slotId]: Path): ComputedRef<ContainerSlot> => {
+  const getSlot = (containerId: ID, slotId: ID): ComputedRef<ContainerSlot> => {
     return computed(() => tool.containers(state.containers).findSlot(containerId, slotId))
   }
 
