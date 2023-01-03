@@ -63,7 +63,7 @@ This is a prototype and cannot be installed. Copy this code into another project
 
 ```typescript
 interface Container {
-  id: number
+  id: number | string
   name: string
   color: 'white' | 'red' | 'blue'
   items: (containerItem | null)[]
@@ -73,7 +73,7 @@ interface Container {
 
 ```typescript
 interface Item {
-  id: number
+  id: number | string
   name: string
   image: string | null
 }
@@ -81,7 +81,7 @@ interface Item {
 
 ```typescript
 interface MoveEvent {
-  id: number
+  id: number | string
   name: string
   image: string | null
 }

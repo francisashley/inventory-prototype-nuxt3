@@ -1,7 +1,7 @@
 import { reactive } from 'vue'
 import itemFixtures from '@/assets/fixtures/items.json'
 import containerFixtures from '@/assets/fixtures/containers.json'
-import { Item, ContainerSlot } from '@/interfaces/inventory'
+import { Item, ContainerSlot, ID, ValueItem } from '@/interfaces/inventory'
 import {
   getRandomItem,
   getRandomItems,
@@ -11,9 +11,10 @@ import {
 } from '@/utils/demo.utils'
 
 type DemoContainer = {
-  id: number
+  id: ID
   color: 'blue' | 'red'
   slots: ContainerSlot[]
+  items: ValueItem[]
 }
 
 interface DemoState {
@@ -28,17 +29,19 @@ const state = reactive<DemoState>({
 
 state.items = itemFixtures.map(createItem)
 
-state.demoContainers = containerFixtures.map(createContainer).map((container: DemoContainer, i: number) => {
-  if (i === 0) {
-    const randomItems = getRandomItems(state.items, 12)
-    let slots = container.slots
-    for (const item of randomItems) {
-      slots = depositFirstAvailableSlot(slots, item)
+state.demoContainers = containerFixtures
+  .map((c) => createContainer(c))
+  .map((container: DemoContainer, i: number) => {
+    if (i === 0) {
+      const randomItems = getRandomItems(state.items, 12)
+      let slots = container.slots
+      for (const item of randomItems) {
+        slots = depositFirstAvailableSlot(slots, item)
+      }
+      container = { ...container, slots }
     }
-    container = { ...container, slots }
-  }
-  return container
-})
+    return container
+  })
 
 export function useDemo() {
   const demoContainers = computed(() => state.demoContainers)
@@ -51,7 +54,7 @@ export function useDemo() {
     return getRandomItem(state.items)
   }
 
-  const addRandomItem = (containerId: number) => {
+  const addRandomItem = (containerId: ID) => {
     const updatedDemoContainers = demoContainers.value.map((demoContainer) => {
       if (demoContainer.id === containerId) {
         const item = generateRandomItem()

@@ -1,8 +1,8 @@
 export type ID = number | string
 export type Path = ID[]
 
-export interface Input {
-  slot: number
+export interface ValueItem {
+  path: Path
   item: Item
 }
 

@@ -14,7 +14,7 @@ import { ContainerSlot, ID } from '../interfaces/inventory'
 const emit = defineEmits(['change'])
 
 type ContainerProps = {
-  id: number
+  id: ID
   value: ContainerSlot[]
 }
 

@@ -1,26 +1,26 @@
-import { ContainerSlot, Item, Input, ID } from '../interfaces/inventory'
+import { ContainerSlot, Item, ValueItem, ID } from '../interfaces/inventory'
 import { generateId } from './id.utils'
 import { generateArray, findLastIndex } from '@/utils/array.utils'
 
-type ContainerSize = [number, number]
+type ContainerSize = number[]
 
 /**
  * Return formatted container
  */
 type InputContainer = {
   id: ID
-  color: 'blue' | 'red'
+  color: string
   size: ContainerSize
 }
 export const createContainer = ({ id, color, size }: InputContainer) => {
   let slots = generateSlots(id, size)
-  return { id, color, slots }
+  return { id, color, slots, items: [] }
 }
 
 /**
  * Return formatted slot
  */
-export const createSlot = (containerId: number, slotId: number) => {
+export const createSlot = (containerId: ID, slotId: ID) => {
   return {
     id: slotId,
     path: [containerId, slotId],
@@ -32,7 +32,7 @@ export const createSlot = (containerId: number, slotId: number) => {
  * Return formatted item
  */
 type InputItem = {
-  id?: string | number
+  id?: ID
   name?: string
   image?: string
   amount?: number
@@ -78,7 +78,7 @@ export const generateSlots = (id: ID, size: ContainerSize): ContainerSlot[] => {
 /**
  * Calculate the total amount of slots needed for the container
  */
-export const calculateTotalNeededSlots = (containerSize: ContainerSize, currentSlots: Input[]) => {
+export const calculateTotalNeededSlots = (containerSize: ContainerSize, currentSlots: ValueItem[]) => {
   const containerCols = containerSize[0]
   const containerRows = containerSize[1]
 
