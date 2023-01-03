@@ -1,4 +1,4 @@
-import { ContainerSlot, Item, Input } from '../interfaces/inventory'
+import { ContainerSlot, Item, Input, ID } from '../interfaces/inventory'
 import { generateId } from './id.utils'
 import { generateArray, findLastIndex } from '@/utils/array.utils'
 
@@ -8,11 +8,11 @@ type ContainerSize = [number, number]
  * Return formatted container
  */
 type InputContainer = {
+  id: ID
   color: 'blue' | 'red'
   size: ContainerSize
 }
-export const createContainer = ({ color, size }: InputContainer) => {
-  const id = generateId()
+export const createContainer = ({ id, color, size }: InputContainer) => {
   let slots = generateSlots(id, size)
   return { id, color, slots }
 }
@@ -70,7 +70,7 @@ export const getRandomItems = (items: Item[], amount: number) => {
 /**
  * Generate container slots from input data
  */
-export const generateSlots = (id: number, size: ContainerSize): ContainerSlot[] => {
+export const generateSlots = (id: ID, size: ContainerSize): ContainerSlot[] => {
   const totalSlots = size[0] * size[1]
   return generateArray(totalSlots).map((_, slotId) => createSlot(id, slotId))
 }
