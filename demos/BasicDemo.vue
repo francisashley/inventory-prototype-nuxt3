@@ -7,7 +7,7 @@
         'tw-relative tw-p-2 tw-border tw-border-thin tw-overflow-scroll tw-flex tw-flex-wrap tw-mx-auto tw-min-h-45 tw-w-min',
         { 'tw-border-blue-400': container.color === 'blue', 'tw-border-red-400': container.color === 'red' },
       ]"
-      :value="container.slots"
+      :value="container.items"
       @change="onChange"
     >
       <div v-for="(slotRow, j) in getRows(container.slots)" :key="j" class="tw-w-full tw-flex">
@@ -25,6 +25,8 @@
 import chunk from 'lodash-es/chunk'
 import Button from './components/Button.vue'
 import { useDemo } from '@/composables/useDemo'
+import { permContainer } from '@/utils/dev.utils'
+
 const { demoContainers, setDemoContainers, addRandomItem } = useDemo()
 
 const getRows = (slots) => {
@@ -32,6 +34,7 @@ const getRows = (slots) => {
 }
 
 const onChange = (updatedContainer) => {
+  updatedContainer = permContainer(updatedContainer)
   const updatedDemoContainers = demoContainers.value.map((container) => {
     return container.id === updatedContainer.id ? { ...container, ...updatedContainer } : container
   })

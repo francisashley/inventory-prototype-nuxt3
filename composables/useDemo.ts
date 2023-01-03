@@ -1,7 +1,8 @@
 import { reactive } from 'vue'
 import itemFixtures from '@/assets/fixtures/items.json'
 import containerFixtures from '@/assets/fixtures/containers.json'
-import { Item, ContainerSlot, ID, ValueItem } from '@/interfaces/inventory'
+import { Item, ID } from '@/interfaces/inventory'
+import { DemoContainer } from '@/interfaces/demo'
 import {
   getRandomItem,
   getRandomItems,
@@ -9,13 +10,6 @@ import {
   createItem,
   createContainer,
 } from '@/utils/demo.utils'
-
-type DemoContainer = {
-  id: ID
-  color: 'blue' | 'red'
-  slots: ContainerSlot[]
-  items: ValueItem[]
-}
 
 interface DemoState {
   items: Item[]
@@ -40,7 +34,11 @@ state.demoContainers = containerFixtures
       }
       container = { ...container, slots }
     }
-    return container
+
+    const items = container.slots
+      .filter((slot) => slot.item)
+      .map((slot) => ({ item: slot.item, path: [container.id, slot.id] }))
+    return { ...container, items }
   })
 
 export function useDemo() {

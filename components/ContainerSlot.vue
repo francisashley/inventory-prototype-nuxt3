@@ -1,7 +1,7 @@
 <template>
   <div
     class="tw-p-1 tw-h-20 tw-w-20 tw-bg-gray-900"
-    @mouseenter="setHoveredSlot(slot.item ? slot : null)"
+    @mouseenter="setHoveredSlot(slot && slot.item ? slot : null)"
     @mousedown="setHoveredSlot(null)"
     @mouseleave="setHoveredSlot(null)"
     @click="onLeftClick"
@@ -17,7 +17,7 @@
         @drop="setIsHovering(false)"
       >
         <div draggable="true" @dragstart.stop="onDrag($event)">
-          <slot :path="slot.path" :item="slot.item ?? null" />
+          <slot v-if="slot" :path="slot.path" :item="slot.item ?? null" />
         </div>
         <div
           v-if="isHovering"
@@ -44,10 +44,11 @@ type ContainerSlotsProps = {
 
 const props = defineProps<ContainerSlotsProps>()
 
-const { setHoveredSlot, getSlot, setSlot } = useState()
+const { setHoveredSlot, getSlot, registerSlot } = useState()
 const hand = useHand()
 
-// setSlot(props.containerId, props.id, { id: props.id, path: [props.containerId, props.id], item: null })
+registerSlot(props.containerId, props.id)
+
 const slot = getSlot(props.containerId, props.id)
 
 const isHovering = ref(false)

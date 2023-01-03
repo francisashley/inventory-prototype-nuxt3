@@ -54,6 +54,9 @@ export default {
       findSlot: (containerId: ID, slotId: ID): ContainerSlot => {
         return findSlot(containers, containerId, slotId)
       },
+      hasSlot: (containerId: ID, slotId: ID): boolean => {
+        return Boolean(findSlot(containers, containerId, slotId))
+      },
       setSlot: (containerId: ID, slotId: ID, slot: ContainerSlot): Map<ID, Container> => {
         return setSlot(containers, containerId, slotId, slot)
       },

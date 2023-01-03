@@ -9,13 +9,13 @@
 <script lang="ts" setup>
 import { useState } from '../composables/useState'
 import { useHand } from '../composables/useHand'
-import { ContainerSlot, ID } from '../interfaces/inventory'
+import { ValueItem, ID } from '../interfaces/inventory'
 
 const emit = defineEmits(['change'])
 
 type ContainerProps = {
   id: ID
-  value: ContainerSlot[]
+  value: ValueItem[]
 }
 
 const props = withDefaults(defineProps<ContainerProps>(), {
@@ -23,25 +23,20 @@ const props = withDefaults(defineProps<ContainerProps>(), {
   value: () => [],
 })
 
-const { getContainer, hoveredSlot, setContainer } = useState()
+const { getContainer, hoveredSlot, registerContainer, setContainerItems } = useState()
 const hand = useHand()
 
-const convertSlotsToMap = (slots: ContainerSlot[]) => {
-  return slots.reduce((acc,slot) => {
-    return acc.set(slot.id,slot)
-  }, new Map<ID, ContainerSlot>)
-}
-
 // initialise container
-setContainer(props.id, { id: props.id, slots: convertSlotsToMap(props.value) })
+registerContainer(props.id)
+setContainerItems(props.id, props.value)
 const container = getContainer(props.id)
 
 // update container when props change
-watch(props, () => setContainer(props.id, { id: props.id, slots: convertSlotsToMap(props.value) }))
+watch(props, () => setContainerItems(props.id, props.value))
 
 // update container when props change
 watch(container, () => {
-  const slots = Array.from(container.value.slots.values())
-  emit('change', {...container, slots})
+  const items = Array.from(container.value.slots.values()).filter((slot) => slot.item)
+  emit('change', { ...container.value, items })
 })
 </script>

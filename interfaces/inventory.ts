@@ -9,6 +9,7 @@ export interface ValueItem {
 export interface Container {
   id: ID
   slots: Map<ID, ContainerSlot>
+  items: ValueItem[]
 }
 
 export interface Item {
